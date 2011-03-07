@@ -3,9 +3,13 @@
 // found in the LICENSE file.
 
 
-@interface KNodeThread : NSThread {
+@interface NodeThread : NSThread {
+  @private
+    NSString *bootstrapPath_;
 }
 
+- (id)initWithBootstrapPath:(NSString *)bootstrapPath;
 + (void)handleUncaughtException:(id)err;
 
 @end
+// vim: expandtab:ts=2:sw=2

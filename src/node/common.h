@@ -17,6 +17,16 @@
   #import <Foundation/Foundation.h>
 #endif
 
+// Framework bundle
+static inline NSBundle* onconf_bundle() { return [NSBundle bundleWithIdentifier:@"io.neat.ObjectiveNode"]; }
+
+// URL for a resource
+NSURL* onconf_res_url(NSString* relpath);
+
+// URL for something in the bundle's shared support directory
+NSURL* onconf_support_url(NSString* relpath);
+
+
 // Filename macro
 #ifndef __FILENAME__
   #define __FILENAME__ ((strrchr(__FILE__, '/') ?: __FILE__ - 1) + 1)

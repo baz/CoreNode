@@ -3,8 +3,8 @@
 // found in the LICENSE file.
 
 #import "common.h"
-#import "kod_node_interface.h"
-#import "knode_ns_additions.h"
+#import "node_interface.h"
+#import "node_ns_additions.h"
 #import "ExternalUTF16String.h"
 
 #import <node.h>

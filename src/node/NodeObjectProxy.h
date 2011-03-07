@@ -2,21 +2,32 @@
 // Use of this source code is governed by a MIT-style license that can be
 // found in the LICENSE file.
 
-#import "node_kod.h"
+#import "objective_node.h"
 #include <map>
 
 #define KN_OBJC_CLASS_ADDITIONS_BEGIN(name) \
   @interface name##_node_ : NSObject {} @end @implementation name##_node_
 
-class KObjectProxy : public node::EventEmitter {
+#if !NDEBUG
+  // Dump a message to stderr
+  #define KN_DLOG(tmpl, ...)\
+    do {\
+      fprintf(stderr, "D [node-kod %s:%d] " tmpl "\n", \
+              __FILENAME__, __LINE__, ##__VA_ARGS__);\
+      fflush(stderr);\
+    } while (0)
+#endif
+
+
+class NodeObjectProxy : public node::EventEmitter {
  public:
   static v8::Persistent<v8::FunctionTemplate> Initialize(
       v8::Handle<v8::Object> target,
       v8::Handle<v8::String> className,
       const char *srcObjCClassName=NULL);
 
-  KObjectProxy(id representedObject);
-  virtual ~KObjectProxy();
+  NodeObjectProxy(id representedObject);
+  virtual ~NodeObjectProxy();
 
   static v8::Handle<v8::Value> New(const v8::Arguments& args);
   static v8::Local<v8::Object> New(v8::Handle<v8::FunctionTemplate> constructor,

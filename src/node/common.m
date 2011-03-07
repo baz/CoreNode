@@ -31,6 +31,22 @@ const char *k_strrstr(const char *string, const char *find) {
 }
 
 
+static inline NSURL *_relurl(NSURL *baseurl, NSString *relpath) {
+	return relpath ? [baseurl URLByAppendingPathComponent:relpath] : baseurl;
+}
+
+
+NSURL* onconf_res_url(NSString* relpath) {
+	return _relurl([onconf_bundle() resourceURL], relpath);
+}
+
+
+NSURL* onconf_support_url(NSString* relpath) {
+	return _relurl([onconf_bundle() sharedSupportURL], relpath);
+}
+
+
+
 #if !defined(NDEBUG)
 
 // Copyright (c) 2008-2010, Vincent Gable.

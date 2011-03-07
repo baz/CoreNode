@@ -3,10 +3,9 @@
 // found in the LICENSE file.
 
 #import "common.h"
-#import "kconf.h"
-#import "KNodeThread.h"
-#import "node_kod.h"
-#import "kod_node_interface.h"
+#import "NodeThread.h"
+#import "objective_node.h"
+#import "node_interface.h"
 
 #import <node.h>
 #import <node_events.h>
@@ -21,25 +20,38 @@ static void _KPrepareNode(EV_P_ ev_prepare *watcher, int revents) {
   kassert(revents == EV_PREPARE);
   //fprintf(stderr, "_KPrepareTick\n"); fflush(stderr);
 
-  // Create _kod module
+  // Create global _objective_node module
   Local<FunctionTemplate> kod_template = FunctionTemplate::New();
   node::EventEmitter::Initialize(kod_template);
-  gKodNodeModule =
-      Persistent<Object>::New(kod_template->GetFunction()->NewInstance());
-  node_kod_init(gKodNodeModule);
+  gKodNodeModule = Persistent<Object>::New(kod_template->GetFunction()->NewInstance());
+  objective_node_init(gKodNodeModule);
   Local<Object> global = v8::Context::GetCurrent()->Global();
-  global->Set(String::New("_kod"), gKodNodeModule);
+  global->Set(String::New("_objective_node"), gKodNodeModule);
 
   ev_prepare_stop(&gPrepareNodeWatcher);
 }
 
 
-@implementation KNodeThread
+@interface NodeThread()
+  @property (nonatomic, copy) NSString *bootstrapPath;
+@end
+
+@implementation NodeThread
+
+@synthesize bootstrapPath = bootstrapPath_;
 
 
-- (id)init {
-  if (!(self = [super init])) return nil;
-  [self setName:@"se.hunch.kod.nodejs"];
+- (void)dealloc {
+  [self setBootstrapPath:nil];
+  [super dealloc];
+}
+
+- (id)initWithBootstrapPath:(NSString *)bootstrapPath {
+  self = [super init];
+  if (self) {
+    self.bootstrapPath = bootstrapPath;
+  }
+
   return self;
 }
 
@@ -49,7 +61,7 @@ static void _KPrepareNode(EV_P_ ev_prepare *watcher, int revents) {
 
   // args
   const char *argv[] = {NULL,"","",NULL};
-  argv[0] = [[kconf_bundle() executablePath] UTF8String];
+  argv[0] = [[onconf_bundle() executablePath] UTF8String];
   int argc = 2;
   #if !NDEBUG || K_DEBUG_V8_EXPOSE_GC
     argv[1] = "--expose-gc";
@@ -59,30 +71,26 @@ static void _KPrepareNode(EV_P_ ev_prepare *watcher, int revents) {
       argc++;
     #endif
   #endif
-  argv[argc-1] = [[kconf_res_url(@"main.js") path] UTF8String];
-  
+  if (self.bootstrapPath) argv[argc-1] = [self.bootstrapPath UTF8String];
+ 
 
   // NODE_PATH
-  NSString *nodelibPath = [kconf_bundle() sharedSupportPath];
-  nodelibPath = [nodelibPath stringByAppendingPathComponent:@"nodelib"];
+  NSString *extensionPath = [[onconf_bundle() resourcePath] stringByAppendingPathComponent:@"objective_node"];
   const char *NODE_PATH_pch = getenv("NODE_PATH");
   NSString *NODE_PATH;
   if (NODE_PATH_pch) {
-    NODE_PATH = [NSString stringWithFormat:@"%@:%s",nodelibPath, NODE_PATH_pch];
+    NODE_PATH = [NSString stringWithFormat:@"%@:%s",extensionPath, NODE_PATH_pch];
   } else {
-    NODE_PATH = nodelibPath;
+    NODE_PATH = extensionPath;
   }
   setenv("NODE_PATH", [NODE_PATH UTF8String], 1);
 
   // Make sure HOME is correct and set
   setenv("HOME", [NSHomeDirectory() UTF8String], 1);
 
-  // Export some basic info about kod
-  setenv("KOD_APP_BUNDLE", [[kconf_bundle() bundlePath] UTF8String], 1);
-
   // register our initializer
   ev_prepare_init(&gPrepareNodeWatcher, _KPrepareNode);
-  // set max priority so _KPrepareNode gets called before main.js is executed
+  // set max priority so _KPrepareNode gets called before specified bootstrap file is executed
   ev_set_priority(&gPrepareNodeWatcher, EV_MAXPRI);
   
   while (![self isCancelled]) {
@@ -96,23 +104,9 @@ static void _KPrepareNode(EV_P_ ev_prepare *watcher, int revents) {
     int exitStatus = node::Start(argc, (char**)argv);
     DLOG("[node] exited with status %d in %@", exitStatus, self);
 
-    // show an alert if node "crashed"
     if (![self isCancelled]) {
       WLOG("forcing program termination due to Node.js unexpectedly exiting");
-      /*NSAlert *alert =
-      [NSAlert alertWithMessageText:@"Node.js terminated prematurely"
-                      defaultButton:@"Try to restart"
-                    alternateButton:@"Terminate Kod"
-                        otherButton:nil
-          informativeTextWithFormat:@"Node.js exited due to an internal error"
-                                     " and is vital to Kod, thus Node.js need"
-                                     " to be restarted or Kod be terminated to"
-                                     " avoid crashing."];
-      [alert setAlertStyle:NSCriticalAlertStyle];
-      NSInteger buttonPressed = [alert runModal];
-      if (buttonPressed == NSAlertAlternateReturn) {*/
-        [self cancel];
-      //}
+      [self cancel];
     }
   }
 
@@ -148,3 +142,4 @@ static void _KPrepareNode(EV_P_ ev_prepare *watcher, int revents) {
 
 
 @end
+// vim: expandtab:ts=2:sw=2

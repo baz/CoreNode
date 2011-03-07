@@ -2,9 +2,9 @@
 // Use of this source code is governed by a MIT-style license that can be
 // found in the LICENSE file.
 
-#import "KObjectProxy.h"
-#import "knode_ns_additions.h"
-#import "kod_node_interface.h"
+#import "NodeObjectProxy.h"
+#import "node_ns_additions.h"
+#import "node_interface.h"
 #import "k_objc_prop.h"
 #import "common.h"
 
@@ -28,10 +28,10 @@ class ARPoolScope {
 // Unique key for the persistent wrapper associated object
 static char kPersistentWrapperKey = 'a';
 
-@interface _KObjectProxyShelf : NSObject {} @end
-@implementation _KObjectProxyShelf
-- (void)_KObjectProxy_dealloc_associations {
-  //DLOG("_KObjectProxy_dealloc_associations for %p", self);
+@interface _NodeObjectProxyShelf : NSObject {} @end
+@implementation _NodeObjectProxyShelf
+- (void)_NodeObjectProxy_dealloc_associations {
+  //DLOG("_NodeObjectProxy_dealloc_associations for %p", self);
   // TODO: assert that we are running in the nodejs thread, or we need to
   // defer this to that thread since v8 will crash and burn unless so.
 
@@ -40,7 +40,7 @@ static char kPersistentWrapperKey = 'a';
   if (v) {
     Persistent<Object> *pobj = (Persistent<Object>*)[v pointerValue];
     if (!pobj->IsEmpty()) {
-      KObjectProxy *p = ObjectWrap::Unwrap<KObjectProxy>(*pobj);
+      NodeObjectProxy *p = ObjectWrap::Unwrap<NodeObjectProxy>(*pobj);
       // clear the represented object, but only if it's self
       if (h_atomic_cas(&(p->representedObject_), self, nil)) {
         // queue object for being totally cleared
@@ -58,7 +58,7 @@ static char kPersistentWrapperKey = 'a';
                            OBJC_ASSOCIATION_RETAIN);
 
   // invokes the actual dealloc method (we are swizzling, baby)
-  [self _KObjectProxy_dealloc_associations];
+  [self _NodeObjectProxy_dealloc_associations];
 }
 @end
 
@@ -118,14 +118,14 @@ static Class KNodeEnableProxyForObjCClass(const char *name,
 
   // mixin a dealloc method which releases any associated objects
   SEL origsel = @selector(dealloc);
-  SEL newsel = @selector(_KObjectProxy_dealloc_associations);
-  Class shelfClass = [_KObjectProxyShelf class];
+  SEL newsel = @selector(_NodeObjectProxy_dealloc_associations);
+  Class shelfClass = [_NodeObjectProxyShelf class];
   Method origm = class_getInstanceMethod(dstCls, origsel);
   Method newm = class_getInstanceMethod(shelfClass, newsel);
   if (class_addMethod(dstCls, origsel, method_getImplementation(newm),
                       method_getTypeEncoding(newm))) {
     //DLOG("added new -dealloc for class '%s'", name);
-    // we added @dealloc with impl from @_KObjectProxy_dealloc_associations
+    // we added @dealloc with impl from @_NodeObjectProxy_dealloc_associations
     Class superCls = class_getSuperclass(dstCls);
     Method m = class_getInstanceMethod(superCls, origsel);
     class_replaceMethod(dstCls, newsel, method_getImplementation(m),
@@ -143,31 +143,31 @@ static Class KNodeEnableProxyForObjCClass(const char *name,
 }
 
 // ----------------------------------------------------------------------------
-// KObjectProxy implementation
+// NodeObjectProxy implementation
 
-KObjectProxy::PtrToFunctionTemplateMap KObjectProxy::constructorMap_;
+NodeObjectProxy::PtrToFunctionTemplateMap NodeObjectProxy::constructorMap_;
 
-KObjectProxy::KObjectProxy(id representedObject) : node::EventEmitter() {
+NodeObjectProxy::NodeObjectProxy(id representedObject) : node::EventEmitter() {
   representedObject_ = representedObject ? [representedObject retain] : NULL;
-  //fprintf(stderr, "\n------------> allocated KObjectProxy %p\n\n", this);
+  //fprintf(stderr, "\n------------> allocated NodeObjectProxy %p\n\n", this);
 }
 
-KObjectProxy::~KObjectProxy() {
-  //fprintf(stderr, "\n------------> dealloc KObjectProxy %p wrapping %p\n\n",
+NodeObjectProxy::~NodeObjectProxy() {
+  //fprintf(stderr, "\n------------> dealloc NodeObjectProxy %p wrapping %p\n\n",
   //        this, representedObject_);
   [representedObject_ release];
 }
 
-v8::Local<Object> KObjectProxy::New(v8::Handle<FunctionTemplate> constructor_t,
+v8::Local<Object> NodeObjectProxy::New(v8::Handle<FunctionTemplate> constructor_t,
                                     id representedObject) {
   HandleScope scope;
   Local<Object> instance = constructor_t->GetFunction()->NewInstance(0, NULL);
-  KObjectProxy *p = ObjectWrap::Unwrap<KObjectProxy>(instance);
+  NodeObjectProxy *p = ObjectWrap::Unwrap<NodeObjectProxy>(instance);
   p->representedObject_ = representedObject ? [representedObject retain] : NULL;
   return scope.Close(instance);
 }
 
-v8::Local<Object> KObjectProxy::New(id representedObject) {
+v8::Local<Object> NodeObjectProxy::New(id representedObject) {
   HandleScope scope;
   Class repCls = [representedObject class];
   Persistent<FunctionTemplate> constructor_t = constructorMap_[repCls];
@@ -179,13 +179,13 @@ v8::Local<Object> KObjectProxy::New(id representedObject) {
   } else {
     //KN_DLOG("found constructor for %s",
     //        object_getClassName(representedObject));
-    Local<Object> obj = KObjectProxy::New(constructor_t, representedObject);
+    Local<Object> obj = NodeObjectProxy::New(constructor_t, representedObject);
     return scope.Close(obj);
   }
 }
 
-v8::Handle<Value> KObjectProxy::New(const Arguments& args) {
-  (new KObjectProxy(NULL))->Wrap(args.This());
+v8::Handle<Value> NodeObjectProxy::New(const Arguments& args) {
+  (new NodeObjectProxy(NULL))->Wrap(args.This());
   return args.This();
 }
 
@@ -193,7 +193,7 @@ v8::Handle<Value> KObjectProxy::New(const Arguments& args) {
 // named property handlers
 
 
-static NSInvocation *_findInvocation(KObjectProxy *p, NSString *selectorName) {
+static NSInvocation *_findInvocation(NodeObjectProxy *p, NSString *selectorName) {
   HandleScope scope;
   if (!selectorName || !p->representedObject_)
     return NULL;
@@ -374,7 +374,7 @@ static v8::Handle<Value> NamedGetter(Local<String> property,
     return scope.Close(jsval);
   }*/
 
-  KObjectProxy *p = ObjectWrap::Unwrap<KObjectProxy>(info.This());
+  NodeObjectProxy *p = ObjectWrap::Unwrap<NodeObjectProxy>(info.This());
   String::Utf8Value _name(property); const char *name = *_name;
   Local<Value> returnValue;
 
@@ -418,7 +418,7 @@ static v8::Handle<Value> NamedSetter(Local<String> property,
   ARPoolScope poolScope;
   Local<Value> r;
 
-  KObjectProxy *p = ObjectWrap::Unwrap<KObjectProxy>(info.This());
+  NodeObjectProxy *p = ObjectWrap::Unwrap<NodeObjectProxy>(info.This());
   String::Utf8Value _name(property); const char *name = *_name;
   //KN_DLOG("%s '%s'", __FUNCTION__, name);
 
@@ -450,7 +450,7 @@ static v8::Handle<Value> NamedSetter(Local<String> property,
 static v8::Handle<Integer> NamedQuery(Local<String> property,
                                       const AccessorInfo& info) {
   HandleScope scope;
-  KObjectProxy *p = ObjectWrap::Unwrap<KObjectProxy>(info.This());
+  NodeObjectProxy *p = ObjectWrap::Unwrap<NodeObjectProxy>(info.This());
   String::Utf8Value _name(property); const char *name = *_name;
   //KN_DLOG("%s '%s'", __FUNCTION__, name);
   v8::Local<Integer> r;
@@ -475,7 +475,7 @@ static v8::Handle<v8::Boolean> NamedDeleter(Local<String> property,
                                             const AccessorInfo& info) {
   HandleScope scope;
   v8::Local<v8::Boolean> r;
-  KObjectProxy *p = ObjectWrap::Unwrap<KObjectProxy>(info.This());
+  NodeObjectProxy *p = ObjectWrap::Unwrap<NodeObjectProxy>(info.This());
   String::Utf8Value _name(property); const char *name = *_name;
   objc_property_t prop = class_getProperty([p->representedObject_ class], name);
   if (prop) {
@@ -493,7 +493,7 @@ static v8::Handle<v8::Boolean> NamedDeleter(Local<String> property,
 static v8::Handle<Array> NamedEnumerator(const AccessorInfo& info) {
   HandleScope scope;
   //KN_DLOG("%s", __PRETTY_FUNCTION__);
-  KObjectProxy *p = ObjectWrap::Unwrap<KObjectProxy>(info.This());
+  NodeObjectProxy *p = ObjectWrap::Unwrap<NodeObjectProxy>(info.This());
 
   unsigned int propsCount;
   Class cls = [p->representedObject_ class];
@@ -537,13 +537,13 @@ static v8::Handle<Value> OnProxyTargetDeleted(const Arguments& args) {
 
 
 Persistent<FunctionTemplate>
-KObjectProxy::Initialize(v8::Handle<Object> target,
+NodeObjectProxy::Initialize(v8::Handle<Object> target,
                          v8::Handle<v8::String> className,
                          const char *srcObjCClassName) {
   HandleScope scope;
 
   // Constructor template
-  Local<FunctionTemplate> t = FunctionTemplate::New(KObjectProxy::New);
+  Local<FunctionTemplate> t = FunctionTemplate::New(NodeObjectProxy::New);
   Persistent<FunctionTemplate> constructor_t
       = Persistent<FunctionTemplate>::New(t);
   constructor_t->SetClassName(className);
@@ -620,7 +620,7 @@ KN_OBJC_CLASS_ADDITIONS_BEGIN(NSObject)
   if ([self nodeWrapperIsPersistent]) {
     NSValue *v = objc_getAssociatedObject(self, &kPersistentWrapperKey);
     if (!v) {
-      Local<Object> obj = KObjectProxy::New(self);
+      Local<Object> obj = NodeObjectProxy::New(self);
       if (!obj.IsEmpty() && obj->IsObject()) {
         Persistent<Object> *pobj = KNodePersistentObjectCreate(obj);
         v = [NSValue valueWithPointer:pobj];
@@ -635,7 +635,7 @@ KN_OBJC_CLASS_ADDITIONS_BEGIN(NSObject)
       return scope.Close(*pobj);
     }
   } else {
-    Local<Value> instance = KObjectProxy::New(self);
+    Local<Value> instance = NodeObjectProxy::New(self);
     return scope.Close(instance);
   }
   return *Undefined();

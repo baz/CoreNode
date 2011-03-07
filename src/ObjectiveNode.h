@@ -6,3 +6,12 @@
 //  Copyright 2011 Neat IO Pty Ltd. All rights reserved.
 //
 
+
+@interface ObjectiveNode : NSObject {
+}
+
+
++ (NSThread *)newNodeThreadForBootstrapPath:(NSString *)bootstrapPath;
+
+
+@end

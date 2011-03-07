@@ -2,7 +2,7 @@
 // Use of this source code is governed by a MIT-style license that can be
 // found in the LICENSE file.
 
-#import "knode_ns_additions.h"
+#import "node_ns_additions.h"
 #import "ExternalUTF16String.h"
 
 #import <err.h>

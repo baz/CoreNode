@@ -7,32 +7,29 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		FD17113A13235E7800277B90 /* ObjectiveNode.h in Headers */ = {isa = PBXBuildFile; fileRef = FD17113813235E7800277B90 /* ObjectiveNode.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		FD1B096A132358DB00C01621 /* runtime in Resources */ = {isa = PBXBuildFile; fileRef = FD1B0969132358DB00C01621 /* runtime */; };
+		FD4295EE13239ACF00B8A790 /* ObjectiveNode.h in Headers */ = {isa = PBXBuildFile; fileRef = FD4295EC13239ACF00B8A790 /* ObjectiveNode.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		FD4295EF13239ACF00B8A790 /* ObjectiveNode.m in Sources */ = {isa = PBXBuildFile; fileRef = FD4295ED13239ACF00B8A790 /* ObjectiveNode.m */; };
 		FD48CFC713234559004FACFB /* libcrypto.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = FD48CFC613234559004FACFB /* libcrypto.dylib */; };
 		FD48CFC91323455F004FACFB /* libssl.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = FD48CFC81323455F004FACFB /* libssl.dylib */; };
 		FD48CFCB13234567004FACFB /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = FD48CFCA13234567004FACFB /* libz.dylib */; };
-		FD48CFD013234606004FACFB /* node_kod.h in Headers */ = {isa = PBXBuildFile; fileRef = FD48CFCE13234606004FACFB /* node_kod.h */; };
-		FD48CFD113234606004FACFB /* node_kod.mm in Sources */ = {isa = PBXBuildFile; fileRef = FD48CFCF13234606004FACFB /* node_kod.mm */; };
-		FD48CFE113234669004FACFB /* kod_node_interface.h in Headers */ = {isa = PBXBuildFile; fileRef = FD48CFD813234669004FACFB /* kod_node_interface.h */; };
-		FD48CFE213234669004FACFB /* kod_node_interface.mm in Sources */ = {isa = PBXBuildFile; fileRef = FD48CFD913234669004FACFB /* kod_node_interface.mm */; };
+		FD48CFD013234606004FACFB /* objective_node.h in Headers */ = {isa = PBXBuildFile; fileRef = FD48CFCE13234606004FACFB /* objective_node.h */; };
+		FD48CFD113234606004FACFB /* objective_node.mm in Sources */ = {isa = PBXBuildFile; fileRef = FD48CFCF13234606004FACFB /* objective_node.mm */; };
+		FD48CFE113234669004FACFB /* node_interface.h in Headers */ = {isa = PBXBuildFile; fileRef = FD48CFD813234669004FACFB /* node_interface.h */; };
+		FD48CFE213234669004FACFB /* node_interface.mm in Sources */ = {isa = PBXBuildFile; fileRef = FD48CFD913234669004FACFB /* node_interface.mm */; };
 		FD48CFE313234669004FACFB /* ExternalUTF16String.h in Headers */ = {isa = PBXBuildFile; fileRef = FD48CFDA13234669004FACFB /* ExternalUTF16String.h */; };
-		FD48CFE413234669004FACFB /* knode_ns_additions.h in Headers */ = {isa = PBXBuildFile; fileRef = FD48CFDB13234669004FACFB /* knode_ns_additions.h */; };
-		FD48CFE513234669004FACFB /* knode_ns_additions.mm in Sources */ = {isa = PBXBuildFile; fileRef = FD48CFDC13234669004FACFB /* knode_ns_additions.mm */; };
-		FD48CFE613234669004FACFB /* KNodeThread.h in Headers */ = {isa = PBXBuildFile; fileRef = FD48CFDD13234669004FACFB /* KNodeThread.h */; };
-		FD48CFE713234669004FACFB /* KNodeThread.mm in Sources */ = {isa = PBXBuildFile; fileRef = FD48CFDE13234669004FACFB /* KNodeThread.mm */; };
-		FD48CFE813234669004FACFB /* KObjectProxy.h in Headers */ = {isa = PBXBuildFile; fileRef = FD48CFDF13234669004FACFB /* KObjectProxy.h */; };
-		FD48CFE913234669004FACFB /* KObjectProxy.mm in Sources */ = {isa = PBXBuildFile; fileRef = FD48CFE013234669004FACFB /* KObjectProxy.mm */; };
+		FD48CFE413234669004FACFB /* node_ns_additions.h in Headers */ = {isa = PBXBuildFile; fileRef = FD48CFDB13234669004FACFB /* node_ns_additions.h */; };
+		FD48CFE513234669004FACFB /* node_ns_additions.mm in Sources */ = {isa = PBXBuildFile; fileRef = FD48CFDC13234669004FACFB /* node_ns_additions.mm */; };
+		FD48CFE613234669004FACFB /* NodeThread.h in Headers */ = {isa = PBXBuildFile; fileRef = FD48CFDD13234669004FACFB /* NodeThread.h */; };
+		FD48CFE713234669004FACFB /* NodeThread.mm in Sources */ = {isa = PBXBuildFile; fileRef = FD48CFDE13234669004FACFB /* NodeThread.mm */; };
+		FD48CFE813234669004FACFB /* NodeObjectProxy.h in Headers */ = {isa = PBXBuildFile; fileRef = FD48CFDF13234669004FACFB /* NodeObjectProxy.h */; };
+		FD48CFE913234669004FACFB /* NodeObjectProxy.mm in Sources */ = {isa = PBXBuildFile; fileRef = FD48CFE013234669004FACFB /* NodeObjectProxy.mm */; };
 		FD48CFF213234690004FACFB /* hcommon.h in Headers */ = {isa = PBXBuildFile; fileRef = FD48CFEB13234690004FACFB /* hcommon.h */; };
 		FD48CFF313234690004FACFB /* common.h in Headers */ = {isa = PBXBuildFile; fileRef = FD48CFEC13234690004FACFB /* common.h */; };
 		FD48CFF413234690004FACFB /* common.m in Sources */ = {isa = PBXBuildFile; fileRef = FD48CFED13234690004FACFB /* common.m */; };
-		FD48CFF513234690004FACFB /* kconf.h in Headers */ = {isa = PBXBuildFile; fileRef = FD48CFEE13234690004FACFB /* kconf.h */; };
-		FD48CFF613234690004FACFB /* kconf.m in Sources */ = {isa = PBXBuildFile; fileRef = FD48CFEF13234690004FACFB /* kconf.m */; };
 		FD48CFF713234690004FACFB /* k_objc_prop.h in Headers */ = {isa = PBXBuildFile; fileRef = FD48CFF013234690004FACFB /* k_objc_prop.h */; };
 		FD48CFF813234690004FACFB /* k_objc_prop.m in Sources */ = {isa = PBXBuildFile; fileRef = FD48CFF113234690004FACFB /* k_objc_prop.m */; };
-		FD48CFFD132346E8004FACFB /* kod in CopyFiles */ = {isa = PBXBuildFile; fileRef = FD48CFD313234631004FACFB /* kod */; };
+		FD48CFFD132346E8004FACFB /* objective_node in CopyFiles */ = {isa = PBXBuildFile; fileRef = FD48CFD313234631004FACFB /* objective_node */; };
 		FD81C86D13233F7600EB9C10 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FD81C86C13233F7600EB9C10 /* Cocoa.framework */; };
-		FD81C87713233F7600EB9C10 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = FD81C87513233F7600EB9C10 /* InfoPlist.strings */; };
 		FD81C87F13233F7600EB9C10 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FD81C86C13233F7600EB9C10 /* Cocoa.framework */; };
 		FD81C88213233F7600EB9C10 /* ObjectiveNode.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FD81C86913233F7600EB9C10 /* ObjectiveNode.framework */; };
 		FD81C88813233F7600EB9C10 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = FD81C88613233F7600EB9C10 /* InfoPlist.strings */; };
@@ -61,38 +58,36 @@
 		FD48CFFC132346DD004FACFB /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
-			dstPath = nodelib;
+			dstPath = objective_node;
 			dstSubfolderSpec = 12;
 			files = (
-				FD48CFFD132346E8004FACFB /* kod in CopyFiles */,
+				FD48CFFD132346E8004FACFB /* objective_node in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		FD17113813235E7800277B90 /* ObjectiveNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObjectiveNode.h; sourceTree = "<group>"; };
-		FD1B0969132358DB00C01621 /* runtime */ = {isa = PBXFileReference; lastKnownFileType = folder; path = runtime; sourceTree = "<group>"; };
+		FD4295EC13239ACF00B8A790 /* ObjectiveNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObjectiveNode.h; sourceTree = "<group>"; };
+		FD4295ED13239ACF00B8A790 /* ObjectiveNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObjectiveNode.m; sourceTree = "<group>"; };
 		FD48CFC613234559004FACFB /* libcrypto.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libcrypto.dylib; path = /usr/lib/libcrypto.dylib; sourceTree = "<absolute>"; };
 		FD48CFC81323455F004FACFB /* libssl.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libssl.dylib; path = /usr/lib/libssl.dylib; sourceTree = "<absolute>"; };
 		FD48CFCA13234567004FACFB /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = /usr/lib/libz.dylib; sourceTree = "<absolute>"; };
-		FD48CFCE13234606004FACFB /* node_kod.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = node_kod.h; sourceTree = "<group>"; };
-		FD48CFCF13234606004FACFB /* node_kod.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = node_kod.mm; sourceTree = "<group>"; };
-		FD48CFD313234631004FACFB /* kod */ = {isa = PBXFileReference; lastKnownFileType = folder; path = kod; sourceTree = "<group>"; };
-		FD48CFD813234669004FACFB /* kod_node_interface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = kod_node_interface.h; sourceTree = "<group>"; };
-		FD48CFD913234669004FACFB /* kod_node_interface.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = kod_node_interface.mm; sourceTree = "<group>"; };
+		FD48CFCE13234606004FACFB /* objective_node.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = objective_node.h; sourceTree = "<group>"; };
+		FD48CFCF13234606004FACFB /* objective_node.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = objective_node.mm; sourceTree = "<group>"; };
+		FD48CFD313234631004FACFB /* objective_node */ = {isa = PBXFileReference; lastKnownFileType = folder; path = objective_node; sourceTree = "<group>"; };
+		FD48CFD813234669004FACFB /* node_interface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = node_interface.h; sourceTree = "<group>"; };
+		FD48CFD913234669004FACFB /* node_interface.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = node_interface.mm; sourceTree = "<group>"; };
 		FD48CFDA13234669004FACFB /* ExternalUTF16String.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExternalUTF16String.h; sourceTree = "<group>"; };
-		FD48CFDB13234669004FACFB /* knode_ns_additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = knode_ns_additions.h; sourceTree = "<group>"; };
-		FD48CFDC13234669004FACFB /* knode_ns_additions.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = knode_ns_additions.mm; sourceTree = "<group>"; };
-		FD48CFDD13234669004FACFB /* KNodeThread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KNodeThread.h; sourceTree = "<group>"; };
-		FD48CFDE13234669004FACFB /* KNodeThread.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = KNodeThread.mm; sourceTree = "<group>"; };
-		FD48CFDF13234669004FACFB /* KObjectProxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KObjectProxy.h; sourceTree = "<group>"; };
-		FD48CFE013234669004FACFB /* KObjectProxy.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = KObjectProxy.mm; sourceTree = "<group>"; };
+		FD48CFDB13234669004FACFB /* node_ns_additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = node_ns_additions.h; sourceTree = "<group>"; };
+		FD48CFDC13234669004FACFB /* node_ns_additions.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = node_ns_additions.mm; sourceTree = "<group>"; };
+		FD48CFDD13234669004FACFB /* NodeThread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NodeThread.h; sourceTree = "<group>"; };
+		FD48CFDE13234669004FACFB /* NodeThread.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = NodeThread.mm; sourceTree = "<group>"; };
+		FD48CFDF13234669004FACFB /* NodeObjectProxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NodeObjectProxy.h; sourceTree = "<group>"; };
+		FD48CFE013234669004FACFB /* NodeObjectProxy.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = NodeObjectProxy.mm; sourceTree = "<group>"; };
 		FD48CFEB13234690004FACFB /* hcommon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hcommon.h; sourceTree = "<group>"; };
 		FD48CFEC13234690004FACFB /* common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = common.h; sourceTree = "<group>"; };
 		FD48CFED13234690004FACFB /* common.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = common.m; sourceTree = "<group>"; };
-		FD48CFEE13234690004FACFB /* kconf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = kconf.h; sourceTree = "<group>"; };
-		FD48CFEF13234690004FACFB /* kconf.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = kconf.m; sourceTree = "<group>"; };
 		FD48CFF013234690004FACFB /* k_objc_prop.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = k_objc_prop.h; sourceTree = "<group>"; };
 		FD48CFF113234690004FACFB /* k_objc_prop.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = k_objc_prop.m; sourceTree = "<group>"; };
 		FD81C86913233F7600EB9C10 /* ObjectiveNode.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ObjectiveNode.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -101,7 +96,6 @@
 		FD81C87013233F7600EB9C10 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		FD81C87113233F7600EB9C10 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		FD81C87413233F7600EB9C10 /* ObjectiveNode-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "ObjectiveNode-Info.plist"; sourceTree = "<group>"; };
-		FD81C87613233F7600EB9C10 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		FD81C87813233F7600EB9C10 /* ObjectiveNode-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ObjectiveNode-Prefix.pch"; sourceTree = "<group>"; };
 		FD81C87E13233F7600EB9C10 /* ObjectiveNodeTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ObjectiveNodeTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
 		FD81C88513233F7600EB9C10 /* Objective NodeTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Objective NodeTests-Info.plist"; sourceTree = "<group>"; };
@@ -151,9 +145,9 @@
 		FD48CFCD132345D8004FACFB /* Extension */ = {
 			isa = PBXGroup;
 			children = (
-				FD48CFD313234631004FACFB /* kod */,
-				FD48CFCE13234606004FACFB /* node_kod.h */,
-				FD48CFCF13234606004FACFB /* node_kod.mm */,
+				FD48CFD313234631004FACFB /* objective_node */,
+				FD48CFCE13234606004FACFB /* objective_node.h */,
+				FD48CFCF13234606004FACFB /* objective_node.mm */,
 			);
 			name = Extension;
 			path = extension;
@@ -163,16 +157,15 @@
 			isa = PBXGroup;
 			children = (
 				FD48CFEA13234685004FACFB /* Support */,
-				FD1B0969132358DB00C01621 /* runtime */,
-				FD48CFD813234669004FACFB /* kod_node_interface.h */,
-				FD48CFD913234669004FACFB /* kod_node_interface.mm */,
+				FD48CFD813234669004FACFB /* node_interface.h */,
+				FD48CFD913234669004FACFB /* node_interface.mm */,
+				FD48CFDB13234669004FACFB /* node_ns_additions.h */,
+				FD48CFDC13234669004FACFB /* node_ns_additions.mm */,
 				FD48CFDA13234669004FACFB /* ExternalUTF16String.h */,
-				FD48CFDB13234669004FACFB /* knode_ns_additions.h */,
-				FD48CFDC13234669004FACFB /* knode_ns_additions.mm */,
-				FD48CFDD13234669004FACFB /* KNodeThread.h */,
-				FD48CFDE13234669004FACFB /* KNodeThread.mm */,
-				FD48CFDF13234669004FACFB /* KObjectProxy.h */,
-				FD48CFE013234669004FACFB /* KObjectProxy.mm */,
+				FD48CFDD13234669004FACFB /* NodeThread.h */,
+				FD48CFDE13234669004FACFB /* NodeThread.mm */,
+				FD48CFDF13234669004FACFB /* NodeObjectProxy.h */,
+				FD48CFE013234669004FACFB /* NodeObjectProxy.mm */,
 			);
 			name = Interface;
 			sourceTree = "<group>";
@@ -183,8 +176,6 @@
 				FD48CFEB13234690004FACFB /* hcommon.h */,
 				FD48CFEC13234690004FACFB /* common.h */,
 				FD48CFED13234690004FACFB /* common.m */,
-				FD48CFEE13234690004FACFB /* kconf.h */,
-				FD48CFEF13234690004FACFB /* kconf.m */,
 				FD48CFF013234690004FACFB /* k_objc_prop.h */,
 				FD48CFF113234690004FACFB /* k_objc_prop.m */,
 			);
@@ -238,7 +229,8 @@
 			children = (
 				FD48CFCC132345BF004FACFB /* Node */,
 				FD81C87313233F7600EB9C10 /* Supporting Files */,
-				FD17113813235E7800277B90 /* ObjectiveNode.h */,
+				FD4295EC13239ACF00B8A790 /* ObjectiveNode.h */,
+				FD4295ED13239ACF00B8A790 /* ObjectiveNode.m */,
 			);
 			name = "Objective Node";
 			path = src;
@@ -248,7 +240,6 @@
 			isa = PBXGroup;
 			children = (
 				FD81C87413233F7600EB9C10 /* ObjectiveNode-Info.plist */,
-				FD81C87513233F7600EB9C10 /* InfoPlist.strings */,
 				FD81C87813233F7600EB9C10 /* ObjectiveNode-Prefix.pch */,
 			);
 			name = "Supporting Files";
@@ -293,17 +284,16 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FD48CFD013234606004FACFB /* node_kod.h in Headers */,
-				FD48CFE113234669004FACFB /* kod_node_interface.h in Headers */,
+				FD48CFD013234606004FACFB /* objective_node.h in Headers */,
+				FD48CFE113234669004FACFB /* node_interface.h in Headers */,
 				FD48CFE313234669004FACFB /* ExternalUTF16String.h in Headers */,
-				FD48CFE413234669004FACFB /* knode_ns_additions.h in Headers */,
-				FD48CFE613234669004FACFB /* KNodeThread.h in Headers */,
-				FD48CFE813234669004FACFB /* KObjectProxy.h in Headers */,
+				FD48CFE413234669004FACFB /* node_ns_additions.h in Headers */,
+				FD48CFE613234669004FACFB /* NodeThread.h in Headers */,
+				FD48CFE813234669004FACFB /* NodeObjectProxy.h in Headers */,
 				FD48CFF213234690004FACFB /* hcommon.h in Headers */,
 				FD48CFF313234690004FACFB /* common.h in Headers */,
-				FD48CFF513234690004FACFB /* kconf.h in Headers */,
 				FD48CFF713234690004FACFB /* k_objc_prop.h in Headers */,
-				FD17113A13235E7800277B90 /* ObjectiveNode.h in Headers */,
+				FD4295EE13239ACF00B8A790 /* ObjectiveNode.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -334,7 +324,6 @@
 				FD81C86413233F7600EB9C10 /* Sources */,
 				FD81C86513233F7600EB9C10 /* Frameworks */,
 				FD81C86613233F7600EB9C10 /* Headers */,
-				FD81C86713233F7600EB9C10 /* Resources */,
 				FD48CFFC132346DD004FACFB /* CopyFiles */,
 			);
 			buildRules = (
@@ -394,15 +383,6 @@
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		FD81C86713233F7600EB9C10 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				FD81C87713233F7600EB9C10 /* InfoPlist.strings in Resources */,
-				FD1B096A132358DB00C01621 /* runtime in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		FD81C87B13233F7600EB9C10 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -435,14 +415,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FD48CFD113234606004FACFB /* node_kod.mm in Sources */,
-				FD48CFE213234669004FACFB /* kod_node_interface.mm in Sources */,
-				FD48CFE513234669004FACFB /* knode_ns_additions.mm in Sources */,
-				FD48CFE713234669004FACFB /* KNodeThread.mm in Sources */,
-				FD48CFE913234669004FACFB /* KObjectProxy.mm in Sources */,
+				FD48CFD113234606004FACFB /* objective_node.mm in Sources */,
+				FD48CFE213234669004FACFB /* node_interface.mm in Sources */,
+				FD48CFE513234669004FACFB /* node_ns_additions.mm in Sources */,
+				FD48CFE713234669004FACFB /* NodeThread.mm in Sources */,
+				FD48CFE913234669004FACFB /* NodeObjectProxy.mm in Sources */,
 				FD48CFF413234690004FACFB /* common.m in Sources */,
-				FD48CFF613234690004FACFB /* kconf.m in Sources */,
 				FD48CFF813234690004FACFB /* k_objc_prop.m in Sources */,
+				FD4295EF13239ACF00B8A790 /* ObjectiveNode.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -470,14 +450,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		FD81C87513233F7600EB9C10 /* InfoPlist.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				FD81C87613233F7600EB9C10 /* en */,
-			);
-			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
 		FD81C88613233F7600EB9C10 /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -528,12 +500,14 @@
 		FD81C89113233F7600EB9C10 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				DYLIB_CURRENT_VERSION = "";
 			};
 			name = Debug;
 		};
 		FD81C89213233F7600EB9C10 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				DYLIB_CURRENT_VERSION = "";
 			};
 			name = Release;
 		};
