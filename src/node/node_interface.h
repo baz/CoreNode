@@ -8,7 +8,6 @@
 
 class KNodeIOEntry;
 class KNodeBlockFun;
-class KNodeParseEntry;
 namespace kod { class ExternalUTF16String; }
 
 typedef void (^KNodeCallbackBlock)(NSError *err, NSArray *args);
@@ -24,7 +23,6 @@ void KNodeInitNode(v8::Handle<v8::Object> kodModule);
 // perform |block| in the node runtime
 void KNodePerformInNode(KNodePerformBlock block);
 void KNodeEnqueueIOEntry(KNodeIOEntry *entry);
-void KNodeEnqueueParseEntry(KNodeParseEntry *entry);
 
 /*!
  * Invoke |fun| on |target| passing |argc| number of arguments in |argv|.
@@ -69,9 +67,6 @@ class KNodeIOEntry {
   KNodeIOEntry *next_;
 };
 
-
-// Parse entry
-//#import "KNodeParseEntry.h"
 
 
 // Invocation transaction I/O queue entry
