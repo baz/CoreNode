@@ -13,5 +13,9 @@
 
 + (NSThread *)newNodeThreadForBootstrapPath:(NSString *)bootstrapPath;
 
++ (void)emitEvent:(NSString *)eventName module:(NSString *)moduleName arguments:(id)argument, ...;
+
++ (void)callFunction:(NSString *)functionName module:(NSString *)moduleName arguments:(id)argument, ...;
+
 
 @end

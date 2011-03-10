@@ -5,17 +5,22 @@
 #import <Cocoa/Cocoa.h>
 #import <dispatch/dispatch.h>
 #import <node.h>
+#include <map>
+#include <vector.h>
+#include <string.h>
 
 class KNodeIOEntry;
 class KNodeBlockFun;
 namespace kod { class ExternalUTF16String; }
 
-typedef void (^KNodeCallbackBlock)(NSError *err, NSArray *args);
-typedef void (^KNodeReturnBlock)(KNodeCallbackBlock, NSError*, NSArray*);
+typedef void (^NodeCallbackBlock)(NSError *err, NSArray *args);
+typedef void (^KNodeReturnBlock)(NodeCallbackBlock, NSError*, NSArray*);
 typedef void (^KNodePerformBlock)(KNodeReturnBlock);
 typedef void (^KNodeFunctionBlock)(const v8::Arguments& args);
 
 extern v8::Persistent<v8::Object> gKodNodeModule;
+
+extern std::map<std::string, v8::Persistent<v8::Object> > gModulesMap;
 
 // initialize (must be called from node)
 void KNodeInitNode(v8::Handle<v8::Object> kodModule);
@@ -34,22 +39,22 @@ v8::Handle<v8::Value> KNodeCallFunction(v8::Handle<v8::Object> target,
                                         int argc, id *argv,
                                         v8::Local<v8::Value> *arg0=NULL);
 
-// Invoke a named exported function in node
-bool KNodeInvokeExposedJSFunction(const char *functionName,
+// invoke a named function inside node
+bool nodeInvokeFunction(const char *functionName,
                                   NSArray *args,
-                                  KNodeCallbackBlock callback);
+                                  NodeCallbackBlock callback);
 
-bool KNodeInvokeExposedJSFunction(const char *functionName,
-                                  KNodeCallbackBlock callback);
+bool nodeInvokeFunction(const char *functionName,
+                                  NodeCallbackBlock callback);
 
-// emit an event on the kod module, passing args
-bool KNodeEmitEventv(const char *eventName, int argc, id *argv);
+// emit an event on the specified module, passing args
+bool nodeEmitEventv(const char *eventName, const char *moduleName, int argc, id *argv);
 
-// emit an event on the kod module, passing nil-terminated list of args
-bool KNodeEmitEvent(const char *eventName, ...);
+// emit an event on the specified module, passing nil-terminated list of args
+bool nodeEmitEvent(const char *eventName, const char *moduleName, ...);
 
 // perform |block| in the kod runtime (queue defaults to main thread)
-static inline void KNodePerformInKod(KNodeCallbackBlock block,
+static inline void KNodePerformInKod(NodeCallbackBlock block,
                                      NSError *err=nil,
                                      NSArray *args=nil,
                                      dispatch_queue_t queue=NULL) {
@@ -89,7 +94,7 @@ class KNodeTransactionalIOEntry : public KNodeIOEntry {
   }
 
   void perform() {
-    performBlock_(^(KNodeCallbackBlock callback, NSError *err, NSArray *args) {
+    performBlock_(^(NodeCallbackBlock callback, NSError *err, NSArray *args) {
       if (callback)
         KNodePerformInKod(callback, err, args, returnDispatchQueue_);
     });
@@ -123,11 +128,12 @@ class KNodeInvocationIOEntry : public KNodeIOEntry {
 // Event I/O queue entry
 class KNodeEventIOEntry : public KNodeIOEntry {
  public:
-  KNodeEventIOEntry(const char *name, int argc, id *argv);
+  KNodeEventIOEntry(const char *name, const char *moduleName, int argc, id *argv);
   virtual ~KNodeEventIOEntry();
   void perform();
  protected:
   char *name_;
+  char *moduleName_;
   int argc_;
   id *argv_;
 };

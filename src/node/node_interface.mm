@@ -6,7 +6,6 @@
 #import "node_interface.h"
 #import "node_ns_additions.h"
 #import "ExternalUTF16String.h"
-
 #import <node.h>
 #import <ev.h>
 #import <libkern/OSAtomic.h>
@@ -34,7 +33,10 @@ static ev_async KNodeIOInputQueueNotifier;
 // maps mathod names to functions
 static v8::Persistent<v8::Object> *kExposedFunctions = NULL;
 
-// publicly available "kod" module object (based on EventEmitter)
+// Map to hold registered modules
+std::map<std::string, v8::Persistent<v8::Object> > gModulesMap;
+
+// publicly available "objective-node" module object (based on EventEmitter)
 Persistent<Object> gKodNodeModule;
 
 // max number of entries to dequeue in one flush
@@ -163,9 +165,9 @@ v8::Handle<v8::Value> KNodeCallFunction(v8::Handle<Object> target,
 }
 
 
-bool KNodeInvokeExposedJSFunction(const char *functionName,
+bool nodeInvokeFunction(const char *functionName,
                                   NSArray *args,
-                                  KNodeCallbackBlock callback) {
+                                  NodeCallbackBlock callback) {
   // call from kod-land
   //DLOG("[knode] 1 calling node from kod");
   KNodePerformInNode(^(KNodeReturnBlock returnCallback){
@@ -231,22 +233,21 @@ bool KNodeInvokeExposedJSFunction(const char *functionName,
 }
 
 
-bool KNodeInvokeExposedJSFunction(const char *functionName,
-                                  KNodeCallbackBlock callback) {
-  return KNodeInvokeExposedJSFunction(functionName, nil, callback);
+bool nodeInvokeFunction(const char *functionName, NodeCallbackBlock callback) {
+  return nodeInvokeFunction(functionName, nil, callback);
 }
 
 
-bool KNodeEmitEventv(const char *eventName, int argc, id *argv) {
-  KNodeEventIOEntry *entry = new KNodeEventIOEntry(eventName, argc, argv);
+bool nodeEmitEventv(const char *eventName, const char *moduleName, int argc, id *argv) {
+  KNodeEventIOEntry *entry = new KNodeEventIOEntry(eventName, moduleName, argc, argv);
   KNodeEnqueueIOEntry(entry);
 }
 
 
-bool KNodeEmitEvent(const char *eventName, ...) {
+bool nodeEmitEvent(const char *eventName, const char *moduleName, ...) {
   static const int argcmax = 16;
   va_list valist;
-  va_start(valist, eventName);
+  va_start(valist, moduleName);
   id argv[argcmax];
   id arg;
   int argc = 0;
@@ -254,7 +255,7 @@ bool KNodeEmitEvent(const char *eventName, ...) {
     argv[argc++] = arg;
   }
   va_end(valist);
-  return KNodeEmitEventv(eventName, argc, argv);
+  return nodeEmitEventv(eventName, moduleName, argc, argv);
 }
 
 
@@ -362,9 +363,10 @@ void KNodeInvocationIOEntry::perform() {
 
 // ---------------------------------------------------------------------------
 
-KNodeEventIOEntry::KNodeEventIOEntry(const char *name, int argc, id *argv) {
+KNodeEventIOEntry::KNodeEventIOEntry(const char *name, const char *moduleName, int argc, id *argv) {
   kassert(name != NULL);
   name_ = strdup(name);
+  moduleName_ = strdup(moduleName);
   argc_ = argc;
   argv_ = new id[argc];
   for (int i = 0; i<argc_; ++i) {
@@ -379,22 +381,20 @@ KNodeEventIOEntry::~KNodeEventIOEntry() {
   }
   delete argv_; argv_ = NULL;
   free(name_); name_ = NULL;
+  free(moduleName_); moduleName_ = NULL;
 }
 
 
 void KNodeEventIOEntry::perform() {
   v8::HandleScope scope;
-  // TODO(rsms): optimize this by keeping a global reference to the emit func
-  if (!gKodNodeModule.IsEmpty()) {
-    Local<Value> v = gKodNodeModule->Get(String::New("emit"));
-    if (v->IsFunction()) {
+  if (!gModulesMap.empty()) {
+    Persistent<Object> module = gModulesMap[std::string(moduleName_)];
+    Local<Value> emitFunction = gKodNodeModule->Get(String::New("emit"));
+    if (emitFunction->IsFunction()) {
       Local<Value> eventName = Local<Value>::New(String::NewSymbol(name_));
-      KNodeCallFunction(gKodNodeModule, Local<Function>::Cast(v),
-                        argc_, argv_, &eventName);
+      KNodeCallFunction(module, Local<Function>::Cast(emitFunction), argc_, argv_, &eventName);
     }
   }
   KNodeIOEntry::perform();
 }
-
-
-//v8::Persistent<v8::Object> obj_;
+// vim: expandtab:ts=2:sw=2

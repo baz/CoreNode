@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		FD4295EE13239ACF00B8A790 /* ObjectiveNode.h in Headers */ = {isa = PBXBuildFile; fileRef = FD4295EC13239ACF00B8A790 /* ObjectiveNode.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		FD4295EF13239ACF00B8A790 /* ObjectiveNode.m in Sources */ = {isa = PBXBuildFile; fileRef = FD4295ED13239ACF00B8A790 /* ObjectiveNode.m */; };
+		FD4295EF13239ACF00B8A790 /* ObjectiveNode.mm in Sources */ = {isa = PBXBuildFile; fileRef = FD4295ED13239ACF00B8A790 /* ObjectiveNode.mm */; };
 		FD48CFC713234559004FACFB /* libcrypto.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = FD48CFC613234559004FACFB /* libcrypto.dylib */; };
 		FD48CFC91323455F004FACFB /* libssl.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = FD48CFC81323455F004FACFB /* libssl.dylib */; };
 		FD48CFCB13234567004FACFB /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = FD48CFCA13234567004FACFB /* libz.dylib */; };
@@ -69,7 +69,7 @@
 
 /* Begin PBXFileReference section */
 		FD4295EC13239ACF00B8A790 /* ObjectiveNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObjectiveNode.h; sourceTree = "<group>"; };
-		FD4295ED13239ACF00B8A790 /* ObjectiveNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObjectiveNode.m; sourceTree = "<group>"; };
+		FD4295ED13239ACF00B8A790 /* ObjectiveNode.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ObjectiveNode.mm; sourceTree = "<group>"; };
 		FD48CFC613234559004FACFB /* libcrypto.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libcrypto.dylib; path = /usr/lib/libcrypto.dylib; sourceTree = "<absolute>"; };
 		FD48CFC81323455F004FACFB /* libssl.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libssl.dylib; path = /usr/lib/libssl.dylib; sourceTree = "<absolute>"; };
 		FD48CFCA13234567004FACFB /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = /usr/lib/libz.dylib; sourceTree = "<absolute>"; };
@@ -230,7 +230,7 @@
 				FD48CFCC132345BF004FACFB /* Node */,
 				FD81C87313233F7600EB9C10 /* Supporting Files */,
 				FD4295EC13239ACF00B8A790 /* ObjectiveNode.h */,
-				FD4295ED13239ACF00B8A790 /* ObjectiveNode.m */,
+				FD4295ED13239ACF00B8A790 /* ObjectiveNode.mm */,
 			);
 			name = "Objective Node";
 			path = src;
@@ -422,7 +422,7 @@
 				FD48CFE913234669004FACFB /* NodeObjectProxy.mm in Sources */,
 				FD48CFF413234690004FACFB /* common.m in Sources */,
 				FD48CFF813234690004FACFB /* k_objc_prop.m in Sources */,
-				FD4295EF13239ACF00B8A790 /* ObjectiveNode.m in Sources */,
+				FD4295EF13239ACF00B8A790 /* ObjectiveNode.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

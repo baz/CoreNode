@@ -55,7 +55,6 @@ static void _KPrepareNode(EV_P_ ev_prepare *watcher, int revents) {
   return self;
 }
 
-
 - (void)main {
   NSAutoreleasePool *pool = [NSAutoreleasePool new];
 
