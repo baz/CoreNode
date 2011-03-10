@@ -5,6 +5,7 @@
 #import <Cocoa/Cocoa.h>
 #import <dispatch/dispatch.h>
 #import <node.h>
+#import "ObjectiveNode.h"
 #include <map>
 #include <vector.h>
 #include <string.h>
@@ -13,10 +14,9 @@ class KNodeIOEntry;
 class KNodeBlockFun;
 namespace kod { class ExternalUTF16String; }
 
-typedef void (^NodeCallbackBlock)(NSError *err, NSArray *args);
-typedef void (^KNodeReturnBlock)(NodeCallbackBlock, NSError*, NSArray*);
-typedef void (^KNodePerformBlock)(KNodeReturnBlock);
-typedef void (^KNodeFunctionBlock)(const v8::Arguments& args);
+typedef void (^NodeReturnBlock)(NodeCallbackBlock, NSError*, NSArray*);
+typedef void (^NodePerformBlock)(NodeReturnBlock);
+typedef void (^NodeFunctionBlock)(const v8::Arguments& args);
 
 extern v8::Persistent<v8::Object> gKodNodeModule;
 
@@ -26,7 +26,7 @@ extern std::map<std::string, v8::Persistent<v8::Object> > gModulesMap;
 void KNodeInitNode(v8::Handle<v8::Object> kodModule);
 
 // perform |block| in the node runtime
-void KNodePerformInNode(KNodePerformBlock block);
+void KNodePerformInNode(NodePerformBlock block);
 void KNodeEnqueueIOEntry(KNodeIOEntry *entry);
 
 /*!
@@ -40,12 +40,9 @@ v8::Handle<v8::Value> KNodeCallFunction(v8::Handle<v8::Object> target,
                                         v8::Local<v8::Value> *arg0=NULL);
 
 // invoke a named function inside node
-bool nodeInvokeFunction(const char *functionName,
-                                  NSArray *args,
-                                  NodeCallbackBlock callback);
+bool nodeInvokeFunction(const char *functionName, const char *moduleName, NSArray *args, NodeCallbackBlock callback);
 
-bool nodeInvokeFunction(const char *functionName,
-                                  NodeCallbackBlock callback);
+bool nodeInvokeFunction(const char *functionName, const char *moduleName, NodeCallbackBlock callback);
 
 // emit an event on the specified module, passing args
 bool nodeEmitEventv(const char *eventName, const char *moduleName, int argc, id *argv);
@@ -77,7 +74,7 @@ class KNodeIOEntry {
 // Invocation transaction I/O queue entry
 class KNodeTransactionalIOEntry : public KNodeIOEntry {
  public:
-  KNodeTransactionalIOEntry(KNodePerformBlock block,
+  KNodeTransactionalIOEntry(NodePerformBlock block,
                             dispatch_queue_t returnDispatchQueue=NULL) {
     performBlock_ = [block copy];
     if (returnDispatchQueue) {
@@ -102,7 +99,7 @@ class KNodeTransactionalIOEntry : public KNodeIOEntry {
   }
 
  protected:
-  KNodePerformBlock performBlock_;
+  NodePerformBlock performBlock_;
   dispatch_queue_t returnDispatchQueue_;
 };
 
@@ -142,10 +139,10 @@ class KNodeEventIOEntry : public KNodeIOEntry {
 // -------------------
 
 class KNodeBlockFun {
-  KNodeFunctionBlock block_;
+  NodeFunctionBlock block_;
   v8::Persistent<v8::Function> fun_;
  public:
-  KNodeBlockFun(KNodeFunctionBlock block);
+  KNodeBlockFun(NodeFunctionBlock block);
   ~KNodeBlockFun();
   inline v8::Local<v8::Value> function() { return *fun_; }
   static v8::Handle<v8::Value> InvocationProxy(const v8::Arguments& args);

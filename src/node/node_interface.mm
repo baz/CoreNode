@@ -30,9 +30,6 @@ static OSQueueHead KNodeIOInputQueue;
 // ev notifier
 static ev_async KNodeIOInputQueueNotifier;
 
-// maps mathod names to functions
-static v8::Persistent<v8::Object> *kExposedFunctions = NULL;
-
 // Map to hold registered modules
 std::map<std::string, v8::Persistent<v8::Object> > gModulesMap;
 
@@ -88,11 +85,9 @@ static void _freePersistentArgs(int argc, Persistent<Value> *argv) {
 }
 
 
-KNodeBlockFun::KNodeBlockFun(KNodeFunctionBlock block) {
+KNodeBlockFun::KNodeBlockFun(NodeFunctionBlock block) {
   block_ = [block copy];
-  Local<FunctionTemplate> t =
-      FunctionTemplate::New(&KNodeBlockFun::InvocationProxy,
-                            External::Wrap(this));
+  Local<FunctionTemplate> t = FunctionTemplate::New(&KNodeBlockFun::InvocationProxy, External::Wrap(this));
   fun_ = Persistent<Function>::New(t->GetFunction());
 }
 
@@ -116,16 +111,19 @@ v8::Handle<Value> KNodeBlockFun::InvocationProxy(const Arguments& args) {
 }
 
 
-static bool _invokeExposedJSFunction(const char *name,
-                                     int argc,
-                                     v8::Handle<v8::Value> argv[]) {
-  Local<Value> v = (*kExposedFunctions)->Get(String::New(name));
-  if (!v->IsFunction())
-    return false;
-  Local<Function> fun = Function::Cast(*v);
-  //Local<Value> returnValue =
-  fun->Call(*kExposedFunctions, argc, argv);
-  return true;
+static bool _invokeJSFunction(const char *functionName, const char *moduleName, int argc, v8::Handle<v8::Value> argv[]) {
+  bool success = false;
+  if (!gModulesMap.empty()) {
+    Persistent<Object> module = gModulesMap[std::string(moduleName)];
+    Local<Value> v = (module)->Get(String::New(functionName));
+    if (v->IsFunction()) {
+      Local<Function> fun = Function::Cast(*v);
+      fun->Call(module, argc, argv);
+      success = true;
+    }
+  }
+
+  return success;
 }
 
 
@@ -165,12 +163,12 @@ v8::Handle<v8::Value> KNodeCallFunction(v8::Handle<Object> target,
 }
 
 
-bool nodeInvokeFunction(const char *functionName,
-                                  NSArray *args,
-                                  NodeCallbackBlock callback) {
+bool nodeInvokeFunction(const char *functionName, const char *moduleName, NSArray *args, NodeCallbackBlock callback) {
   // call from kod-land
   //DLOG("[knode] 1 calling node from kod");
-  KNodePerformInNode(^(KNodeReturnBlock returnCallback){
+  char *function = strdup(functionName);
+  char *module = strdup(moduleName);
+  KNodePerformInNode(^(NodeReturnBlock returnCallback){
     //DLOG("[knode] 1 called in node");
     //DLOG("[knode] 1 calling kod from node");
     v8::HandleScope scope;
@@ -178,10 +176,10 @@ bool nodeInvokeFunction(const char *functionName,
     // create a block function
     __block BOOL blockFunDidExecute = NO;
     KNodeBlockFun *blockFun = new KNodeBlockFun(^(const v8::Arguments& args){
-      // TODO: pass args to callback (convert to cocoa first)
-      // TODO: check if first arg is an object and if so, treat it as an error
+      // pass args to callback (convert to cocoa first)
       NSArray *args2 = nil;
       NSError *err = nil;
+      // check if first arg is an object and if so, treat it as an error
       if (args.Length() > 0) {
         Local<Value> v = args[0];
         if (v->IsString() || v->IsObject()) {
@@ -209,18 +207,19 @@ bool nodeInvokeFunction(const char *functionName,
       for (NSUInteger i = 0; i<argc; ++i) {
         argv[i+1] = [[args objectAtIndex:i] v8Value];
       }
-      didFindAndCallFun = _invokeExposedJSFunction(functionName, argc+1, argv);
+      didFindAndCallFun = _invokeJSFunction(function, module, argc+1, argv);
       delete argv;
     } else {
-      didFindAndCallFun = _invokeExposedJSFunction(functionName, 1, &fun);
+      didFindAndCallFun = _invokeJSFunction(function, module, 1, &fun);
     }
+    free(function);
+    free(module);
 
     NSError *error = nil;
     if (tryCatch.HasCaught()) {
       error = [NSError nodeErrorWithTryCatch:tryCatch];
     } else if (!didFindAndCallFun) {
-      error = [NSError nodeErrorWithFormat:@"Unknown method '%s'",
-               functionName];
+      error = [NSError nodeErrorWithFormat:@"Unknown method '%s'", functionName];
     }
     if (error) { DLOG("[knode] error while calling into node: %@", error); }
     if (!blockFunDidExecute) {
@@ -233,8 +232,8 @@ bool nodeInvokeFunction(const char *functionName,
 }
 
 
-bool nodeInvokeFunction(const char *functionName, NodeCallbackBlock callback) {
-  return nodeInvokeFunction(functionName, nil, callback);
+bool nodeInvokeFunction(const char *functionName, const char *moduleName, NodeCallbackBlock callback) {
+  return nodeInvokeFunction(functionName, moduleName, nil, callback);
 }
 
 
@@ -260,11 +259,6 @@ bool nodeEmitEvent(const char *eventName, const char *moduleName, ...) {
 
 
 void KNodeInitNode(v8::Handle<Object> kodModule) {
-  // get reference to method-name-to-js-func dict
-  v8::Local<Value> exposedFunctions =
-      kodModule->Get(String::New("exposedFunctions"))->ToObject();
-  kExposedFunctions = KNodePersistentObjectCreate(exposedFunctions);
-
   // setup notifiers
   KNodeIOInputQueueNotifier.data = NULL;
   ev_async_init(&KNodeIOInputQueueNotifier, &InputQueueNotification);
@@ -287,7 +281,7 @@ void KNodeEnqueueIOEntry(KNodeIOEntry *entry) {
 }
 
 
-void KNodePerformInNode(KNodePerformBlock block) {
+void KNodePerformInNode(NodePerformBlock block) {
   KNodeIOEntry *entry =
       new KNodeTransactionalIOEntry(block, dispatch_get_current_queue());
   KNodeEnqueueIOEntry(entry);

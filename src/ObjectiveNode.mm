@@ -36,7 +36,8 @@
 	nodeEmitEventv([eventName UTF8String], [moduleName UTF8String], argc, argv);
 }
 
-+ (void)callFunction:(NSString *)functionName module:(NSString *)moduleName arguments:(id)argument, ... {
++ (void)invokeFunction:(NSString *)functionName module:(NSString *)moduleName arguments:(NSArray *)arguments callback:(NodeCallbackBlock)callbackBlock {
+	nodeInvokeFunction([functionName UTF8String], [moduleName UTF8String], arguments, callbackBlock);
 }
 
 
