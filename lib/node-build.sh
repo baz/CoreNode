@@ -54,7 +54,7 @@ WAF_MAKE="$WAF --check-c-compiler=clang --product-type=cstaticlib --debug build"
 # debug build is treated differently (_g suffix, debug subdir, etc) by WAF
 if [ "$BUILD_STYLE" = "Debug" ]; then
   echo "info: Building debug"
-  $WAF --without-snapshot "--blddir=${NODE_BUILD_DIR}" --debug configure
+  $WAF "--blddir=${NODE_BUILD_DIR}" --debug configure
   $WAF_MAKE
   NODE_PICKUP_DIR="${NODE_BUILD_DIR}/debug"
   mv "${NODE_PICKUP_DIR}/libnode_g.a" "${NODE_LIBNODE_PRODUCT}"
@@ -75,7 +75,7 @@ else
       continue
     fi
     NODE_ARCH_BUILD_DIR="${NODE_BUILD_DIR}-${arch}"
-    $WAF --without-snapshot "--blddir=${NODE_ARCH_BUILD_DIR}" \
+    $WAF "--blddir=${NODE_ARCH_BUILD_DIR}" \
          --dest-cpu=${arch} configure
     $WAF_MAKE
     NODE_LIBNODE_PRODUCTS="${NODE_LIBNODE_PRODUCTS} ${NODE_ARCH_BUILD_DIR}/default/libnode.a"
