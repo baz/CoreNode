@@ -31,7 +31,7 @@ static OSQueueHead KNodeIOInputQueue;
 static ev_async KNodeIOInputQueueNotifier;
 
 // Map to hold registered modules
-std::map<std::string, v8::Persistent<v8::Object> > gModulesMap;
+std::map<std::string, v8::Persistent<v8::Object> > gObjectMap;
 
 // publicly available "objective-node" module object (based on EventEmitter)
 Persistent<Object> gKodNodeModule;
@@ -111,10 +111,10 @@ v8::Handle<Value> KNodeBlockFun::InvocationProxy(const Arguments& args) {
 }
 
 
-static bool _invokeJSFunction(const char *functionName, const char *moduleName, int argc, v8::Handle<v8::Value> argv[]) {
+static bool _invokeJSFunction(const char *functionName, const char *objectName, int argc, v8::Handle<v8::Value> argv[]) {
   bool success = false;
-  if (!gModulesMap.empty()) {
-    Persistent<Object> module = gModulesMap[std::string(moduleName)];
+  if (!gObjectMap.empty()) {
+    Persistent<Object> module = gObjectMap[std::string(objectName)];
     Local<Value> v = (module)->Get(String::New(functionName));
     if (v->IsFunction()) {
       Local<Function> fun = Function::Cast(*v);
@@ -163,11 +163,11 @@ v8::Handle<v8::Value> KNodeCallFunction(v8::Handle<Object> target,
 }
 
 
-bool nodeInvokeFunction(const char *functionName, const char *moduleName, NSArray *args, NodeCallbackBlock callback) {
+bool nodeInvokeFunction(const char *functionName, const char *objectName, NSArray *args, NodeCallbackBlock callback) {
   // call from kod-land
   //DLOG("[knode] 1 calling node from kod");
   char *function = strdup(functionName);
-  char *module = strdup(moduleName);
+  char *module = strdup(objectName);
   KNodePerformInNode(^(NodeReturnBlock returnCallback){
     //DLOG("[knode] 1 called in node");
     //DLOG("[knode] 1 calling kod from node");
@@ -232,21 +232,21 @@ bool nodeInvokeFunction(const char *functionName, const char *moduleName, NSArra
 }
 
 
-bool nodeInvokeFunction(const char *functionName, const char *moduleName, NodeCallbackBlock callback) {
-  return nodeInvokeFunction(functionName, moduleName, nil, callback);
+bool nodeInvokeFunction(const char *functionName, const char *objectName, NodeCallbackBlock callback) {
+  return nodeInvokeFunction(functionName, objectName, nil, callback);
 }
 
 
-bool nodeEmitEventv(const char *eventName, const char *moduleName, int argc, id *argv) {
-  KNodeEventIOEntry *entry = new KNodeEventIOEntry(eventName, moduleName, argc, argv);
+bool nodeEmitEventv(const char *eventName, const char *objectName, int argc, id *argv) {
+  KNodeEventIOEntry *entry = new KNodeEventIOEntry(eventName, objectName, argc, argv);
   KNodeEnqueueIOEntry(entry);
 }
 
 
-bool nodeEmitEvent(const char *eventName, const char *moduleName, ...) {
+bool nodeEmitEvent(const char *eventName, const char *objectName, ...) {
   static const int argcmax = 16;
   va_list valist;
-  va_start(valist, moduleName);
+  va_start(valist, objectName);
   id argv[argcmax];
   id arg;
   int argc = 0;
@@ -254,7 +254,7 @@ bool nodeEmitEvent(const char *eventName, const char *moduleName, ...) {
     argv[argc++] = arg;
   }
   va_end(valist);
-  return nodeEmitEventv(eventName, moduleName, argc, argv);
+  return nodeEmitEventv(eventName, objectName, argc, argv);
 }
 
 
@@ -357,10 +357,10 @@ void KNodeInvocationIOEntry::perform() {
 
 // ---------------------------------------------------------------------------
 
-KNodeEventIOEntry::KNodeEventIOEntry(const char *name, const char *moduleName, int argc, id *argv) {
+KNodeEventIOEntry::KNodeEventIOEntry(const char *name, const char *objectName, int argc, id *argv) {
   kassert(name != NULL);
   name_ = strdup(name);
-  moduleName_ = strdup(moduleName);
+  moduleName_ = strdup(objectName);
   argc_ = argc;
   argv_ = new id[argc];
   for (int i = 0; i<argc_; ++i) {
@@ -381,8 +381,8 @@ KNodeEventIOEntry::~KNodeEventIOEntry() {
 
 void KNodeEventIOEntry::perform() {
   v8::HandleScope scope;
-  if (!gModulesMap.empty()) {
-    Persistent<Object> module = gModulesMap[std::string(moduleName_)];
+  if (!gObjectMap.empty()) {
+    Persistent<Object> module = gObjectMap[std::string(moduleName_)];
     Local<Value> emitFunction = gKodNodeModule->Get(String::New("emit"));
     if (emitFunction->IsFunction()) {
       Local<Value> eventName = Local<Value>::New(String::NewSymbol(name_));

@@ -19,7 +19,7 @@
 	return nodeThread;
 }
 
-+ (void)emitEvent:(NSString *)eventName module:(NSString *)moduleName arguments:(id)argument, ... {
++ (void)emitEvent:(NSString *)eventName onObjectName:(NSString *)objectName arguments:(id)argument, ... {
 	static const int argcmax = 16;
 	id argv[argcmax];
 	int argc = 0;
@@ -33,11 +33,11 @@
 		va_end(valist);
 	}
 
-	nodeEmitEventv([eventName UTF8String], [moduleName UTF8String], argc, argv);
+	nodeEmitEventv([eventName UTF8String], [objectName UTF8String], argc, argv);
 }
 
-+ (void)invokeFunction:(NSString *)functionName module:(NSString *)moduleName arguments:(NSArray *)arguments callback:(NodeCallbackBlock)callbackBlock {
-	nodeInvokeFunction([functionName UTF8String], [moduleName UTF8String], arguments, callbackBlock);
++ (void)invokeFunction:(NSString *)functionName onObjectName:(NSString *)objectName arguments:(NSArray *)arguments callback:(NodeCallbackBlock)callbackBlock {
+	nodeInvokeFunction([functionName UTF8String], [objectName UTF8String], arguments, callbackBlock);
 }
 
 

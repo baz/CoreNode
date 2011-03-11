@@ -15,8 +15,8 @@ typedef void (^NodeCallbackBlock)(NSError *error, NSArray *arguments);
 
 + (NSThread *)newNodeThreadForBootstrapPath:(NSString *)bootstrapPath;
 
-+ (void)emitEvent:(NSString *)eventName module:(NSString *)moduleName arguments:(id)argument, ...;
++ (void)emitEvent:(NSString *)eventName onObjectName:(NSString *)objectName arguments:(id)argument, ...;
 
-+ (void)invokeFunction:(NSString *)functionName module:(NSString *)moduleName arguments:(NSArray *)arguments callback:(NodeCallbackBlock)callbackBlock;
++ (void)invokeFunction:(NSString *)functionName onObjectName:(NSString *)objectName arguments:(NSArray *)arguments callback:(NodeCallbackBlock)callbackBlock;
 
 @end

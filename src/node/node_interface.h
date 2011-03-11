@@ -20,7 +20,7 @@ typedef void (^NodeFunctionBlock)(const v8::Arguments& args);
 
 extern v8::Persistent<v8::Object> gKodNodeModule;
 
-extern std::map<std::string, v8::Persistent<v8::Object> > gModulesMap;
+extern std::map<std::string, v8::Persistent<v8::Object> > gObjectMap;
 
 // initialize (must be called from node)
 void KNodeInitNode(v8::Handle<v8::Object> kodModule);
@@ -40,15 +40,15 @@ v8::Handle<v8::Value> KNodeCallFunction(v8::Handle<v8::Object> target,
                                         v8::Local<v8::Value> *arg0=NULL);
 
 // invoke a named function inside node
-bool nodeInvokeFunction(const char *functionName, const char *moduleName, NSArray *args, NodeCallbackBlock callback);
+bool nodeInvokeFunction(const char *functionName, const char *objectName, NSArray *args, NodeCallbackBlock callback);
 
-bool nodeInvokeFunction(const char *functionName, const char *moduleName, NodeCallbackBlock callback);
+bool nodeInvokeFunction(const char *functionName, const char *objectName, NodeCallbackBlock callback);
 
 // emit an event on the specified module, passing args
-bool nodeEmitEventv(const char *eventName, const char *moduleName, int argc, id *argv);
+bool nodeEmitEventv(const char *eventName, const char *objectName, int argc, id *argv);
 
 // emit an event on the specified module, passing nil-terminated list of args
-bool nodeEmitEvent(const char *eventName, const char *moduleName, ...);
+bool nodeEmitEvent(const char *eventName, const char *objectName, ...);
 
 // perform |block| in the kod runtime (queue defaults to main thread)
 static inline void KNodePerformInKod(NodeCallbackBlock block,
@@ -125,7 +125,7 @@ class KNodeInvocationIOEntry : public KNodeIOEntry {
 // Event I/O queue entry
 class KNodeEventIOEntry : public KNodeIOEntry {
  public:
-  KNodeEventIOEntry(const char *name, const char *moduleName, int argc, id *argv);
+  KNodeEventIOEntry(const char *name, const char *objectName, int argc, id *argv);
   virtual ~KNodeEventIOEntry();
   void perform();
  protected:
