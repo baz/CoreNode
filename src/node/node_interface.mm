@@ -100,6 +100,8 @@ KNodeBlockFun::~KNodeBlockFun() {
 }
 
 // static
+// this will be invoked when the JS function executes the callback
+// unwrap the arguments that come back to retrieve the original KNodeBlockFun instance
 v8::Handle<Value> KNodeBlockFun::InvocationProxy(const Arguments& args) {
   Local<Value> data = args.Data();
   assert(!data.IsEmpty());
@@ -168,12 +170,13 @@ bool nodeInvokeFunction(const char *functionName, const char *objectName, NSArra
   //DLOG("[knode] 1 calling node from kod");
   char *function = strdup(functionName);
   char *module = strdup(objectName);
-  KNodePerformInNode(^(NodeReturnBlock returnCallback){
+  KNodePerformInNode(^(NodeReturnBlock returnCallback) {
     //DLOG("[knode] 1 called in node");
     //DLOG("[knode] 1 calling kod from node");
     v8::HandleScope scope;
 
-    // create a block function
+    // create a JS function which is the last callback argument
+    // this proxy function object wraps an ObjC block which will be pulled out and invoked when the JS function calls back
     __block BOOL blockFunDidExecute = NO;
     KNodeBlockFun *blockFun = new KNodeBlockFun(^(const v8::Arguments& args){
       // pass args to callback (convert to cocoa first)
@@ -196,18 +199,21 @@ bool nodeInvokeFunction(const char *functionName, const char *objectName, NSArra
       blockFunDidExecute = YES;
     });
 
-    // invoke the block function
+    // pass all arguments to the JS function we intend to invoke
     TryCatch tryCatch;
     Local<Value> fun = blockFun->function();
     bool didFindAndCallFun;
     NSUInteger argc = args ? args.count : 0;
     if (argc != 0) {
-      Local<Value> *argv = new Local<Value>[argc+1];
-      argv[0] = fun;
-      for (NSUInteger i = 0; i<argc; ++i) {
-        argv[i+1] = [[args objectAtIndex:i] v8Value];
+      // passing the block function as the last parameter
+      argc++;
+      Local<Value> *argv = new Local<Value>[argc];
+      NSUInteger i = 0;
+      for (i; i<argc - 1; i++) {
+        argv[i] = [[args objectAtIndex:i] v8Value];
       }
-      didFindAndCallFun = _invokeJSFunction(function, module, argc+1, argv);
+      argv[i] = fun;
+      didFindAndCallFun = _invokeJSFunction(function, module, argc, argv);
       delete argv;
     } else {
       didFindAndCallFun = _invokeJSFunction(function, module, 1, &fun);
