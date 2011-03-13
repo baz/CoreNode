@@ -227,12 +227,14 @@ bool nodeInvokeFunction(const char *functionName, const char *objectName, NSArra
     } else if (!didFindAndCallFun) {
       error = [NSError nodeErrorWithFormat:@"Unknown method '%s'", functionName];
     }
-    if (error) { DLOG("[knode] error while calling into node: %@", error); }
-    if (!blockFunDidExecute) {
-      // dispose of block function
-      delete blockFun;
-      // Invoke callback with error
-      returnCallback(callback, error, nil);
+    if (error) {
+      DLOG("[knode] error while calling into node: %@", error);
+      if (!blockFunDidExecute) {
+        // dispose of block function
+        delete blockFun;
+        // invoke callback with error
+        returnCallback(callback, error, nil);
+      }
     }
   });
 }
