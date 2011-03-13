@@ -30,7 +30,7 @@ static OSQueueHead KNodeIOInputQueue;
 // ev notifier
 static ev_async KNodeIOInputQueueNotifier;
 
-// Map to hold registered modules
+// Map to hold registered objects
 std::map<std::string, v8::Persistent<v8::Object> > gObjectMap;
 
 // publicly available "objective-node" module object (based on EventEmitter)
@@ -116,11 +116,11 @@ v8::Handle<Value> KNodeBlockFun::InvocationProxy(const Arguments& args) {
 static bool _invokeJSFunction(const char *functionName, const char *objectName, int argc, v8::Handle<v8::Value> argv[]) {
   bool success = false;
   if (!gObjectMap.empty()) {
-    Persistent<Object> module = gObjectMap[std::string(objectName)];
-    Local<Value> v = (module)->Get(String::New(functionName));
+    Persistent<Object> object = gObjectMap[std::string(objectName)];
+    Local<Value> v = (object)->Get(String::New(functionName));
     if (v->IsFunction()) {
       Local<Function> fun = Function::Cast(*v);
-      fun->Call(module, argc, argv);
+      fun->Call(object, argc, argv);
       success = true;
     }
   }
@@ -169,7 +169,7 @@ bool nodeInvokeFunction(const char *functionName, const char *objectName, NSArra
   // call from kod-land
   //DLOG("[knode] 1 calling node from kod");
   char *function = strdup(functionName);
-  char *module = strdup(objectName);
+  char *object = strdup(objectName);
   KNodePerformInNode(^(NodeReturnBlock returnCallback) {
     //DLOG("[knode] 1 called in node");
     //DLOG("[knode] 1 calling kod from node");
@@ -213,13 +213,13 @@ bool nodeInvokeFunction(const char *functionName, const char *objectName, NSArra
         argv[i] = [[args objectAtIndex:i] v8Value];
       }
       argv[i] = fun;
-      didFindAndCallFun = _invokeJSFunction(function, module, argc, argv);
+      didFindAndCallFun = _invokeJSFunction(function, object, argc, argv);
       delete argv;
     } else {
-      didFindAndCallFun = _invokeJSFunction(function, module, 1, &fun);
+      didFindAndCallFun = _invokeJSFunction(function, object, 1, &fun);
     }
     free(function);
-    free(module);
+    free(object);
 
     NSError *error = nil;
     if (tryCatch.HasCaught()) {
@@ -367,7 +367,7 @@ void KNodeInvocationIOEntry::perform() {
 KNodeEventIOEntry::KNodeEventIOEntry(const char *name, const char *objectName, int argc, id *argv) {
   kassert(name != NULL);
   name_ = strdup(name);
-  moduleName_ = strdup(objectName);
+  objectName_ = strdup(objectName);
   argc_ = argc;
   argv_ = new id[argc];
   for (int i = 0; i<argc_; ++i) {
@@ -382,18 +382,18 @@ KNodeEventIOEntry::~KNodeEventIOEntry() {
   }
   delete argv_; argv_ = NULL;
   free(name_); name_ = NULL;
-  free(moduleName_); moduleName_ = NULL;
+  free(objectName_); objectName_ = NULL;
 }
 
 
 void KNodeEventIOEntry::perform() {
   v8::HandleScope scope;
   if (!gObjectMap.empty()) {
-    Persistent<Object> module = gObjectMap[std::string(moduleName_)];
+    Persistent<Object> object = gObjectMap[std::string(objectName_)];
     Local<Value> emitFunction = gKodNodeModule->Get(String::New("emit"));
     if (emitFunction->IsFunction()) {
       Local<Value> eventName = Local<Value>::New(String::NewSymbol(name_));
-      KNodeCallFunction(module, Local<Function>::Cast(emitFunction), argc_, argv_, &eventName);
+      KNodeCallFunction(object, Local<Function>::Cast(emitFunction), argc_, argv_, &eventName);
     }
   }
   KNodeIOEntry::perform();

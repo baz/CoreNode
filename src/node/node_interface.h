@@ -44,10 +44,10 @@ bool nodeInvokeFunction(const char *functionName, const char *objectName, NSArra
 
 bool nodeInvokeFunction(const char *functionName, const char *objectName, NodeCallbackBlock callback);
 
-// emit an event on the specified module, passing args
+// emit an event on the specified object, passing args
 bool nodeEmitEventv(const char *eventName, const char *objectName, int argc, id *argv);
 
-// emit an event on the specified module, passing nil-terminated list of args
+// emit an event on the specified object, passing nil-terminated list of args
 bool nodeEmitEvent(const char *eventName, const char *objectName, ...);
 
 // perform |block| in the kod runtime (queue defaults to main thread)
@@ -134,7 +134,7 @@ class KNodeEventIOEntry : public KNodeIOEntry {
   void perform();
  protected:
   char *name_;
-  char *moduleName_;
+  char *objectName_;
   int argc_;
   id *argv_;
 };

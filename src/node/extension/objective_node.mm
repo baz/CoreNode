@@ -56,7 +56,6 @@ void objective_node_init(v8::Handle<v8::Object> target) {
   // Constants
   NSString *version = [onconf_bundle() objectForInfoDictionaryKey:@"CFBundleVersion"];
   target->Set(String::NewSymbol("version"), String::New([version UTF8String]));
-  target->Set(String::NewSymbol("exposedFunctions"), Object::New());
 
   // Functions
   NODE_SET_METHOD(target, "handleUncaughtException", HandleUncaughtException);
