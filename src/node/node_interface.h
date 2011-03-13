@@ -74,8 +74,7 @@ class KNodeIOEntry {
 // Invocation transaction I/O queue entry
 class KNodeTransactionalIOEntry : public KNodeIOEntry {
  public:
-  KNodeTransactionalIOEntry(NodePerformBlock block,
-                            dispatch_queue_t returnDispatchQueue=NULL) {
+  KNodeTransactionalIOEntry(NodePerformBlock block, dispatch_queue_t returnDispatchQueue=NULL) {
     performBlock_ = [block copy];
     if (returnDispatchQueue) {
       returnDispatchQueue_ = returnDispatchQueue;
@@ -107,11 +106,8 @@ class KNodeTransactionalIOEntry : public KNodeIOEntry {
 // Invokes funcName on target passing arguments
 class KNodeInvocationIOEntry : public KNodeIOEntry {
  public:
-  KNodeInvocationIOEntry(v8::Handle<v8::Object> target, const char *funcName,
-                         int argc=0, id *argv=NULL);
-  KNodeInvocationIOEntry(v8::Handle<v8::Object> target,
-                         const char *funcName,
-                         int argc, v8::Handle<v8::Value> argv[]);
+  KNodeInvocationIOEntry(v8::Handle<v8::Object> target, const char *funcName, int argc=0, id *argv=NULL);
+  KNodeInvocationIOEntry(v8::Handle<v8::Object> target, const char *funcName, int argc, v8::Handle<v8::Value> argv[]);
   virtual ~KNodeInvocationIOEntry();
   void perform();
  protected:
@@ -158,8 +154,7 @@ static inline v8::Persistent<v8::Object>* KNodePersistentObjectCreate(
 }
 
 static inline v8::Persistent<v8::Object>* KNodePersistentObjectUnwrap(void *data) {
-  v8::Persistent<v8::Object> *pobj =
-    reinterpret_cast<v8::Persistent<v8::Object>*>(data);
+  v8::Persistent<v8::Object> *pobj = reinterpret_cast<v8::Persistent<v8::Object>*>(data);
   assert((*pobj)->IsObject());
   return pobj;
 }

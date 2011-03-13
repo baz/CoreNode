@@ -277,8 +277,7 @@ void KNodeInitNode(v8::Handle<Object> kodModule) {
 }
 
 
-static void _KNodeEnqueueEntry(OSQueueHead *queue, ev_async *asyncWatcher,
-                               KNodeIOEntry *entry) {
+static void _KNodeEnqueueEntry(OSQueueHead *queue, ev_async *asyncWatcher, KNodeIOEntry *entry) {
   OSAtomicEnqueue(queue, entry, cxx_offsetof(KNodeIOEntry, next_));
   ev_async_send(EV_DEFAULT_UC_ asyncWatcher);
 }
@@ -290,8 +289,8 @@ void KNodeEnqueueIOEntry(KNodeIOEntry *entry) {
 
 
 void KNodePerformInNode(NodePerformBlock block) {
-  KNodeIOEntry *entry =
-      new KNodeTransactionalIOEntry(block, dispatch_get_current_queue());
+  dispatch_queue_t queue = dispatch_get_current_queue();
+  KNodeIOEntry *entry = new KNodeTransactionalIOEntry(block, queue);
   KNodeEnqueueIOEntry(entry);
 }
 
