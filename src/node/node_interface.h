@@ -86,14 +86,22 @@ class KNodeTransactionalIOEntry : public KNodeIOEntry {
 
   virtual ~KNodeTransactionalIOEntry() {
     [performBlock_ release];
-    dispatch_release(returnDispatchQueue_);
+    if (returnDispatchQueue_) {
+      dispatch_release(returnDispatchQueue_);
+    }
+    returnDispatchQueue_ = NULL;
   }
 
   void perform() {
+    // maintain a weak reference because the queue may be released
+	__block dispatch_queue_t blockReturnQueue = returnDispatchQueue_;
     performBlock_(^(NodeCallbackBlock callback, NSError *err, NSArray *args) {
-      if (callback)
-        KNodePerformInKod(callback, err, args, returnDispatchQueue_);
+      if (callback) {
+        // queue may be released by now
+        KNodePerformInKod(callback, err, args, blockReturnQueue);
+      }
     });
+    // call super which will delete this instance
     KNodeIOEntry::perform();
   }
 
