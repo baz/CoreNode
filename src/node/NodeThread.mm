@@ -6,27 +6,30 @@
 #import "NodeThread.h"
 #import "objective_node.h"
 #import "node_interface.h"
-
 #import <node.h>
 #import <node_events.h>
 
 using namespace v8;
 
 static ev_prepare gPrepareNodeWatcher;
+static NodeModuleInitializeBlock ModuleInitializer;
 
 static void _KPrepareNode(EV_P_ ev_prepare *watcher, int revents) {
   HandleScope scope;
   kassert(watcher == &gPrepareNodeWatcher);
   kassert(revents == EV_PREPARE);
-  //fprintf(stderr, "_KPrepareTick\n"); fflush(stderr);
 
   // Create global _objective_node module
-  Local<FunctionTemplate> kod_template = FunctionTemplate::New();
-  node::EventEmitter::Initialize(kod_template);
-  gKodNodeModule = Persistent<Object>::New(kod_template->GetFunction()->NewInstance());
-  objective_node_init(gKodNodeModule);
-  Local<Object> global = v8::Context::GetCurrent()->Global();
-  global->Set(String::New("_objective_node"), gKodNodeModule);
+  injectNodeModule(&objective_node_init, "_objective_node");
+
+  // Init Node interface
+  KNodeInitNode();
+
+  // Allow others to initialize modules
+  if (ModuleInitializer) {
+    ModuleInitializer();
+    [ModuleInitializer release];
+  }
 
   ev_prepare_stop(&gPrepareNodeWatcher);
 }
@@ -120,13 +123,6 @@ static void _KPrepareNode(EV_P_ ev_prepare *watcher, int revents) {
       WLOG("forcing program termination due to Node.js unexpectedly exiting");
       [self cancel];
     }
-  }
-
-  // clean up
-  if (!gKodNodeModule.IsEmpty()) {
-    gKodNodeModule.Clear();
-    // Note(rsms): Calling gKodNodeModule.Dispose() here seems to bug out on
-    // program termination
   }
 
   [NSApp terminate:nil];

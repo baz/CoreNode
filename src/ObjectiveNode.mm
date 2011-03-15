@@ -7,15 +7,15 @@
 //
 
 #import "ObjectiveNode.h"
-#import "NodeThread.h"
 #import "node_interface.h"
+#import <v8.h>
 
 
 @implementation ObjectiveNode
 
 
-+ (NSThread *)newNodeThreadForBootstrapPath:(NSString *)bootstrapPath {
-	NodeThread *nodeThread = [[NodeThread alloc] initWithBootstrapPath:bootstrapPath];
++ (NodeThread *)newNodeThreadForBootstrapPath:(NSString *)bootstrapPath nodePath:(NSString *)nodePath {
+	NodeThread *nodeThread = [[NodeThread alloc] initWithBootstrapPath:bootstrapPath nodePath:nodePath];
 	return nodeThread;
 }
 
@@ -38,6 +38,10 @@
 
 + (void)invokeFunction:(NSString *)functionName onObjectName:(NSString *)objectName arguments:(NSArray *)arguments callback:(NodeCallbackBlock)callbackBlock {
 	nodeInvokeFunction([functionName UTF8String], [objectName UTF8String], arguments, callbackBlock);
+}
+
++ (void)injectNodeModule:(moduleInit)moduleInitializer name:(NSString *)name {
+	injectNodeModule(moduleInitializer, [name UTF8String]);
 }
 
 

@@ -18,12 +18,10 @@ typedef void (^NodeReturnBlock)(NodeCallbackBlock, NSError*, NSArray*);
 typedef void (^NodePerformBlock)(NodeReturnBlock);
 typedef void (^NodeFunctionBlock)(const v8::Arguments& args);
 
-extern v8::Persistent<v8::Object> gKodNodeModule;
-
 extern std::map<std::string, v8::Persistent<v8::Object> > gObjectMap;
 
 // initialize (must be called from node)
-void KNodeInitNode(v8::Handle<v8::Object> kodModule);
+void KNodeInitNode();
 
 // perform |block| in the node runtime
 void KNodePerformInNode(NodePerformBlock block);
@@ -58,6 +56,9 @@ static inline void KNodePerformInKod(NodeCallbackBlock block,
   if (!queue) queue = dispatch_get_main_queue();
   dispatch_async(queue, ^{ block(err, args); });
 }
+
+// inject a custom Node module into the global context
+void injectNodeModule(void(*init_module)(v8::Handle<v8::Object> target), const char *module_name);
 
 
 // Input/Output queue entry base class

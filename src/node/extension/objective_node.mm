@@ -65,8 +65,5 @@ void objective_node_init(v8::Handle<v8::Object> target) {
   NODE_SET_METHOD(target, "handleUncaughtException", HandleUncaughtException);
   NODE_SET_METHOD(target, "registerObject", RegisterObject);
   NODE_SET_METHOD(target, "unregisterObjectName", UnregisterObjectName);
-
-  // init Node interface
-  KNodeInitNode(target);
 }
 // vim: expandtab:ts=2:sw=2

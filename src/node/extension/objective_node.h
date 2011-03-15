@@ -2,9 +2,8 @@
 // Use of this source code is governed by a MIT-style license that can be
 // found in the LICENSE file.
 
-#import <node.h>           // includes v8.h, ev.h, eio.h, sys/types.h, etc
-#import <node_events.h>    // EventEmitter
-
+#import <node.h>
+#import <node_events.h>
 #ifdef __OBJC__
 #import <Cocoa/Cocoa.h>
 #endif

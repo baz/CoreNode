@@ -3,6 +3,9 @@
 // found in the LICENSE file.
 
 
+typedef void(^NodeModuleInitializeBlock)(void);
+
+
 @interface NodeThread : NSThread {
   @private
     NSString *bootstrapPath_;
@@ -10,6 +13,7 @@
 }
 
 - (id)initWithBootstrapPath:(NSString *)bootstrapPath nodePath:(NSString *)nodePath;
++ (void)setModuleInitializeBlock:(NodeModuleInitializeBlock)moduleInitializer;
 + (void)handleUncaughtException:(id)err;
 
 @end

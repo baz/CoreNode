@@ -7,13 +7,9 @@
 #import "node_ns_additions.h"
 #import "ExternalUTF16String.h"
 #import <node.h>
+#import <node_events.h>
 #import <ev.h>
 #import <libkern/OSAtomic.h>
-
-/*!
- * --- hack hack hack ---
- * This code is compiled into Kod, and not this module
- */
 
 using namespace v8;
 
@@ -32,9 +28,6 @@ static ev_async KNodeIOInputQueueNotifier;
 
 // Map to hold registered objects
 std::map<std::string, v8::Persistent<v8::Object> > gObjectMap;
-
-// publicly available "objective-node" module object (based on EventEmitter)
-Persistent<Object> gKodNodeModule;
 
 // max number of entries to dequeue in one flush
 #define KNODE_MAX_DEQUEUE 100
@@ -117,7 +110,7 @@ static bool _invokeJSFunction(const char *functionName, const char *objectName, 
   bool success = false;
   if (!gObjectMap.empty()) {
     Persistent<Object> object = gObjectMap[std::string(objectName)];
-    Local<Value> v = (object)->Get(String::New(functionName));
+    Local<Value> v = object->Get(String::New(functionName));
     if (v->IsFunction()) {
       Local<Function> fun = Function::Cast(*v);
       fun->Call(object, argc, argv);
@@ -266,7 +259,7 @@ bool nodeEmitEvent(const char *eventName, const char *objectName, ...) {
 }
 
 
-void KNodeInitNode(v8::Handle<Object> kodModule) {
+void KNodeInitNode() {
   // setup notifiers
   KNodeIOInputQueueNotifier.data = NULL;
   ev_async_init(&KNodeIOInputQueueNotifier, &InputQueueNotification);
@@ -292,6 +285,15 @@ void KNodePerformInNode(NodePerformBlock block) {
   dispatch_queue_t queue = dispatch_get_current_queue();
   KNodeIOEntry *entry = new KNodeTransactionalIOEntry(block, queue);
   KNodeEnqueueIOEntry(entry);
+}
+
+void injectNodeModule(void(*init_module)(v8::Handle<v8::Object> target), const char *module_name) {
+  Local<FunctionTemplate> function_template = FunctionTemplate::New();
+  node::EventEmitter::Initialize(function_template);
+  Persistent<Object> function_instance = Persistent<Object>::New(function_template->GetFunction()->NewInstance());
+  init_module(function_instance);
+  Local<Object> global = v8::Context::GetCurrent()->Global();
+  global->Set(String::New(module_name), function_instance);
 }
 
 
@@ -390,7 +392,7 @@ void KNodeEventIOEntry::perform() {
   v8::HandleScope scope;
   if (!gObjectMap.empty()) {
     Persistent<Object> object = gObjectMap[std::string(objectName_)];
-    Local<Value> emitFunction = gKodNodeModule->Get(String::New("emit"));
+    Local<Value> emitFunction = object->Get(String::New("emit"));
     if (emitFunction->IsFunction()) {
       Local<Value> eventName = Local<Value>::New(String::NewSymbol(name_));
       KNodeCallFunction(object, Local<Function>::Cast(emitFunction), argc_, argv_, &eventName);
