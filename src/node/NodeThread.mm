@@ -34,25 +34,34 @@ static void _KPrepareNode(EV_P_ ev_prepare *watcher, int revents) {
 
 @interface NodeThread()
   @property (nonatomic, copy) NSString *bootstrapPath;
+  @property (nonatomic, copy) NSString *nodePath;
 @end
 
 @implementation NodeThread
 
 @synthesize bootstrapPath = bootstrapPath_;
+@synthesize nodePath = nodePath_;
 
 
 - (void)dealloc {
   [self setBootstrapPath:nil];
+  [self setNodePath:nil];
+  if (ModuleInitializer) [ModuleInitializer release];
   [super dealloc];
 }
 
-- (id)initWithBootstrapPath:(NSString *)bootstrapPath {
+- (id)initWithBootstrapPath:(NSString *)bootstrapPath nodePath:(NSString *)nodePath {
   self = [super init];
   if (self) {
     self.bootstrapPath = bootstrapPath;
+    self.nodePath = nodePath;
   }
 
   return self;
+}
+
++ (void)setModuleInitializeBlock:(NodeModuleInitializeBlock)moduleInitializer {
+  ModuleInitializer = [moduleInitializer copy];
 }
 
 - (void)main {
@@ -75,14 +84,18 @@ static void _KPrepareNode(EV_P_ ev_prepare *watcher, int revents) {
 
   // NODE_PATH
   NSString *extensionPath = [[onconf_bundle() resourcePath] stringByAppendingPathComponent:@"objective_node"];
-  const char *NODE_PATH_pch = getenv("NODE_PATH");
-  NSString *NODE_PATH;
-  if (NODE_PATH_pch) {
-    NODE_PATH = [NSString stringWithFormat:@"%@:%s",extensionPath, NODE_PATH_pch];
-  } else {
-    NODE_PATH = extensionPath;
+  NSString *nodePath = nil;
+  const char *node_path_pch = getenv("NODE_PATH");
+  if (self.nodePath) {
+    if (node_path_pch) {
+      nodePath = [NSString stringWithFormat:@"%@:%@:%s", self.nodePath, extensionPath, node_path_pch];
+    } else {
+      nodePath = [NSString stringWithFormat:@"%@:%@", self.nodePath, extensionPath];
+    }
+  } else if (node_path_pch) {
+    nodePath = [NSString stringWithFormat:@"%@:%s", extensionPath, node_path_pch];
   }
-  setenv("NODE_PATH", [NODE_PATH UTF8String], 1);
+  setenv("NODE_PATH", [nodePath UTF8String], 1);
 
   // Make sure HOME is correct and set
   setenv("HOME", [NSHomeDirectory() UTF8String], 1);

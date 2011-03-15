@@ -6,9 +6,10 @@
 @interface NodeThread : NSThread {
   @private
     NSString *bootstrapPath_;
+    NSString *nodePath_;
 }
 
-- (id)initWithBootstrapPath:(NSString *)bootstrapPath;
+- (id)initWithBootstrapPath:(NSString *)bootstrapPath nodePath:(NSString *)nodePath;
 + (void)handleUncaughtException:(id)err;
 
 @end

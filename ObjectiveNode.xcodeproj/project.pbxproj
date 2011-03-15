@@ -14,14 +14,14 @@
 		FD48CFCB13234567004FACFB /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = FD48CFCA13234567004FACFB /* libz.dylib */; };
 		FD48CFD013234606004FACFB /* objective_node.h in Headers */ = {isa = PBXBuildFile; fileRef = FD48CFCE13234606004FACFB /* objective_node.h */; };
 		FD48CFD113234606004FACFB /* objective_node.mm in Sources */ = {isa = PBXBuildFile; fileRef = FD48CFCF13234606004FACFB /* objective_node.mm */; };
-		FD48CFE113234669004FACFB /* node_interface.h in Headers */ = {isa = PBXBuildFile; fileRef = FD48CFD813234669004FACFB /* node_interface.h */; };
+		FD48CFE113234669004FACFB /* node_interface.h in Headers */ = {isa = PBXBuildFile; fileRef = FD48CFD813234669004FACFB /* node_interface.h */; settings = {ATTRIBUTES = (); }; };
 		FD48CFE213234669004FACFB /* node_interface.mm in Sources */ = {isa = PBXBuildFile; fileRef = FD48CFD913234669004FACFB /* node_interface.mm */; };
 		FD48CFE313234669004FACFB /* ExternalUTF16String.h in Headers */ = {isa = PBXBuildFile; fileRef = FD48CFDA13234669004FACFB /* ExternalUTF16String.h */; };
 		FD48CFE413234669004FACFB /* node_ns_additions.h in Headers */ = {isa = PBXBuildFile; fileRef = FD48CFDB13234669004FACFB /* node_ns_additions.h */; };
 		FD48CFE513234669004FACFB /* node_ns_additions.mm in Sources */ = {isa = PBXBuildFile; fileRef = FD48CFDC13234669004FACFB /* node_ns_additions.mm */; };
-		FD48CFE613234669004FACFB /* NodeThread.h in Headers */ = {isa = PBXBuildFile; fileRef = FD48CFDD13234669004FACFB /* NodeThread.h */; };
+		FD48CFE613234669004FACFB /* NodeThread.h in Headers */ = {isa = PBXBuildFile; fileRef = FD48CFDD13234669004FACFB /* NodeThread.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		FD48CFE713234669004FACFB /* NodeThread.mm in Sources */ = {isa = PBXBuildFile; fileRef = FD48CFDE13234669004FACFB /* NodeThread.mm */; };
-		FD48CFE813234669004FACFB /* NodeObjectProxy.h in Headers */ = {isa = PBXBuildFile; fileRef = FD48CFDF13234669004FACFB /* NodeObjectProxy.h */; };
+		FD48CFE813234669004FACFB /* NodeObjectProxy.h in Headers */ = {isa = PBXBuildFile; fileRef = FD48CFDF13234669004FACFB /* NodeObjectProxy.h */; settings = {ATTRIBUTES = (); }; };
 		FD48CFE913234669004FACFB /* NodeObjectProxy.mm in Sources */ = {isa = PBXBuildFile; fileRef = FD48CFE013234669004FACFB /* NodeObjectProxy.mm */; };
 		FD48CFF213234690004FACFB /* hcommon.h in Headers */ = {isa = PBXBuildFile; fileRef = FD48CFEB13234690004FACFB /* hcommon.h */; };
 		FD48CFF313234690004FACFB /* common.h in Headers */ = {isa = PBXBuildFile; fileRef = FD48CFEC13234690004FACFB /* common.h */; };
@@ -73,7 +73,7 @@
 		FD48CFC613234559004FACFB /* libcrypto.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libcrypto.dylib; path = /usr/lib/libcrypto.dylib; sourceTree = "<absolute>"; };
 		FD48CFC81323455F004FACFB /* libssl.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libssl.dylib; path = /usr/lib/libssl.dylib; sourceTree = "<absolute>"; };
 		FD48CFCA13234567004FACFB /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = /usr/lib/libz.dylib; sourceTree = "<absolute>"; };
-		FD48CFCE13234606004FACFB /* objective_node.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = objective_node.h; sourceTree = "<group>"; };
+		FD48CFCE13234606004FACFB /* objective_node.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = objective_node.h; sourceTree = "<group>"; };
 		FD48CFCF13234606004FACFB /* objective_node.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = objective_node.mm; sourceTree = "<group>"; };
 		FD48CFD313234631004FACFB /* objective_node */ = {isa = PBXFileReference; lastKnownFileType = folder; path = objective_node; sourceTree = "<group>"; };
 		FD48CFD813234669004FACFB /* node_interface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = node_interface.h; sourceTree = "<group>"; };
