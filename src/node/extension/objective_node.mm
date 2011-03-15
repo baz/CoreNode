@@ -11,7 +11,6 @@
 
 using namespace v8;
 using namespace node;
-using namespace kod;
 
 
 static v8::Handle<Value> HandleUncaughtException(const Arguments& args) {
@@ -19,7 +18,7 @@ static v8::Handle<Value> HandleUncaughtException(const Arguments& args) {
   id err = nil;
   if (args.Length() > 0) {
     if (args[0]->IsObject()) {
-      // don't include arguments (just gets messy when converted to objc)
+      // Don't include arguments (just gets messy when converted to objc)
       args[0]->ToObject()->Delete(String::New("arguments"));
     }
     err = [NSObject fromV8Value:args[0]];
@@ -39,14 +38,19 @@ static v8::Handle<Value> RegisterObject(const Arguments& args) {
 
     Persistent<Object> module = Persistent<Object>::New(moduleValue->ToObject());
     String::Utf8Value utf8pch(objectName->ToString());
-    char *key = *utf8pch;
-    gObjectMap[std::string(key)] = module;
+    gObjectMap[std::string(*utf8pch)] = module;
   }
   return Undefined();
 }
 
 static v8::Handle<Value> UnregisterObjectName(const Arguments& args) {
-  // TODO
+  if (!gObjectMap.empty() && args.Length()) {
+    Local<Value> objectName = args[0];
+    String::Utf8Value utf8pch(objectName->ToString());
+    Persistent<Object> object = gObjectMap[std::string(*utf8pch)];
+    object.Clear();
+    object.Dispose();
+  }
   return Undefined();
 }
 
