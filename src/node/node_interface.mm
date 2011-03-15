@@ -211,15 +211,16 @@ bool nodeInvokeFunction(const char *functionName, const char *objectName, NSArra
     } else {
       didFindAndCallFun = _invokeJSFunction(function, object, 1, &fun);
     }
-    free(function);
-    free(object);
 
     NSError *error = nil;
     if (tryCatch.HasCaught()) {
       error = [NSError nodeErrorWithTryCatch:tryCatch];
     } else if (!didFindAndCallFun) {
-      error = [NSError nodeErrorWithFormat:@"Unknown method '%s'", functionName];
+      error = [NSError nodeErrorWithFormat:@"Unknown method '%s'", function];
     }
+    free(function);
+    free(object);
+
     if (error) {
       DLOG("[knode] error while calling into node: %@", error);
       if (!blockFunDidExecute) {
