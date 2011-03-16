@@ -160,7 +160,7 @@ v8::Handle<v8::Value> KNodeCallFunction(v8::Handle<Object> target,
 }
 
 
-bool nodeInvokeFunction(const char *functionName, const char *objectName, NSArray *args, NodeCallbackBlock callback) {
+void nodeInvokeFunction(const char *functionName, const char *objectName, NSArray *args, NodeCallbackBlock callback) {
   // call from kod-land
   //DLOG("[knode] 1 calling node from kod");
   char *function = strdup(functionName);
@@ -186,7 +186,7 @@ bool nodeInvokeFunction(const char *functionName, const char *objectName, NSArra
         }
         if (args.Length() > 1) {
           args2 = [NSMutableArray arrayWithCapacity:args.Length()-1];
-          for (NSUInteger i = 1; i < args.Length(); ++i)
+          for (int i = 1; i < args.Length(); ++i)
             [(NSMutableArray*)args2 addObject:[NSObject fromV8Value:args[i]]];
         }
       }
@@ -204,11 +204,11 @@ bool nodeInvokeFunction(const char *functionName, const char *objectName, NSArra
       argc++;
       Local<Value> *argv = new Local<Value>[argc];
       NSUInteger i = 0;
-      for (i; i<argc - 1; i++) {
+      for (; i<argc - 1; i++) {
         argv[i] = [[args objectAtIndex:i] v8Value];
       }
       argv[i] = fun;
-      didFindAndCallFun = _invokeJSFunction(function, object, argc, argv);
+      didFindAndCallFun = _invokeJSFunction(function, object, (unsigned int) argc, argv);
       delete argv;
     } else {
       didFindAndCallFun = _invokeJSFunction(function, object, 1, &fun);
@@ -236,18 +236,18 @@ bool nodeInvokeFunction(const char *functionName, const char *objectName, NSArra
 }
 
 
-bool nodeInvokeFunction(const char *functionName, const char *objectName, NodeCallbackBlock callback) {
-  return nodeInvokeFunction(functionName, objectName, nil, callback);
+void nodeInvokeFunction(const char *functionName, const char *objectName, NodeCallbackBlock callback) {
+  nodeInvokeFunction(functionName, objectName, nil, callback);
 }
 
 
-bool nodeEmitEventv(const char *eventName, const char *objectName, int argc, id *argv) {
+void nodeEmitEventv(const char *eventName, const char *objectName, int argc, id *argv) {
   KNodeEventIOEntry *entry = new KNodeEventIOEntry(eventName, objectName, argc, argv);
   KNodeEnqueueIOEntry(entry);
 }
 
 
-bool nodeEmitEvent(const char *eventName, const char *objectName, ...) {
+void nodeEmitEvent(const char *eventName, const char *objectName, ...) {
   static const int argcmax = 16;
   va_list valist;
   va_start(valist, objectName);
@@ -258,7 +258,7 @@ bool nodeEmitEvent(const char *eventName, const char *objectName, ...) {
     argv[argc++] = arg;
   }
   va_end(valist);
-  return nodeEmitEventv(eventName, objectName, argc, argv);
+  nodeEmitEventv(eventName, objectName, argc, argv);
 }
 
 

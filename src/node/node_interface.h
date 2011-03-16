@@ -36,15 +36,15 @@ v8::Handle<v8::Value> KNodeCallFunction(v8::Handle<v8::Object> target,
                                         v8::Local<v8::Value> *arg0=NULL);
 
 // invoke a named function inside node
-bool nodeInvokeFunction(const char *functionName, const char *objectName, NSArray *args, NodeCallbackBlock callback);
+void nodeInvokeFunction(const char *functionName, const char *objectName, NSArray *args, NodeCallbackBlock callback);
 
-bool nodeInvokeFunction(const char *functionName, const char *objectName, NodeCallbackBlock callback);
+void nodeInvokeFunction(const char *functionName, const char *objectName, NodeCallbackBlock callback);
 
 // emit an event on the specified object, passing args
-bool nodeEmitEventv(const char *eventName, const char *objectName, int argc, id *argv);
+void nodeEmitEventv(const char *eventName, const char *objectName, int argc, id *argv);
 
 // emit an event on the specified object, passing nil-terminated list of args
-bool nodeEmitEvent(const char *eventName, const char *objectName, ...);
+void nodeEmitEvent(const char *eventName, const char *objectName, ...);
 
 // perform |block| in the kod runtime (queue defaults to main thread)
 static inline void KNodePerformInKod(NodeCallbackBlock block,

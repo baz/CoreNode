@@ -88,7 +88,7 @@ static Class KNodeEnableProxyForObjCClass(const char *name,
 
   if (!srcName) {
     char srcNameBuf[1024];
-    int len = MIN(1023-strlen(suffix), strlen(name));
+    int len = MIN(1023- (int) strlen(suffix), (int) strlen(name));
     if (!strncpy(srcNameBuf, name, len)) return NO;
     if (!strncpy(srcNameBuf+len, suffix, strlen(suffix))) return NO;
     len += strlen(suffix);
@@ -132,7 +132,6 @@ static Class KNodeEnableProxyForObjCClass(const char *name,
                         method_getTypeEncoding(m));
   } else {
     // there is already a dealloc function defined -- let's define newsel
-    Method m = class_getInstanceMethod(dstCls, origsel);
     class_addMethod(dstCls, newsel, method_getImplementation(newm),
                     method_getTypeEncoding(newm));
     newm = class_getInstanceMethod(dstCls, newsel);
@@ -307,25 +306,25 @@ static BOOL _invokeGetter(NSInvocation *invocation,
     case _C_LNG: {
       long rv;
       [invocation getReturnValue:&rv];
-      returnValue = Integer::New(rv);
+      returnValue = Integer::New((int) rv);
       break;
     }
     case _C_ULNG: {
       unsigned long rv;
       [invocation getReturnValue:&rv];
-      returnValue = Integer::New(rv);
+      returnValue = Integer::New((unsigned int) rv);
       break;
     }
     case _C_LNG_LNG: {
       long long rv;
       [invocation getReturnValue:&rv];
-      returnValue = Integer::New(rv);
+      returnValue = Integer::New((int) rv);
       break;
     }
     case _C_ULNG_LNG: {
       unsigned long long rv;
       [invocation getReturnValue:&rv];
-      returnValue = Integer::New(rv);
+      returnValue = Integer::New((unsigned int) rv);
       break;
     }
     case _C_FLT: {

@@ -178,13 +178,13 @@ Persistent<Function> BuildContext::indexOf;
     case _C_UINT:
       return scope.Close(Integer::New([self unsignedIntValue]));
     case _C_LNG:
-      return scope.Close(Integer::New([self longValue]));
+      return scope.Close(Integer::New((int) [self longValue]));
     case _C_ULNG:
-      return scope.Close(Integer::New([self unsignedLongValue]));
+      return scope.Close(Integer::New((unsigned int) [self unsignedLongValue]));
     case _C_LNG_LNG:
-      return scope.Close(Integer::New([self longLongValue]));
+      return scope.Close(Integer::New((int) [self longLongValue]));
     case _C_ULNG_LNG:
-      return scope.Close(Integer::New([self unsignedLongLongValue]));
+      return scope.Close(Integer::New((int) [self unsignedLongLongValue]));
     case _C_FLT:
       return scope.Close(Number::New([self floatValue]));
     case _C_DBL:
@@ -225,9 +225,9 @@ Persistent<Function> BuildContext::indexOf;
 - (Local<Value>)v8Value {
   HandleScope scope;
   NSUInteger i = 0, count = [self count];
-  Local<Array> a = Array::New(count);
+  Local<Array> a = Array::New((int) count);
   for (; i < count; i++) {
-    a->Set(i, [[self objectAtIndex:i] v8Value]);
+    a->Set((int) i, [[self objectAtIndex:i] v8Value]);
   }
   return scope.Close(a);
 }
@@ -237,9 +237,9 @@ Persistent<Function> BuildContext::indexOf;
 - (Local<Value>)v8Value {
   HandleScope scope;
   NSUInteger i = 0, count = [self count];
-  Local<Array> a = Array::New(count);
+  Local<Array> a = Array::New((int) count);
   for (NSObject* obj in self) {
-    a->Set(i++, [obj v8Value]);
+    a->Set((int) i++, [obj v8Value]);
   }
   return scope.Close(a);
 }
@@ -298,7 +298,7 @@ Persistent<Function> BuildContext::indexOf;
         tmplscope.Close(Local<Function>::Cast(Buffer_v)));
   }
 
-  Local<Value> argv[] = {Integer::New([self length])};
+  Local<Value> argv[] = {Integer::New((unsigned int) [self length])};
   Local<Value> buf = BufferConstructor->NewInstance(1, argv);
 
   char *dataptr = node::Buffer::Data(Local<Object>::Cast(buf));
