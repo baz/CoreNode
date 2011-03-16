@@ -29,6 +29,8 @@ static ev_async KNodeIOInputQueueNotifier;
 // Map to hold registered objects
 std::map<std::string, v8::Persistent<v8::Object> > gObjectMap;
 
+static v8::Persistent<v8::Object> objectiveNodeModule;
+
 // max number of entries to dequeue in one flush
 #define KNODE_MAX_DEQUEUE 100
 
@@ -288,13 +290,41 @@ void KNodePerformInNode(NodePerformBlock block) {
   KNodeEnqueueIOEntry(entry);
 }
 
-void injectNodeModule(void(*init_module)(v8::Handle<v8::Object> target), const char *module_name) {
+void injectNodeModule(void(*init_module)(v8::Handle<v8::Object> target), const char *module_name, bool root) {
+  v8::HandleScope scope;
   Local<FunctionTemplate> function_template = FunctionTemplate::New();
   node::EventEmitter::Initialize(function_template);
   Persistent<Object> function_instance = Persistent<Object>::New(function_template->GetFunction()->NewInstance());
   init_module(function_instance);
-  Local<Object> global = v8::Context::GetCurrent()->Global();
-  global->Set(String::New(module_name), function_instance);
+  if (root) {
+    // Special case for the objective_node module
+    Local<Object> global = v8::Context::GetCurrent()->Global();
+    global->Set(String::New(module_name), function_instance);
+    objectiveNodeModule = function_instance;
+  } else {
+    // Set via binding object on objective_node module to prevent polluting the global namespace
+    Local<Value> bindingsObject = objectiveNodeModule->Get(String::New("binding"));
+    if (bindingsObject->IsObject()) {
+      Local<Object>::Cast(bindingsObject)->Set(String::New(module_name), function_instance);
+    }
+  }
+}
+
+void registerNodeObject(const char *name, Persistent<Object> object) {
+  v8::HandleScope scope;
+  if (!object->IsObject()) return;
+  unregisterNodeObject(name);
+  gObjectMap[std::string(name)] = object;
+}
+
+void unregisterNodeObject(const char *name) {
+  if (!gObjectMap.empty()) {
+    Persistent<Object> object = gObjectMap[std::string(name)];
+    object.Clear();
+    object.Dispose();
+  }
+}
+
 }
 
 

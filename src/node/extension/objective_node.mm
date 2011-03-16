@@ -38,18 +38,16 @@ static v8::Handle<Value> RegisterObject(const Arguments& args) {
 
     Persistent<Object> module = Persistent<Object>::New(moduleValue->ToObject());
     String::Utf8Value utf8pch(objectName->ToString());
-    gObjectMap[std::string(*utf8pch)] = module;
+    registerNodeObject(*utf8pch, module);
   }
   return Undefined();
 }
 
 static v8::Handle<Value> UnregisterObjectName(const Arguments& args) {
-  if (!gObjectMap.empty() && args.Length()) {
+  if (args.Length()) {
     Local<Value> objectName = args[0];
     String::Utf8Value utf8pch(objectName->ToString());
-    Persistent<Object> object = gObjectMap[std::string(*utf8pch)];
-    object.Clear();
-    object.Dispose();
+    unregisterNodeObject(*utf8pch);
   }
   return Undefined();
 }
@@ -57,9 +55,9 @@ static v8::Handle<Value> UnregisterObjectName(const Arguments& args) {
 void objective_node_init(v8::Handle<v8::Object> target) {
   HandleScope scope;
 
-  // Constants
   NSString *version = [onconf_bundle() objectForInfoDictionaryKey:@"CFBundleVersion"];
   target->Set(String::NewSymbol("version"), String::New([version UTF8String]));
+  target->Set(String::NewSymbol("binding"), Object::New());
 
   // Functions
   NODE_SET_METHOD(target, "handleUncaughtException", HandleUncaughtException);

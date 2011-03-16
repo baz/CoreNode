@@ -58,8 +58,13 @@ static inline void KNodePerformInKod(NodeCallbackBlock block,
 }
 
 // inject a custom Node module into the global context
-void injectNodeModule(void(*init_module)(v8::Handle<v8::Object> target), const char *module_name);
+void injectNodeModule(void(*init_module)(v8::Handle<v8::Object> target), const char *module_name, bool root);
 
+// maintain a persistent pointer to a node object in a global map
+void registerNodeObject(const char *name, v8::Persistent<v8::Object> object);
+
+// dispose of a previously persistent object
+void unregisterNodeObject(const char *name);
 
 // Input/Output queue entry base class
 class KNodeIOEntry {

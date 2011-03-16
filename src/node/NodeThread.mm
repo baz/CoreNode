@@ -20,7 +20,7 @@ static void _KPrepareNode(EV_P_ ev_prepare *watcher, int revents) {
   kassert(revents == EV_PREPARE);
 
   // Create global _objective_node module
-  injectNodeModule(&objective_node_init, "_objective_node");
+  injectNodeModule(&objective_node_init, "_objective_node", true);
 
   // Init Node interface
   KNodeInitNode();

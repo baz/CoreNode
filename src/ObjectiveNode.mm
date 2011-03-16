@@ -41,7 +41,7 @@
 }
 
 + (void)injectNodeModule:(moduleInit)moduleInitializer name:(NSString *)name {
-	injectNodeModule(moduleInitializer, [name UTF8String]);
+	injectNodeModule(moduleInitializer, [name UTF8String], false);
 }
 
 
