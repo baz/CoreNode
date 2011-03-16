@@ -27,7 +27,7 @@ static OSQueueHead KNodeIOInputQueue;
 static ev_async KNodeIOInputQueueNotifier;
 
 // Map to hold registered objects
-std::map<std::string, v8::Persistent<v8::Object> > gObjectMap;
+static std::map<std::string, v8::Persistent<v8::Object> > nodeObjectMap;
 
 static v8::Persistent<v8::Object> objectiveNodeModule;
 
@@ -110,8 +110,8 @@ v8::Handle<Value> KNodeBlockFun::InvocationProxy(const Arguments& args) {
 
 static bool _invokeJSFunction(const char *functionName, const char *objectName, int argc, v8::Handle<v8::Value> argv[]) {
   bool success = false;
-  if (!gObjectMap.empty()) {
-    Persistent<Object> object = gObjectMap[std::string(objectName)];
+  if (!nodeObjectMap.empty()) {
+    Persistent<Object> object = nodeObjectMap[std::string(objectName)];
     Local<Value> v = object->Get(String::New(functionName));
     if (v->IsFunction()) {
       Local<Function> fun = Function::Cast(*v);
@@ -314,21 +314,21 @@ void registerNodeObject(const char *name, Persistent<Object> object) {
   v8::HandleScope scope;
   if (!object->IsObject()) return;
   unregisterNodeObject(name);
-  gObjectMap[std::string(name)] = object;
+  nodeObjectMap[std::string(name)] = object;
 }
 
 void unregisterNodeObject(const char *name) {
-  if (!gObjectMap.empty()) {
-    Persistent<Object> object = gObjectMap[std::string(name)];
+  if (!nodeObjectMap.empty()) {
+    Persistent<Object> object = nodeObjectMap[std::string(name)];
     object.Clear();
     object.Dispose();
   }
 }
 
 void unregisterAllNodeObjects() {
-  if (!gObjectMap.empty()) {
+  if (!nodeObjectMap.empty()) {
     std::map<std::string, v8::Persistent<v8::Object> >::iterator it;
-    for (it = gObjectMap.begin(); it != gObjectMap.end(); it++) {
+    for (it = nodeObjectMap.begin(); it != nodeObjectMap.end(); it++) {
       unregisterNodeObject(it->first.c_str());
     }
   }
@@ -428,8 +428,8 @@ KNodeEventIOEntry::~KNodeEventIOEntry() {
 
 void KNodeEventIOEntry::perform() {
   v8::HandleScope scope;
-  if (!gObjectMap.empty()) {
-    Persistent<Object> object = gObjectMap[std::string(objectName_)];
+  if (!nodeObjectMap.empty()) {
+    Persistent<Object> object = nodeObjectMap[std::string(objectName_)];
     Local<Value> emitFunction = object->Get(String::New("emit"));
     if (emitFunction->IsFunction()) {
       Local<Value> eventName = Local<Value>::New(String::NewSymbol(name_));

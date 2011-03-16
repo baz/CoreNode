@@ -18,8 +18,6 @@ typedef void (^NodeReturnBlock)(NodeCallbackBlock, NSError*, NSArray*);
 typedef void (^NodePerformBlock)(NodeReturnBlock);
 typedef void (^NodeFunctionBlock)(const v8::Arguments& args);
 
-extern std::map<std::string, v8::Persistent<v8::Object> > gObjectMap;
-
 // initialize (must be called from node)
 void KNodeInitNode();
 
