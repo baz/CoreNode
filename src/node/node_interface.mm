@@ -325,6 +325,13 @@ void unregisterNodeObject(const char *name) {
   }
 }
 
+void unregisterAllNodeObjects() {
+  if (!gObjectMap.empty()) {
+    std::map<std::string, v8::Persistent<v8::Object> >::iterator it;
+    for (it = gObjectMap.begin(); it != gObjectMap.end(); it++) {
+      unregisterNodeObject(it->first.c_str());
+    }
+  }
 }
 
 

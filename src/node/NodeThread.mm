@@ -125,6 +125,8 @@ static void _KPrepareNode(EV_P_ ev_prepare *watcher, int revents) {
     }
   }
 
+  unregisterAllNodeObjects();
+
   [NSApp terminate:nil];
   [pool drain];
 }

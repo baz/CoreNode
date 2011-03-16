@@ -66,6 +66,9 @@ void registerNodeObject(const char *name, v8::Persistent<v8::Object> object);
 // dispose of a previously persistent object
 void unregisterNodeObject(const char *name);
 
+// unregister all objects
+void unregisterAllNodeObjects();
+
 // Input/Output queue entry base class
 class KNodeIOEntry {
  public:
