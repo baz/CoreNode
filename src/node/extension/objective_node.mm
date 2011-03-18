@@ -9,6 +9,9 @@
 #import "NodeObjectProxy.h"
 #import "NodeThread.h"
 
+NSString *const NodeDidFinishLaunchingNotification = @"NodeDidFinishLaunchingNotification";
+BOOL ObjectiveNodeActive = NO;
+
 using namespace v8;
 using namespace node;
 
@@ -52,6 +55,12 @@ static v8::Handle<Value> UnregisterObjectName(const Arguments& args) {
   return Undefined();
 }
 
+static v8::Handle<Value> NotifyNodeActive(const Arguments& args) {
+  [[NSNotificationCenter defaultCenter] postNotificationName:NodeDidFinishLaunchingNotification object:nil];
+  ObjectiveNodeActive = YES;
+  return Undefined();
+}
+
 void objective_node_init(v8::Handle<v8::Object> target) {
   HandleScope scope;
 
@@ -63,5 +72,6 @@ void objective_node_init(v8::Handle<v8::Object> target) {
   NODE_SET_METHOD(target, "handleUncaughtException", HandleUncaughtException);
   NODE_SET_METHOD(target, "registerObject", RegisterObject);
   NODE_SET_METHOD(target, "unregisterObjectName", UnregisterObjectName);
+  NODE_SET_METHOD(target, "notifyNodeActive", NotifyNodeActive);
 }
 // vim: expandtab:ts=2:sw=2

@@ -8,6 +8,7 @@
 
 #import "ObjectiveNode.h"
 #import "node_interface.h"
+#import "objective_node.h"
 #import <v8.h>
 
 
@@ -42,6 +43,10 @@
 
 + (void)injectNodeModule:(moduleInit)moduleInitializer name:(NSString *)name {
 	injectNodeModule(moduleInitializer, [name UTF8String], false);
+}
+
++ (BOOL)isNodeActive {
+	return ObjectiveNodeActive;
 }
 
 

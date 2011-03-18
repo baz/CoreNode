@@ -8,6 +8,10 @@
 #import <Cocoa/Cocoa.h>
 #endif
 
+extern NSString *const NodeDidFinishLaunchingNotification;
+extern BOOL ObjectiveNodeActive;
+
+
 // Creates a new UTF-8 C string from a Value.
 // Note: if you only need to access the string (i.e. not make a copy of it) you
 // can use String::Utf8Value:

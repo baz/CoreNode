@@ -115,7 +115,6 @@ static void _KPrepareNode(EV_P_ ev_prepare *watcher, int revents) {
     // as we are not canceled.
 
     // start
-    DLOG("[node] starting in %@", self);
     int exitStatus = node::Start(argc, (char**)argv);
     DLOG("[node] exited with status %d in %@", exitStatus, self);
 

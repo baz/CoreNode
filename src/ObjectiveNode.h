@@ -9,6 +9,7 @@
 #import "NodeThread.h"
 
 typedef void (^NodeCallbackBlock)(NSError *error, NSArray *arguments);
+extern NSString *const NodeDidFinishLaunchingNotification;
 
 #ifdef __cplusplus
 #import <v8.h>
@@ -30,5 +31,6 @@ typedef void (*moduleInit)(v8::Handle<v8::Object> target);
 + (void)injectNodeModule:(moduleInit)moduleInitializer name:(NSString *)name;
 #endif
 
++ (BOOL)isNodeActive;
 
 @end

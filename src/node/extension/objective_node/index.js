@@ -14,3 +14,5 @@ if (global._objective_node) {
 process.on('uncaughtException', global._objective_node.handleUncaughtException);
 
 console.log('Node thread started ('+ process.version +')');
+
+global._objective_node.notifyNodeActive();
