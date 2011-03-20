@@ -102,7 +102,9 @@ v8::Handle<Value> KNodeBlockFun::InvocationProxy(const Arguments& args) {
   assert(!data.IsEmpty());
   KNodeBlockFun* blockFun = (KNodeBlockFun*)External::Unwrap(data);
   assert(((void*)blockFun->block_) != NULL);
-  blockFun->block_(args);
+  if (blockFun->block_) {
+    blockFun->block_(args);
+  }
   delete blockFun;
   return Undefined();
 }
