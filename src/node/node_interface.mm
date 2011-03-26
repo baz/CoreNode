@@ -126,6 +126,23 @@ static bool _invokeJSFunction(const char *functionName, const char *objectName, 
 }
 
 
+static id _invokeJSFunctionSync(const char *functionName, const char *objectName, int argc, v8::Handle<v8::Value> argv[]) {
+  HandleScope scope;
+  id retVal = nil;
+  if (!nodeObjectMap.empty()) {
+    Persistent<Object> object = nodeObjectMap[std::string(objectName)];
+    Local<Value> v = object->Get(String::New(functionName));
+    if (v->IsFunction()) {
+      Local<Function> fun = Function::Cast(*v);
+      Local<Value> v8Value = fun->Call(object, argc, argv);
+      retVal = [NSObject fromV8Value:v8Value];
+    }
+  }
+
+  return retVal;
+}
+
+
 v8::Handle<v8::Value> KNodeCallFunction(v8::Handle<Object> target,
                                         v8::Handle<Function> fun,
                                         int argc, id *objc_argv,
@@ -240,6 +257,20 @@ void nodeInvokeFunction(const char *functionName, const char *objectName, NSArra
 
 void nodeInvokeFunction(const char *functionName, const char *objectName, NodeCallbackBlock callback) {
   nodeInvokeFunction(functionName, objectName, nil, callback);
+}
+
+
+id nodeInvokeFunctionSync(const char *functionName, const char *objectName, NSArray *args) {
+  HandleScope scope;
+  NSUInteger argc = [args count];
+  Local<Value> *argv = new Local<Value>[argc];
+  for (int i=0; i<[args count]; i++) {
+    argv[i] = [[args objectAtIndex:i] v8Value];
+  }
+  id retVal = _invokeJSFunctionSync(functionName, objectName, (unsigned int) argc, argv);
+  delete argv;
+
+  return retVal;
 }
 
 

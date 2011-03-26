@@ -27,6 +27,8 @@ typedef void (*moduleInit)(v8::Handle<v8::Object> target);
 
 + (void)invokeFunction:(NSString *)functionName onObjectName:(NSString *)objectName arguments:(NSArray *)arguments callback:(NodeCallbackBlock)callbackBlock;
 
++ (id)invokeFunctionSync:(NSString *)functionName onObjectName:(NSString *)objectName arguments:(NSArray *)arguments;
+
 #ifdef __cplusplus
 + (void)injectNodeModule:(moduleInit)moduleInitializer name:(NSString *)name;
 #endif
