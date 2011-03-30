@@ -588,6 +588,19 @@ NodeObjectProxy::Initialize(v8::Handle<Object> target,
 }
 
 
+id NodeObjectProxy::RepresentedObjectForObjectProxy(v8::Local<v8::Value> objectProxy) {
+  HandleScope scope;
+  id representedObject = nil;
+	if (objectProxy->IsObject()) {
+    Local<Object> object = Local<Object>::New(objectProxy->ToObject());
+	  NodeObjectProxy *p = ObjectWrap::Unwrap<NodeObjectProxy>(object);
+    representedObject = p->representedObject_;
+	}
+
+	return representedObject;
+}
+
+
 // ----------------------------------------------------------------------------
 
 // Standard base curry source (sauce?)
@@ -630,3 +643,4 @@ KN_OBJC_CLASS_ADDITIONS_BEGIN(NSObject)
 
 
 @end
+// vim: expandtab:ts=2:sw=2

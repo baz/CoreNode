@@ -25,6 +25,7 @@ class NodeObjectProxy : public node::EventEmitter {
       v8::Handle<v8::Object> target,
       v8::Handle<v8::String> className,
       const char *srcObjCClassName=NULL);
+  static id RepresentedObjectForObjectProxy(v8::Local<v8::Value> objectProxy);
 
   NodeObjectProxy(id representedObject);
   virtual ~NodeObjectProxy();

@@ -35,6 +35,10 @@ typedef void (*moduleInit)(v8::Handle<v8::Object> target);
 
 + (void)enableObjectProxyForClassName:(NSString *)className;
 
+#ifdef __cplusplus
++ (id)representedObjectForObjectProxy:(v8::Local<v8::Value>)objectProxy;
+#endif
+
 + (BOOL)isNodeActive;
 
 @end

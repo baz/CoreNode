@@ -18,7 +18,7 @@ using namespace node;
 static v8::Handle<Value> HandleUncaughtException(const Arguments& args) {
   HandleScope scope;
   id err = nil;
-  if (args.Length() > 0) {
+  if (args.Length()) {
     if (args[0]->IsObject()) {
       // Don't include arguments (just gets messy when converted to objc)
       args[0]->ToObject()->Delete(String::New("arguments"));

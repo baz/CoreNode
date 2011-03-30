@@ -9,6 +9,7 @@
 #import "ObjectiveNode.h"
 #import "node_interface.h"
 #import "objective_node.h"
+#import "NodeObjectProxy.h"
 #import <v8.h>
 #import <node.h>
 
@@ -50,7 +51,11 @@
 }
 
 + (void)enableObjectProxyForClassName:(NSString *)className {
-  initializeObjectProxy([className UTF8String]);
+	initializeObjectProxy([className UTF8String]);
+}
+
++ (id)representedObjectForObjectProxy:(v8::Local<v8::Value>)objectProxy {
+	return NodeObjectProxy::RepresentedObjectForObjectProxy(objectProxy);
 }
 
 + (BOOL)isNodeActive {
