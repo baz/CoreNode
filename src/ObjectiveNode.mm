@@ -9,6 +9,7 @@
 #import "ObjectiveNode.h"
 #import "node_interface.h"
 #import "objective_node.h"
+#import "node_ns_additions.h"
 #import "NodeObjectProxy.h"
 #import <v8.h>
 #import <node.h>
@@ -56,6 +57,14 @@
 
 + (id)representedObjectForObjectProxy:(v8::Local<v8::Value>)objectProxy {
 	return NodeObjectProxy::RepresentedObjectForObjectProxy(objectProxy);
+}
+
++ (v8::Local<v8::Value>)v8ValueForObject:(id)object {
+	return [object v8Value];
+}
+
++ (id)objectFromV8Value:(v8::Local<v8::Value>)value {
+	return [NSObject fromV8Value:value];
 }
 
 + (BOOL)isNodeActive {
