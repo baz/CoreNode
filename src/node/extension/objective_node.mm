@@ -56,7 +56,9 @@ static v8::Handle<Value> UnregisterObjectName(const Arguments& args) {
 }
 
 static v8::Handle<Value> NotifyNodeActive(const Arguments& args) {
-  [[NSNotificationCenter defaultCenter] postNotificationName:NodeDidFinishLaunchingNotification object:nil];
+  dispatch_async(dispatch_get_main_queue(), ^{
+    [[NSNotificationCenter defaultCenter] postNotificationName:NodeDidFinishLaunchingNotification object:nil];
+  });
   ObjectiveNodeActive = YES;
   return Undefined();
 }
