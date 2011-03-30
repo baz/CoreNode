@@ -10,6 +10,7 @@
 #import <node_events.h>
 #import <ev.h>
 #import <libkern/OSAtomic.h>
+#import "NodeObjectProxy.h"
 
 using namespace v8;
 
@@ -325,6 +326,13 @@ void NodePerformInNode(NodePerformBlock block) {
   NodeEnqueueIOEntry(entry);
 }
 
+static void _bindModule(const char *name, v8::Handle<Object> module) {
+  Local<Value> bindingsObject = objectiveNodeModule->Get(String::New("binding"));
+  if (bindingsObject->IsObject()) {
+    Local<Object>::Cast(bindingsObject)->Set(String::New(name), module);
+  }
+}
+
 void injectNodeModule(void(*init_module)(v8::Handle<v8::Object> target), const char *module_name, bool root) {
   v8::HandleScope scope;
   Local<FunctionTemplate> function_template = FunctionTemplate::New();
@@ -338,11 +346,18 @@ void injectNodeModule(void(*init_module)(v8::Handle<v8::Object> target), const c
     objectiveNodeModule = function_instance;
   } else {
     // Set via binding object on objective_node module to prevent polluting the global namespace
-    Local<Value> bindingsObject = objectiveNodeModule->Get(String::New("binding"));
-    if (bindingsObject->IsObject()) {
-      Local<Object>::Cast(bindingsObject)->Set(String::New(module_name), function_instance);
-    }
+    _bindModule(module_name, function_instance);
   }
+}
+
+void initializeObjectProxy(const char *className) {
+  v8::HandleScope scope;
+  Local<FunctionTemplate> function_template = FunctionTemplate::New();
+  node::EventEmitter::Initialize(function_template);
+  Persistent<Object> function_instance = Persistent<Object>::New(function_template->GetFunction()->NewInstance());
+  NodeObjectProxy::Initialize(function_instance, String::NewSymbol(className));
+
+  _bindModule(className, function_instance);
 }
 
 void registerNodeObject(const char *name, Persistent<Object> object) {

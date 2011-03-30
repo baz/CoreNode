@@ -61,6 +61,9 @@ static inline void NodePerformInObjectiveNode(NodeCallbackBlock block,
 // inject a custom Node module into the global context
 void injectNodeModule(void(*init_module)(v8::Handle<v8::Object> target), const char *module_name, bool root);
 
+// allow specified class to be proxied through to Node for interaction of setters/getters
+void initializeObjectProxy(const char *className);
+
 // maintain a persistent pointer to a node object in a global map
 void registerNodeObject(const char *name, v8::Persistent<v8::Object> object);
 

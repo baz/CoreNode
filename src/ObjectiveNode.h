@@ -33,6 +33,8 @@ typedef void (*moduleInit)(v8::Handle<v8::Object> target);
 + (void)injectNodeModule:(moduleInit)moduleInitializer name:(NSString *)name;
 #endif
 
++ (void)enableObjectProxyForClassName:(NSString *)className;
+
 + (BOOL)isNodeActive;
 
 @end

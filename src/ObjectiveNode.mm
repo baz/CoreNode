@@ -10,7 +10,7 @@
 #import "node_interface.h"
 #import "objective_node.h"
 #import <v8.h>
-
+#import <node.h>
 
 @implementation ObjectiveNode
 
@@ -47,6 +47,10 @@
 
 + (void)injectNodeModule:(moduleInit)moduleInitializer name:(NSString *)name {
 	injectNodeModule(moduleInitializer, [name UTF8String], false);
+}
+
++ (void)enableObjectProxyForClassName:(NSString *)className {
+  initializeObjectProxy([className UTF8String]);
 }
 
 + (BOOL)isNodeActive {
