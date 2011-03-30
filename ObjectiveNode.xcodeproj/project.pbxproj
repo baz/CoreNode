@@ -76,8 +76,8 @@
 		FD48CFCE13234606004FACFB /* objective_node.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = objective_node.h; sourceTree = "<group>"; };
 		FD48CFCF13234606004FACFB /* objective_node.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = objective_node.mm; sourceTree = "<group>"; };
 		FD48CFD313234631004FACFB /* objective_node */ = {isa = PBXFileReference; lastKnownFileType = folder; path = objective_node; sourceTree = "<group>"; };
-		FD48CFD813234669004FACFB /* node_interface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = node_interface.h; sourceTree = "<group>"; };
-		FD48CFD913234669004FACFB /* node_interface.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = node_interface.mm; sourceTree = "<group>"; };
+		FD48CFD813234669004FACFB /* node_interface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = node_interface.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		FD48CFD913234669004FACFB /* node_interface.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; path = node_interface.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		FD48CFDA13234669004FACFB /* ExternalUTF16String.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExternalUTF16String.h; sourceTree = "<group>"; };
 		FD48CFDB13234669004FACFB /* node_ns_additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = node_ns_additions.h; sourceTree = "<group>"; };
 		FD48CFDC13234669004FACFB /* node_ns_additions.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = node_ns_additions.mm; sourceTree = "<group>"; };

@@ -10,8 +10,8 @@
 #include <vector.h>
 #include <string.h>
 
-class KNodeIOEntry;
-class KNodeBlockFun;
+class NodeIOEntry;
+class NodeBlockFun;
 namespace kod { class ExternalUTF16String; }
 
 typedef void (^NodeReturnBlock)(NodeCallbackBlock, NSError*, NSArray*);
@@ -19,11 +19,11 @@ typedef void (^NodePerformBlock)(NodeReturnBlock);
 typedef void (^NodeFunctionBlock)(const v8::Arguments& args);
 
 // initialize (must be called from node)
-void KNodeInitNode();
+void NodeInitNode();
 
 // perform |block| in the node runtime
-void KNodePerformInNode(NodePerformBlock block);
-void KNodeEnqueueIOEntry(KNodeIOEntry *entry);
+void NodePerformInNode(NodePerformBlock block);
+void NodeEnqueueIOEntry(NodeIOEntry *entry);
 
 /*!
  * Invoke |fun| on |target| passing |argc| number of arguments in |argv|.
@@ -50,7 +50,7 @@ void nodeEmitEventv(const char *eventName, const char *objectName, int argc, id 
 void nodeEmitEvent(const char *eventName, const char *objectName, ...);
 
 // perform |block| in the kod runtime (queue defaults to main thread)
-static inline void KNodePerformInKod(NodeCallbackBlock block,
+static inline void NodePerformInObjectiveNode(NodeCallbackBlock block,
                                      NSError *err=nil,
                                      NSArray *args=nil,
                                      dispatch_queue_t queue=NULL) {
@@ -71,18 +71,18 @@ void unregisterNodeObject(const char *name);
 void unregisterAllNodeObjects();
 
 // Input/Output queue entry base class
-class KNodeIOEntry {
+class NodeIOEntry {
  public:
-  KNodeIOEntry() {}
-  virtual ~KNodeIOEntry() {}
+  NodeIOEntry() {}
+  virtual ~NodeIOEntry() {}
   virtual void perform() { delete this; }
-  KNodeIOEntry *next_;
+  NodeIOEntry *next_;
 };
 
 
 
 // Invocation transaction I/O queue entry
-class KNodeTransactionalIOEntry : public KNodeIOEntry {
+class KNodeTransactionalIOEntry : public NodeIOEntry {
  public:
   KNodeTransactionalIOEntry(NodePerformBlock block, dispatch_queue_t returnDispatchQueue=NULL) {
     performBlock_ = [block copy];
@@ -108,11 +108,11 @@ class KNodeTransactionalIOEntry : public KNodeIOEntry {
     performBlock_(^(NodeCallbackBlock callback, NSError *err, NSArray *args) {
       if (callback) {
         // queue may be released by now
-        KNodePerformInKod(callback, err, args, blockReturnQueue);
+        NodePerformInObjectiveNode(callback, err, args, blockReturnQueue);
       }
     });
     // call super which will delete this instance
-    KNodeIOEntry::perform();
+    NodeIOEntry::perform();
   }
 
  protected:
@@ -122,11 +122,11 @@ class KNodeTransactionalIOEntry : public KNodeIOEntry {
 
 
 // Invokes funcName on target passing arguments
-class KNodeInvocationIOEntry : public KNodeIOEntry {
+class NodeInvocationIOEntry : public NodeIOEntry {
  public:
-  KNodeInvocationIOEntry(v8::Handle<v8::Object> target, const char *funcName, int argc=0, id *argv=NULL);
-  KNodeInvocationIOEntry(v8::Handle<v8::Object> target, const char *funcName, int argc, v8::Handle<v8::Value> argv[]);
-  virtual ~KNodeInvocationIOEntry();
+  NodeInvocationIOEntry(v8::Handle<v8::Object> target, const char *funcName, int argc=0, id *argv=NULL);
+  NodeInvocationIOEntry(v8::Handle<v8::Object> target, const char *funcName, int argc, v8::Handle<v8::Value> argv[]);
+  virtual ~NodeInvocationIOEntry();
   void perform();
  protected:
   char *funcName_;
@@ -137,10 +137,10 @@ class KNodeInvocationIOEntry : public KNodeIOEntry {
 
 
 // Event I/O queue entry
-class KNodeEventIOEntry : public KNodeIOEntry {
+class NodeEventIOEntry : public NodeIOEntry {
  public:
-  KNodeEventIOEntry(const char *name, const char *objectName, int argc, id *argv);
-  virtual ~KNodeEventIOEntry();
+  NodeEventIOEntry(const char *name, const char *objectName, int argc, id *argv);
+  virtual ~NodeEventIOEntry();
   void perform();
  protected:
   char *name_;
@@ -152,32 +152,32 @@ class KNodeEventIOEntry : public KNodeIOEntry {
 
 // -------------------
 
-class KNodeBlockFun {
+class NodeBlockFun {
   NodeFunctionBlock block_;
   v8::Persistent<v8::Function> fun_;
  public:
-  KNodeBlockFun(NodeFunctionBlock block);
-  ~KNodeBlockFun();
+  NodeBlockFun(NodeFunctionBlock block);
+  ~NodeBlockFun();
   inline v8::Local<v8::Value> function() { return *fun_; }
   static v8::Handle<v8::Value> InvocationProxy(const v8::Arguments& args);
 };
 
 // -------------------
 
-static inline v8::Persistent<v8::Object>* KNodePersistentObjectCreate(
+static inline v8::Persistent<v8::Object>* NodePersistentObjectUnwrap(
     const v8::Local<v8::Value> &v) {
   v8::Persistent<v8::Object> *pobj = new v8::Persistent<v8::Object>();
   *pobj = v8::Persistent<v8::Object>::New(v8::Local<v8::Object>::Cast(v));
   return pobj;
 }
 
-static inline v8::Persistent<v8::Object>* KNodePersistentObjectUnwrap(void *data) {
+static inline v8::Persistent<v8::Object>* NodePersistentObjectUnwrap(void *data) {
   v8::Persistent<v8::Object> *pobj = reinterpret_cast<v8::Persistent<v8::Object>*>(data);
   assert((*pobj)->IsObject());
   return pobj;
 }
 
-static inline void KNodePersistentObjectDestroy(v8::Persistent<v8::Object> *pobj) {
+static inline void NodePersistentObjectDestroy(v8::Persistent<v8::Object> *pobj) {
   pobj->Dispose();
   delete pobj;
 }

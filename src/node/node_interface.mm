@@ -20,7 +20,7 @@ void DummyFunction() { }
 
 // ----------------------
 
-// queue with entries of type KNodeIOEntry*
+// queue with entries of type NodeIOEntry*
 static OSQueueHead KNodeIOInputQueue;
 
 // ev notifier
@@ -44,13 +44,13 @@ static void _QueueNotification(OSQueueHead *queue, ev_async *watcher, int revent
 
   // enumerate queue
   // since we use a LIFO queue for atomicity, we need to reverse the order
-  KNodeIOEntry* entries[KNODE_MAX_DEQUEUE+1];
+  NodeIOEntry* entries[KNODE_MAX_DEQUEUE+1];
   int i = 0;
-  KNodeIOEntry* entry;
-  while ( (entry = (KNodeIOEntry*)OSAtomicDequeue(
-           queue, cxx_offsetof(KNodeIOEntry, next_)))
+  NodeIOEntry* entry;
+  while ( (entry = (NodeIOEntry*)OSAtomicDequeue(
+           queue, cxx_offsetof(NodeIOEntry, next_)))
           && (i < KNODE_MAX_DEQUEUE) ) {
-    //NSLog(@"dequeued KNodeIOEntry@%p", entry);
+    //NSLog(@"dequeued NodeIOEntry@%p", entry);
     entries[i++] = entry;
   }
   entries[i] = NULL; // sentinel
@@ -80,13 +80,13 @@ static void _freePersistentArgs(int argc, Persistent<Value> *argv) {
 }
 
 
-KNodeBlockFun::KNodeBlockFun(NodeFunctionBlock block) {
+NodeBlockFun::NodeBlockFun(NodeFunctionBlock block) {
   block_ = [block copy];
-  Local<FunctionTemplate> t = FunctionTemplate::New(&KNodeBlockFun::InvocationProxy, External::Wrap(this));
+  Local<FunctionTemplate> t = FunctionTemplate::New(&NodeBlockFun::InvocationProxy, External::Wrap(this));
   fun_ = Persistent<Function>::New(t->GetFunction());
 }
 
-KNodeBlockFun::~KNodeBlockFun() {
+NodeBlockFun::~NodeBlockFun() {
   [block_ release];
   if (!fun_.IsEmpty()) {
     fun_.Dispose();
@@ -96,11 +96,11 @@ KNodeBlockFun::~KNodeBlockFun() {
 
 // static
 // this will be invoked when the JS function executes the callback
-// unwrap the arguments that come back to retrieve the original KNodeBlockFun instance
-v8::Handle<Value> KNodeBlockFun::InvocationProxy(const Arguments& args) {
+// unwrap the arguments that come back to retrieve the original NodeBlockFun instance
+v8::Handle<Value> NodeBlockFun::InvocationProxy(const Arguments& args) {
   Local<Value> data = args.Data();
   assert(!data.IsEmpty());
-  KNodeBlockFun* blockFun = (KNodeBlockFun*)External::Unwrap(data);
+  NodeBlockFun* blockFun = (NodeBlockFun*)External::Unwrap(data);
   assert(((void*)blockFun->block_) != NULL);
   if (blockFun->block_) {
     blockFun->block_(args);
@@ -184,7 +184,7 @@ void nodeInvokeFunction(const char *functionName, const char *objectName, NSArra
   //DLOG("[knode] 1 calling node from kod");
   char *function = strdup(functionName);
   char *object = strdup(objectName);
-  KNodePerformInNode(^(NodeReturnBlock returnCallback) {
+  NodePerformInNode(^(NodeReturnBlock returnCallback) {
     //DLOG("[knode] 1 called in node");
     //DLOG("[knode] 1 calling kod from node");
     v8::HandleScope scope;
@@ -192,7 +192,7 @@ void nodeInvokeFunction(const char *functionName, const char *objectName, NSArra
     // create a JS function which is the last callback argument
     // this proxy function object wraps an ObjC block which will be pulled out and invoked when the JS function calls back
     __block BOOL blockFunDidExecute = NO;
-    KNodeBlockFun *blockFun = new KNodeBlockFun(^(const v8::Arguments& args){
+    NodeBlockFun *blockFun = new NodeBlockFun(^(const v8::Arguments& args){
       // pass args to callback (convert to cocoa first)
       NSArray *args2 = nil;
       NSError *err = nil;
@@ -225,6 +225,8 @@ void nodeInvokeFunction(const char *functionName, const char *objectName, NSArra
       NSUInteger i = 0;
       for (; i<argc - 1; i++) {
         argv[i] = [[args objectAtIndex:i] v8Value];
+        // TODO Automatically convert any object into a JS object with key-value pairs.
+        // This means the new object will just be a dumb representation...turn it into a proxy object where any change in JS land makes the change in ObjC land.
       }
       argv[i] = fun;
       didFindAndCallFun = _invokeJSFunction(function, object, (unsigned int) argc, argv);
@@ -275,8 +277,8 @@ id nodeInvokeFunctionSync(const char *functionName, const char *objectName, NSAr
 
 
 void nodeEmitEventv(const char *eventName, const char *objectName, int argc, id *argv) {
-  KNodeEventIOEntry *entry = new KNodeEventIOEntry(eventName, objectName, argc, argv);
-  KNodeEnqueueIOEntry(entry);
+  NodeEventIOEntry *entry = new NodeEventIOEntry(eventName, objectName, argc, argv);
+  NodeEnqueueIOEntry(entry);
 }
 
 
@@ -295,7 +297,7 @@ void nodeEmitEvent(const char *eventName, const char *objectName, ...) {
 }
 
 
-void KNodeInitNode() {
+void NodeInitNode() {
   // setup notifiers
   KNodeIOInputQueueNotifier.data = NULL;
   ev_async_init(&KNodeIOInputQueueNotifier, &InputQueueNotification);
@@ -306,21 +308,21 @@ void KNodeInitNode() {
 }
 
 
-static void _KNodeEnqueueEntry(OSQueueHead *queue, ev_async *asyncWatcher, KNodeIOEntry *entry) {
-  OSAtomicEnqueue(queue, entry, cxx_offsetof(KNodeIOEntry, next_));
+static void _NodeEnqueueEntry(OSQueueHead *queue, ev_async *asyncWatcher, NodeIOEntry *entry) {
+  OSAtomicEnqueue(queue, entry, cxx_offsetof(NodeIOEntry, next_));
   ev_async_send(EV_DEFAULT_UC_ asyncWatcher);
 }
 
 
-void KNodeEnqueueIOEntry(KNodeIOEntry *entry) {
-  _KNodeEnqueueEntry(&KNodeIOInputQueue, &KNodeIOInputQueueNotifier, entry);
+void NodeEnqueueIOEntry(NodeIOEntry *entry) {
+  _NodeEnqueueEntry(&KNodeIOInputQueue, &KNodeIOInputQueueNotifier, entry);
 }
 
 
-void KNodePerformInNode(NodePerformBlock block) {
+void NodePerformInNode(NodePerformBlock block) {
   dispatch_queue_t queue = dispatch_get_current_queue();
-  KNodeIOEntry *entry = new KNodeTransactionalIOEntry(block, queue);
-  KNodeEnqueueIOEntry(entry);
+  NodeIOEntry *entry = new KNodeTransactionalIOEntry(block, queue);
+  NodeEnqueueIOEntry(entry);
 }
 
 void injectNodeModule(void(*init_module)(v8::Handle<v8::Object> target), const char *module_name, bool root) {
@@ -370,7 +372,7 @@ void unregisterAllNodeObjects() {
 
 // ---------------------------------------------------------------------------
 
-KNodeInvocationIOEntry::KNodeInvocationIOEntry(v8::Handle<Object> target,
+NodeInvocationIOEntry::NodeInvocationIOEntry(v8::Handle<Object> target,
                                                const char *funcName,
                                                int argc, id *argv) {
   v8::HandleScope scope;
@@ -388,7 +390,7 @@ KNodeInvocationIOEntry::KNodeInvocationIOEntry(v8::Handle<Object> target,
 }
 
 
-KNodeInvocationIOEntry::KNodeInvocationIOEntry(v8::Handle<Object> target,
+NodeInvocationIOEntry::NodeInvocationIOEntry(v8::Handle<Object> target,
                                                const char *funcName,
                                                int argc,
                                                v8::Handle<Value> argv[]) {
@@ -407,7 +409,7 @@ KNodeInvocationIOEntry::KNodeInvocationIOEntry(v8::Handle<Object> target,
 }
 
 
-KNodeInvocationIOEntry::~KNodeInvocationIOEntry() {
+NodeInvocationIOEntry::~NodeInvocationIOEntry() {
   if (!target_.IsEmpty()) {
     target_.Dispose();
     target_.Clear();
@@ -419,25 +421,25 @@ KNodeInvocationIOEntry::~KNodeInvocationIOEntry() {
 }
 
 
-void KNodeInvocationIOEntry::perform() {
+void NodeInvocationIOEntry::perform() {
   v8::HandleScope scope;
-  DLOG("KNodeInvocationIOEntry::perform()");
+  DLOG("NodeInvocationIOEntry::perform()");
   if (!target_.IsEmpty()) {
     Local<Value> v = target_->Get(String::New(funcName_));
     if (v->IsFunction()) {
-      DLOG("KNodeInvocationIOEntry::perform() invoke '%s' with %d arguments",
+      DLOG("NodeInvocationIOEntry::perform() invoke '%s' with %d arguments",
            funcName_, argc_);
       Local<Function> fun = Local<Function>::Cast(v);
       Local<Value> ret = fun->Call(target_, argc_, argv_);
     }
   }
-  KNodeIOEntry::perform();
+  NodeIOEntry::perform();
 }
 
 
 // ---------------------------------------------------------------------------
 
-KNodeEventIOEntry::KNodeEventIOEntry(const char *name, const char *objectName, int argc, id *argv) {
+NodeEventIOEntry::NodeEventIOEntry(const char *name, const char *objectName, int argc, id *argv) {
   kassert(name != NULL);
   name_ = strdup(name);
   objectName_ = strdup(objectName);
@@ -449,7 +451,7 @@ KNodeEventIOEntry::KNodeEventIOEntry(const char *name, const char *objectName, i
 }
 
 
-KNodeEventIOEntry::~KNodeEventIOEntry() {
+NodeEventIOEntry::~NodeEventIOEntry() {
   for (int i = 0; i<argc_; ++i) {
     [argv_[i] release];
   }
@@ -459,7 +461,7 @@ KNodeEventIOEntry::~KNodeEventIOEntry() {
 }
 
 
-void KNodeEventIOEntry::perform() {
+void NodeEventIOEntry::perform() {
   v8::HandleScope scope;
   if (!nodeObjectMap.empty()) {
     Persistent<Object> object = nodeObjectMap[std::string(objectName_)];
@@ -469,6 +471,6 @@ void KNodeEventIOEntry::perform() {
       KNodeCallFunction(object, Local<Function>::Cast(emitFunction), argc_, argv_, &eventName);
     }
   }
-  KNodeIOEntry::perform();
+  NodeIOEntry::perform();
 }
 // vim: expandtab:ts=2:sw=2

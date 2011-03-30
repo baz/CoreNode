@@ -23,7 +23,7 @@ static void _KPrepareNode(EV_P_ ev_prepare *watcher, int revents) {
   injectNodeModule(&objective_node_init, "_objective_node", true);
 
   // Init Node interface
-  KNodeInitNode();
+  NodeInitNode();
 
   // Allow others to initialize modules
   if (ModuleInitializer) {

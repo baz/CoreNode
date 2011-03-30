@@ -6,7 +6,6 @@
 #import "common.h"
 #import "node_interface.h"
 #import "node_ns_additions.h"
-#import "NodeObjectProxy.h"
 #import "NodeThread.h"
 
 NSString *const NodeDidFinishLaunchingNotification = @"NodeDidFinishLaunchingNotification";

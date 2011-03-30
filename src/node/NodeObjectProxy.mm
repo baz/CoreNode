@@ -44,8 +44,8 @@ static char kPersistentWrapperKey = 'a';
       // clear the represented object, but only if it's self
       if (h_atomic_cas(&(p->representedObject_), self, nil)) {
         // queue object for being totally cleared
-        KNodeEnqueueIOEntry(
-            new KNodeInvocationIOEntry(*pobj, "onProxyTargetDeleted"));
+        NodeEnqueueIOEntry(
+            new NodeInvocationIOEntry(*pobj, "onProxyTargetDeleted"));
       }
       pobj->Dispose();
       pobj->Clear();
@@ -68,18 +68,6 @@ static char kPersistentWrapperKey = 'a';
   fprintf(stderr, "\n-- CHECKPOINT %s:%d --\n", __FILE__, __LINE__); \
   fflush(stderr); } while(0)
 
-
-/*static inline void hobjc_swizzle(Class cls, SEL origsel, SEL newsel) {
-  Method origMethod = class_getInstanceMethod(cls, origsel);
-  Method newMethod = class_getInstanceMethod(cls, newsel);
-  if (class_addMethod(cls, origsel, method_getImplementation(newMethod),
-                      method_getTypeEncoding(newMethod))) {
-    class_replaceMethod(cls, newsel, method_getImplementation(origMethod),
-                        method_getTypeEncoding(origMethod));
-  } else {
-    method_exchangeImplementations(origMethod, newMethod);
-  }
-}*/
 
 static Class KNodeEnableProxyForObjCClass(const char *name,
                                           const char *srcName) {
@@ -621,7 +609,7 @@ KN_OBJC_CLASS_ADDITIONS_BEGIN(NSObject)
     if (!v) {
       Local<Object> obj = NodeObjectProxy::New(self);
       if (!obj.IsEmpty() && obj->IsObject()) {
-        Persistent<Object> *pobj = KNodePersistentObjectCreate(obj);
+        Persistent<Object> *pobj = NodePersistentObjectUnwrap(obj);
         v = [NSValue valueWithPointer:pobj];
         objc_setAssociatedObject(self, &kPersistentWrapperKey, v,
                                  OBJC_ASSOCIATION_RETAIN);
