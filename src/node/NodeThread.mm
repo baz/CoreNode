@@ -67,6 +67,13 @@ static void _KPrepareNode(EV_P_ ev_prepare *watcher, int revents) {
   ModuleInitializer = [moduleInitializer copy];
 }
 
+- (void)setEnvironment:(NSDictionary *)environment {
+  for (NSString *key in environment) {
+    NSString *value = [environment objectForKey:key];
+    setenv([key UTF8String], [value UTF8String], 1);
+  }
+}
+
 - (void)main {
   NSAutoreleasePool *pool = [NSAutoreleasePool new];
 
@@ -83,7 +90,6 @@ static void _KPrepareNode(EV_P_ ev_prepare *watcher, int revents) {
     #endif
   #endif
   if (self.bootstrapPath) argv[argc-1] = [self.bootstrapPath UTF8String];
- 
 
   // NODE_PATH
   NSString *extensionPath = [[onconf_bundle() resourcePath] stringByAppendingPathComponent:@"objective_node"];

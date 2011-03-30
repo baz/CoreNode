@@ -15,6 +15,7 @@ typedef void(^NodeModuleInitializeBlock)(void);
 - (id)initWithBootstrapPath:(NSString *)bootstrapPath nodePath:(NSString *)nodePath;
 + (void)setModuleInitializeBlock:(NodeModuleInitializeBlock)moduleInitializer;
 + (void)handleUncaughtException:(id)err;
+- (void)setEnvironment:(NSDictionary *)environment;
 
 @end
 // vim: expandtab:ts=2:sw=2
