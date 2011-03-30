@@ -72,6 +72,6 @@ void objective_node_init(v8::Handle<v8::Object> target) {
   NODE_SET_METHOD(target, "handleUncaughtException", HandleUncaughtException);
   NODE_SET_METHOD(target, "registerObject", RegisterObject);
   NODE_SET_METHOD(target, "unregisterObjectName", UnregisterObjectName);
-  NODE_SET_METHOD(target, "notifyNodeActive", NotifyNodeActive);
+  NODE_SET_METHOD(target, "_notifyNodeActive", NotifyNodeActive);
 }
 // vim: expandtab:ts=2:sw=2
