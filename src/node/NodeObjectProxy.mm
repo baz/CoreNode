@@ -591,13 +591,15 @@ NodeObjectProxy::Initialize(v8::Handle<Object> target,
 id NodeObjectProxy::RepresentedObjectForObjectProxy(v8::Local<v8::Value> objectProxy) {
   HandleScope scope;
   id representedObject = nil;
-	if (objectProxy->IsObject()) {
+  if (objectProxy->IsObject()) {
     Local<Object> object = Local<Object>::New(objectProxy->ToObject());
-	  NodeObjectProxy *p = ObjectWrap::Unwrap<NodeObjectProxy>(object);
-    representedObject = p->representedObject_;
-	}
+    if (object->InternalFieldCount()) {
+      NodeObjectProxy *p = ObjectWrap::Unwrap<NodeObjectProxy>(object);
+      representedObject = p->representedObject_;
+    }
+  }
 
-	return representedObject;
+  return representedObject;
 }
 
 
