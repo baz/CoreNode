@@ -226,8 +226,6 @@ void nodeInvokeFunction(const char *functionName, const char *objectName, NSArra
       NSUInteger i = 0;
       for (; i<argc - 1; i++) {
         argv[i] = [[args objectAtIndex:i] v8Value];
-        // TODO Automatically convert any object into a JS object with key-value pairs.
-        // This means the new object will just be a dumb representation...turn it into a proxy object where any change in JS land makes the change in ObjC land.
       }
       argv[i] = fun;
       didFindAndCallFun = _invokeJSFunction(function, object, (unsigned int) argc, argv);

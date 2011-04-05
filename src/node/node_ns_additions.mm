@@ -3,6 +3,7 @@
 // found in the LICENSE file.
 
 #import "node_ns_additions.h"
+#import "NodeObjectProxy.h"
 #import "ExternalUTF16String.h"
 
 #import <err.h>
@@ -126,6 +127,12 @@ Persistent<Function> BuildContext::indexOf;
     NSData *nsdata = [NSData dataWithBytes:data length:length];
     bctx->SetObjectForValue(nsdata, v);
     return nsdata;
+  }
+
+  // Object -> Wrapped object
+  if (v->IsObject()) {
+    id wrappedObject = NodeObjectProxy::RepresentedObjectForObjectProxy(v);
+    if (wrappedObject) return wrappedObject;
   }
 
   // Object --> Dictionary
