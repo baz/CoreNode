@@ -3,15 +3,15 @@
 KObjCPropFlags k_objc_propattrs(objc_property_t prop,
                                 char *returnType,
                                 NSString **getterName,
-                                NSString **setterName) {
+                                NSString **setterName,
+                                NSString **className) {
   KObjCPropFlags flags = 0;
+  if (returnType) *returnType = 0;
   if (getterName) *getterName = NULL;
   if (setterName) *setterName = NULL;
-  if (returnType) *returnType = 0;
+  if (className) *className = NULL;
   const char *propattrs = property_getAttributes(prop);
-  if (!propattrs || propattrs[0] != 'T')
-    return 0;
-  //NSLog(@"propattrs -> %s", propattrs);
+  if (!propattrs || propattrs[0] != 'T') return 0;
   size_t propattrslen = strlen(propattrs);
   char section = 0;
   for (int i=0; i<propattrslen; ++i) {
@@ -37,6 +37,21 @@ KObjCPropFlags k_objc_propattrs(objc_property_t prop,
         case '{': // struct
           // unsupported
           return KObjCPropUnsupported;
+        case '@': // object
+          {
+            // skip over class name
+            const char *start = propattrs+i+1;
+            const char *end = start;
+            while ( (*end != ',') && end && ++end );
+            long length = end-start;
+            if (className) {
+              *className = [[NSString alloc] initWithBytes:start+1
+                                                    length:length-2
+                                                  encoding:NSUTF8StringEncoding];
+              [*className autorelease];
+            }
+            i += length;
+          }
         default:
           if (returnType)
             *returnType = c;

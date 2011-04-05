@@ -21,7 +21,8 @@ extern "C" {
 KObjCPropFlags k_objc_propattrs(objc_property_t prop,
                                 char *returnType,
                                 NSString **getterName,
-                                NSString **setterName);
+                                NSString **setterName,
+                                NSString **className);
 
 #ifdef __cplusplus
 }  // extern "C"

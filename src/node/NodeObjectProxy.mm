@@ -185,18 +185,14 @@ static NSInvocation *_findInvocation(NodeObjectProxy *p, NSString *selectorName)
   if (!selectorName || !p->representedObject_)
     return NULL;
 
-  // find method with name "key"
   SEL sel = NSSelectorFromString(selectorName);
-  //NSLog(@"keysel -> %@", keysel ? NSStringFromSelector(keysel) : nil);
   NSInvocation *invocation = nil;
   NSMethodSignature *msig =
       [p->representedObject_ methodSignatureForSelector:sel];
-  //NSLog(@"msig -> %@", msig);
   if (msig) {
     invocation = [NSInvocation invocationWithMethodSignature:msig];
     [invocation setSelector:sel];
     [invocation setTarget:p->representedObject_];
-    //[invocation setArgument:&newThickness atIndex:2];
   }
   return invocation;
 }
@@ -204,24 +200,13 @@ static NSInvocation *_findInvocation(NodeObjectProxy *p, NSString *selectorName)
 
 static BOOL _invokeSetter(NSInvocation *invocation,
                           char typecode,
+                          NSString *className,
                           Local<Value> &value) {
+  const NSUInteger kArgumentIndex = 2;
   switch (typecode) {
-    case '"': {
-      String::Utf8Value utf8pch(value->ToString());
-      id arg2 = [NSString stringWithUTF8String:*utf8pch];
-      // Note(rsms): we need to use objc_msgSend directly in the case of string
-      // arguments for some weird reason. [invocation invoke] causes
-      // "+[NSCFString length]: unrecognized selector" and finally a
-      // NSInvalidArgumentException to be raised.
-      objc_msgSend([invocation target], [invocation selector], arg2);
-      //[invocation setArgument:arg2 atIndex:2];
-      //[invocation invoke];
-      break;
-    }
     case _C_ID: {
-      String::Utf8Value utf8pch(value->ToString());
-      [invocation setArgument:[NSString stringWithUTF8String:*utf8pch]
-                      atIndex:2];
+      id object = [NSObject fromV8Value:*value];
+      [invocation setArgument:&object atIndex:kArgumentIndex];
       [invocation invoke];
       break;
     }
@@ -232,28 +217,28 @@ static BOOL _invokeSetter(NSInvocation *invocation,
     case _C_LNG_LNG:
     case _C_ULNG_LNG: {
       int64_t d = value->IntegerValue();
-      [invocation setArgument:(void*)&d atIndex:2];
+      [invocation setArgument:(void*)&d atIndex:kArgumentIndex];
       [invocation invoke];
       break;
     }
     case _C_FLT:
     case _C_DBL: {
       double f = value->NumberValue();
-      [invocation setArgument:(void*)&f atIndex:2];
+      [invocation setArgument:(void*)&f atIndex:kArgumentIndex];
       [invocation invoke];
       break;
     }
     case _C_CHR:
     case _C_BOOL: {
       BOOL b = !!value->BooleanValue();
-      [invocation setArgument:(void*)&b atIndex:2];
+      [invocation setArgument:(void*)&b atIndex:kArgumentIndex];
       [invocation invoke];
       break;
     }
     case _C_CHARPTR: {
       String::Utf8Value utf8pch(value->ToString());
       const char *pch = *utf8pch;
-      [invocation setArgument:(void*)&pch atIndex:2];
+      [invocation setArgument:(void*)&pch atIndex:kArgumentIndex];
       [invocation invoke];
       break;
     }
@@ -377,7 +362,7 @@ static v8::Handle<Value> NamedGetter(Local<String> property,
   objc_property_t prop = class_getProperty([p->representedObject_ class], name);
   if (prop) {
     KObjCPropFlags propflags =
-        k_objc_propattrs(prop, NULL, &selectorName, NULL);
+        k_objc_propattrs(prop, NULL, &selectorName, NULL, NULL);
     NSInvocation *invocation;
     if ((propflags & KObjCPropReadable) &&
         (invocation = _findInvocation(p, selectorName))) {
@@ -412,13 +397,13 @@ static v8::Handle<Value> NamedSetter(Local<String> property,
   objc_property_t prop = class_getProperty([p->representedObject_ class], name);
   if (prop) {
     char typecode;
-    NSString *getterName, *setterName;
+    NSString *getterName, *setterName, *className;
     KObjCPropFlags propflags =
-        k_objc_propattrs(prop, &typecode, &getterName, &setterName);
+        k_objc_propattrs(prop, &typecode, &getterName, &setterName, &className);
     if (propflags & KObjCPropWritable) {
       NSInvocation *invocation = _findInvocation(p, setterName);
       if (invocation) {
-        if (_invokeSetter(invocation, typecode, value)) {
+        if (_invokeSetter(invocation, typecode, className, value)) {
           return scope.Close(value);
         }
       }
@@ -444,7 +429,7 @@ static v8::Handle<Integer> NamedQuery(Local<String> property,
   objc_property_t prop = class_getProperty([p->representedObject_ class], name);
   if (prop) {
     int flags = v8::DontDelete;
-    KObjCPropFlags propflags = k_objc_propattrs(prop, NULL, NULL, NULL);
+    KObjCPropFlags propflags = k_objc_propattrs(prop, NULL, NULL, NULL, NULL);
     if (!(propflags & KObjCPropWritable))
       flags |= v8::ReadOnly;
     r = Integer::New(flags);
@@ -489,7 +474,7 @@ static v8::Handle<Array> NamedEnumerator(const AccessorInfo& info) {
   uint32_t index = 0;
 
   for (unsigned int i=0; i<propsCount; ++i) {
-    KObjCPropFlags propflags = k_objc_propattrs(props[i], NULL, NULL, NULL);
+    KObjCPropFlags propflags = k_objc_propattrs(props[i], NULL, NULL, NULL, NULL);
     if (propflags & KObjCPropReadable) {
       list->Set(index++, String::New(property_getName(props[i])));
     }
@@ -645,4 +630,3 @@ KN_OBJC_CLASS_ADDITIONS_BEGIN(NSObject)
 
 
 @end
-// vim: expandtab:ts=2:sw=2
