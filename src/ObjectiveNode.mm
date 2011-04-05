@@ -71,5 +71,11 @@
 	return ObjectiveNodeActive;
 }
 
++ (void)runGC {
+  while (!v8::V8::IdleNotification()) {
+    v8::V8::IdleNotification();
+  }
+}
+
 
 @end
