@@ -206,8 +206,10 @@ static BOOL _invokeSetter(NSInvocation *invocation,
   switch (typecode) {
     case _C_ID: {
       id object = [NSObject fromV8Value:*value];
-      [invocation setArgument:&object atIndex:kArgumentIndex];
-      [invocation invoke];
+      if ([object isKindOfClass:NSClassFromString(className)]) {
+        [invocation setArgument:&object atIndex:kArgumentIndex];
+        [invocation invoke];
+      }
       break;
     }
     case _C_INT:
