@@ -43,7 +43,5 @@ typedef void (*moduleInit)(v8::Handle<v8::Object> target);
 
 + (BOOL)isNodeActive;
 
-+ (void)runGC;
-
 
 @end
