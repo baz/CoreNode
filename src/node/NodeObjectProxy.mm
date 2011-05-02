@@ -480,7 +480,6 @@ static v8::Handle<Array> NamedEnumerator(const AccessorInfo& info) {
       KObjCPropFlags propflags = k_objc_propattrs(props[i], NULL, NULL, NULL, NULL);
       if (propflags & KObjCPropReadable) {
         list->Set(index++, String::New(property_getName(props[i])));
-        NSLog(@"OBJC %s",property_getName(props[i]));
       }
     }
     free(props);
