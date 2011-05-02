@@ -469,19 +469,24 @@ static v8::Handle<Array> NamedEnumerator(const AccessorInfo& info) {
   //KN_DLOG("%s", __PRETTY_FUNCTION__);
   NodeObjectProxy *p = ObjectWrap::Unwrap<NodeObjectProxy>(info.This());
 
-  unsigned int propsCount;
-  Class cls = [p->representedObject_ class];
-  objc_property_t *props = class_copyPropertyList(cls, &propsCount);
-  Local<Array> list = Array::New(propsCount);
+  Local<Array> list = Array::New();
   uint32_t index = 0;
+  Class cls = [p->representedObject_ class];
+  while (cls) {
+    unsigned int propsCount;
+    objc_property_t *props = class_copyPropertyList(cls, &propsCount);
 
-  for (unsigned int i=0; i<propsCount; ++i) {
-    KObjCPropFlags propflags = k_objc_propattrs(props[i], NULL, NULL, NULL, NULL);
-    if (propflags & KObjCPropReadable) {
-      list->Set(index++, String::New(property_getName(props[i])));
+    for (unsigned int i=0; i<propsCount; ++i) {
+      KObjCPropFlags propflags = k_objc_propattrs(props[i], NULL, NULL, NULL, NULL);
+      if (propflags & KObjCPropReadable) {
+        list->Set(index++, String::New(property_getName(props[i])));
+        NSLog(@"OBJC %s",property_getName(props[i]));
+      }
     }
+    free(props);
+
+    cls = class_getSuperclass(cls);
   }
-  free(props);
 
   // TODO: list methods and include methods which match the property pattern:
   //  -*
