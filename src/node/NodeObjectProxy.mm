@@ -209,6 +209,8 @@ static BOOL _invokeSetter(NSInvocation *invocation,
       if ([object isKindOfClass:NSClassFromString(className)] || !className) {
         [invocation setArgument:&object atIndex:kArgumentIndex];
         [invocation invoke];
+      } else {
+        WLOG("wrong class type for setter method '%@'", NSStringFromSelector([invocation selector]));
       }
       break;
     }
