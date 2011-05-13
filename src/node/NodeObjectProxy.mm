@@ -206,10 +206,10 @@ static BOOL _invokeSetter(NSInvocation *invocation,
   switch (typecode) {
     case _C_ID: {
       id object = [NSObject fromV8Value:*value];
-      if ([object isKindOfClass:NSClassFromString(className)] || !className) {
+      if (object != [NSNull null] && ([object isKindOfClass:NSClassFromString(className)] || !className)) {
         [invocation setArgument:&object atIndex:kArgumentIndex];
         [invocation invoke];
-      } else {
+      } else if (object != [NSNull null]) {
         WLOG("wrong class type for setter method '%@'", NSStringFromSelector([invocation selector]));
       }
       break;
