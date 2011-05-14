@@ -4,12 +4,12 @@ cd "$(dirname $0)/node"
 # synthesize Xcode env vars when running on our own
 if [ "$CONFIGURATION_BUILD_DIR" = "" ]; then
   # TODO: query xcodebuild for the active build style
-  BUILD_STYLE=$1
-  if [ "$BUILD_STYLE" != "Debug" ] && [ "$BUILD_STYLE" != "Release" ]; then
-    BUILD_STYLE=Debug
+  CONFIGURATION=$1
+  if [ "$CONFIGURATION" != "Debug" ] && [ "$CONFIGURATION" != "Release" ]; then
+    CONFIGURATION=Debug
   fi
   PRODUCT_NAME=nodejs
-  CONFIGURATION_BUILD_DIR=../../build/$BUILD_STYLE
+  CONFIGURATION_BUILD_DIR=../../build/$CONFIGURATION
   ARCHS=x64
 fi
 
@@ -52,7 +52,7 @@ WAF="python tools/waf-light --jobs=$(sysctl -n hw.ncpu)"
 WAF_MAKE="$WAF --check-c-compiler=clang --product-type=cstaticlib --debug build"
 
 # debug build is treated differently (_g suffix, debug subdir, etc) by WAF
-if [ "$BUILD_STYLE" = "Debug" ]; then
+if [ "$CONFIGURATION" = "Debug" ]; then
   echo "info: Building debug"
   $WAF "--blddir=${NODE_BUILD_DIR}" --debug configure
   $WAF_MAKE
