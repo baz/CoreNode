@@ -35,6 +35,8 @@
 		FD81C88813233F7600EB9C10 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = FD81C88613233F7600EB9C10 /* InfoPlist.strings */; };
 		FD81C88B13233F7600EB9C10 /* Objective_NodeTests.h in Resources */ = {isa = PBXBuildFile; fileRef = FD81C88A13233F7600EB9C10 /* Objective_NodeTests.h */; };
 		FD81C88D13233F7600EB9C10 /* Objective_NodeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = FD81C88C13233F7600EB9C10 /* Objective_NodeTests.m */; };
+		FDB551A9137D049900889EAA /* NodeJSFunction.h in Headers */ = {isa = PBXBuildFile; fileRef = FDB551A7137D049900889EAA /* NodeJSFunction.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		FDB551AA137D049900889EAA /* NodeJSFunction.mm in Sources */ = {isa = PBXBuildFile; fileRef = FDB551A8137D049900889EAA /* NodeJSFunction.mm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -106,6 +108,8 @@
 		FD81C89B13233FD400EB9C10 /* base.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = base.xcconfig; sourceTree = "<group>"; };
 		FD81C89C13233FD400EB9C10 /* debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = debug.xcconfig; sourceTree = "<group>"; };
 		FD81C89D13233FD400EB9C10 /* release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = release.xcconfig; sourceTree = "<group>"; };
+		FDB551A7137D049900889EAA /* NodeJSFunction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NodeJSFunction.h; path = src/NodeJSFunction.h; sourceTree = SOURCE_ROOT; };
+		FDB551A8137D049900889EAA /* NodeJSFunction.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = NodeJSFunction.mm; path = src/NodeJSFunction.mm; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -231,6 +235,8 @@
 				FD81C87313233F7600EB9C10 /* Supporting Files */,
 				FD4295EC13239ACF00B8A790 /* ObjectiveNode.h */,
 				FD4295ED13239ACF00B8A790 /* ObjectiveNode.mm */,
+				FDB551A7137D049900889EAA /* NodeJSFunction.h */,
+				FDB551A8137D049900889EAA /* NodeJSFunction.mm */,
 			);
 			name = "Objective Node";
 			path = src;
@@ -294,6 +300,7 @@
 				FD48CFF313234690004FACFB /* common.h in Headers */,
 				FD48CFF713234690004FACFB /* k_objc_prop.h in Headers */,
 				FD4295EE13239ACF00B8A790 /* ObjectiveNode.h in Headers */,
+				FDB551A9137D049900889EAA /* NodeJSFunction.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -361,6 +368,7 @@
 		FD81C85F13233F7600EB9C10 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastUpgradeCheck = 0410;
 				ORGANIZATIONNAME = "Neat IO Pty Ltd";
 			};
 			buildConfigurationList = FD81C86213233F7600EB9C10 /* Build configuration list for PBXProject "ObjectiveNode" */;
@@ -423,6 +431,7 @@
 				FD48CFF413234690004FACFB /* common.m in Sources */,
 				FD48CFF813234690004FACFB /* k_objc_prop.m in Sources */,
 				FD4295EF13239ACF00B8A790 /* ObjectiveNode.mm in Sources */,
+				FDB551AA137D049900889EAA /* NodeJSFunction.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -482,6 +491,7 @@
 			baseConfigurationReference = FD81C89C13233FD400EB9C10 /* debug.xcconfig */;
 			buildSettings = {
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 			};
@@ -492,6 +502,7 @@
 			baseConfigurationReference = FD81C89D13233FD400EB9C10 /* release.xcconfig */;
 			buildSettings = {
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 			};

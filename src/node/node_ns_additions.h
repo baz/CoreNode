@@ -43,7 +43,7 @@ extern NSString * const KNodeErrorDomain;
  *   String --> NSString
  *   Date --> NSDate
  *   RegExp --> NSString
- *   // Function --> NodeJSFunction
+ *   Function --> NodeJSFunction
  *   Array --> NSArray
  *   node::Buffer --> NSData
  *   Object --> Dictionary

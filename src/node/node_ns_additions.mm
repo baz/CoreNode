@@ -5,6 +5,7 @@
 #import "node_ns_additions.h"
 #import "NodeObjectProxy.h"
 #import "ExternalUTF16String.h"
+#import "NodeJSFunction.h"
 
 #import <err.h>
 #import <node_buffer.h>
@@ -133,6 +134,14 @@ Persistent<Function> BuildContext::indexOf;
   if (v->IsObject()) {
     id wrappedObject = NodeObjectProxy::RepresentedObjectForObjectProxy(v);
     if (wrappedObject) return wrappedObject;
+  }
+
+  // Function -> NodeJSFunction
+  if (v->IsFunction()) {
+    NodeJSFunction *nodeFunction = [NodeJSFunction new];
+    Local<Function> fun = Local<Function>::Cast(v);
+    [nodeFunction setV8Function:fun];
+    return nodeFunction;
   }
 
   // Object --> Dictionary
