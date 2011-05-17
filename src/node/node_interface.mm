@@ -14,6 +14,7 @@
 
 using namespace v8;
 
+void DummyFunction();
 void DummyFunction() { }
 #define KnownAddress ((char *) ::DummyFunction)
 #define cxx_offsetof(type, member) \
