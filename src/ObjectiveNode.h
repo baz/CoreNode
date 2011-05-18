@@ -7,6 +7,7 @@
 //
 
 #import "NodeThread.h"
+#import "NodeJSFunction.h"
 
 typedef void (^NodeCallbackBlock)(NSError *error, NSArray *arguments);
 extern NSString *const NodeDidFinishLaunchingNotification;
