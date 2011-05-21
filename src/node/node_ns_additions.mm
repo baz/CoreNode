@@ -138,7 +138,7 @@ Persistent<Function> BuildContext::indexOf;
 
   // Function -> NodeJSFunction
   if (v->IsFunction()) {
-    NodeJSFunction *nodeFunction = [NodeJSFunction new];
+    NodeJSFunction *nodeFunction = [[[NodeJSFunction alloc] init] autorelease];
     Local<Function> fun = Local<Function>::Cast(v);
     [nodeFunction setV8Function:fun];
     return nodeFunction;

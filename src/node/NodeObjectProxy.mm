@@ -14,14 +14,6 @@
 using namespace v8;
 using namespace node;
 
-// ----------------------------------------------------------------------------
-
-class ARPoolScope {
- public:
-  NSAutoreleasePool *pool_;
-  ARPoolScope() { pool_ = [NSAutoreleasePool new]; }
-  ~ARPoolScope() { [pool_ drain]; pool_ = nil; }
-};
 
 // ----------------------------------------------------------------------------
 

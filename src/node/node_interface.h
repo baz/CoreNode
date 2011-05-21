@@ -111,6 +111,7 @@ class KNodeTransactionalIOEntry : public NodeIOEntry {
     performBlock_(^(NodeCallbackBlock callback, NSError *err, NSArray *args) {
       if (callback) {
         // queue may be released by now
+        // invoke the original ObjC callback block that was provided by the caller
         NodePerformInObjectiveNode(callback, err, args, blockReturnQueue);
       }
     });
@@ -165,6 +166,15 @@ class NodeBlockFun {
   static v8::Handle<v8::Value> InvocationProxy(const v8::Arguments& args);
  protected:
   bool isReleased_;
+};
+
+// -------------------
+
+class ARPoolScope {
+ public:
+  NSAutoreleasePool *pool_;
+  ARPoolScope() { pool_ = [NSAutoreleasePool new]; }
+  ~ARPoolScope() { [pool_ drain]; pool_ = nil; }
 };
 
 // -------------------

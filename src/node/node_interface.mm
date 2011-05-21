@@ -190,6 +190,7 @@ void nodeInvokeFunction(const char *functionName, const char *objectName, NSArra
   char *function = strdup(functionName);
   char *object = strdup(objectName);
   NodePerformInNode(^(NodeReturnBlock returnCallback) {
+    ARPoolScope outerPool;
     //DLOG("[knode] 1 called in node");
     //DLOG("[knode] 1 calling kod from node");
     v8::HandleScope scope;
@@ -197,9 +198,10 @@ void nodeInvokeFunction(const char *functionName, const char *objectName, NSArra
     // create a JS function which is the last callback argument
     // this proxy function object wraps an ObjC block which will be pulled out and invoked when the JS function calls back
     __block BOOL blockFunDidExecute = NO;
-    NodeBlockFun *blockFun = new NodeBlockFun(^(const v8::Arguments& args){
+    NodeBlockFun *blockFun = new NodeBlockFun(^(const v8::Arguments& args) {
+      ARPoolScope innerPool;
       // pass args to callback (convert to cocoa first)
-      NSArray *args2 = nil;
+      NSMutableArray *args2 = nil;
       NSError *err = nil;
       // check if first arg is an object and if so, treat it as an error
       if (args.Length() > 0) {
@@ -211,7 +213,7 @@ void nodeInvokeFunction(const char *functionName, const char *objectName, NSArra
         if (args.Length() > 1) {
           args2 = [NSMutableArray arrayWithCapacity:args.Length()-1];
           for (int i = 1; i < args.Length(); ++i)
-            [(NSMutableArray*)args2 addObject:[NSObject fromV8Value:args[i]]];
+            [args2 addObject:[NSObject fromV8Value:args[i]]];
         }
       }
       returnCallback(callback, err, args2);
