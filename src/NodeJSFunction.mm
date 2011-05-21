@@ -35,14 +35,6 @@ static std::map<id, Persistent<Value> > valueCache;
   [super dealloc];
 }
 
-- (id)retain {
-  return [super retain];
-}
-
-- (void)release {
-   [super release];
-}
-
 - (void)setV8Function:(v8::Local<v8::Function>)function {
   function_ = Persistent<Function>::New(function);
 }
