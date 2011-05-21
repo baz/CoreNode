@@ -63,8 +63,7 @@ static std::map<id, Persistent<Value> > valueCache;
   NodePerformInNode(^(NodeReturnBlock returnCallback) {
     TryCatch tryCatch;
     if (function_->IsFunction()) {
-      Local<Function> fun = Function::Cast(*function_);
-      fun->Call(Context::GetCurrent()->Global(), argc, argv);
+      function_->Call(Context::GetCurrent()->Global(), argc, argv);
       delete argv;
       if (tryCatch.HasCaught()) {
         String::Utf8Value trace(tryCatch.StackTrace());
