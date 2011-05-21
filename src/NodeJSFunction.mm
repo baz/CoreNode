@@ -13,6 +13,8 @@
 
 using namespace v8;
 
+static std::map<id, Persistent<Value> > valueCache;
+
 
 @implementation NodeJSFunction
 
@@ -20,22 +22,48 @@ using namespace v8;
 - (void)dealloc {
   function_.Dispose();
   function_.Clear();
+
+  std::map<id, Persistent<Value> >::iterator it;
+  for (it = valueCache.begin(); it != valueCache.end(); it++) {
+    Persistent<Value> v = it->second;
+    v.Dispose();
+    v.Clear();
+    valueCache.erase(it->first);
+  }
+  valueCache.clear();
+
   [super dealloc];
 }
 
+- (id)retain {
+  return [super retain];
+}
+
+- (void)release {
+   [super release];
+}
+
 - (void)setV8Function:(v8::Local<v8::Function>)function {
-  function_ = Persistent<Object>::New(function->ToObject());
+  function_ = Persistent<Function>::New(function);
 }
 
 - (void)invokeWithArguments:(id)argument, ... {
   static const int argcmax = 16;
-  Local<Value> *argv = new Local<Value>[argcmax];
+  Handle<Value> *argv = new Handle<Value>[argcmax];
   int argc = 0;
   if (argument) {
     va_list valist;
     va_start(valist, argument);
     for (id arg = argument; arg != nil; arg = va_arg(valist, id)) {
-      argv[argc++] = [arg v8Value];
+      if (valueCache.count(arg)) {
+        argv[argc] = valueCache[arg];
+      } else {
+        Local<Value> v = [arg v8Value];
+        argv[argc] = v;
+        // Cache for next time
+        valueCache[arg] = Persistent<Value>::New(v);
+      }
+      argc++;
     }
     va_end(valist);
   }
@@ -51,8 +79,6 @@ using namespace v8;
         WLOG("Error occurred whilst calling NodeJSFunction: %s", *trace ? *trace : "(no trace)");
       }
     }
-    // Must be called since this takes care of releasing some resources
-    returnCallback(nil, nil, nil);
   });
 }
 

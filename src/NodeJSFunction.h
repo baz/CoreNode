@@ -16,7 +16,7 @@
 @interface NodeJSFunction : NSObject {
 	@private
 #ifdef __cplusplus
-		v8::Persistent<v8::Object> function_;
+		v8::Persistent<v8::Function> function_;
 #endif
 }
 
