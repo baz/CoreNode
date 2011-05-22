@@ -40,13 +40,21 @@ static std::map<id, Persistent<Value> > valueCache;
 }
 
 - (void)invokeWithArguments:(id)argument, ... {
-  static const int argcmax = 16;
-  Handle<Value> *argv = new Handle<Value>[argcmax];
-  int argc = 0;
+  NSMutableArray *arguments = [NSMutableArray arrayWithCapacity:0];
   if (argument) {
     va_list valist;
     va_start(valist, argument);
     for (id arg = argument; arg != nil; arg = va_arg(valist, id)) {
+      [arguments addObject:arg];
+    }
+    va_end(valist);
+  }
+
+  NodePerformInNode(^(NodeReturnBlock returnCallback) {
+    HandleScope scope;
+    Handle<Value> *argv = new Handle<Value>[[arguments count]];
+    int argc = 0;
+    for (id arg in arguments) {
       if (valueCache.count(arg)) {
         argv[argc] = valueCache[arg];
       } else {
@@ -57,10 +65,7 @@ static std::map<id, Persistent<Value> > valueCache;
       }
       argc++;
     }
-    va_end(valist);
-  }
 
-  NodePerformInNode(^(NodeReturnBlock returnCallback) {
     TryCatch tryCatch;
     if (function_->IsFunction()) {
       function_->Call(Context::GetCurrent()->Global(), argc, argv);
