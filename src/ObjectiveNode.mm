@@ -51,7 +51,7 @@
 }
 
 + (void)enableObjectProxyForClassName:(NSString *)className {
-  initializeObjectProxy([className UTF8String]);
+  initializeObjectProxy([className UTF8String], NULL);
 }
 
 + (id)representedObjectForObjectProxy:(v8::Local<v8::Value>)objectProxy {

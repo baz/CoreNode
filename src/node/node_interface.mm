@@ -354,12 +354,12 @@ void injectNodeModule(void(*init_module)(v8::Handle<v8::Object> target), const c
   }
 }
 
-void initializeObjectProxy(const char *className) {
+void initializeObjectProxy(const char *className, const char *sourceClassName) {
   v8::HandleScope scope;
   Local<FunctionTemplate> function_template = FunctionTemplate::New();
   node::EventEmitter::Initialize(function_template);
   Persistent<Object> function_instance = Persistent<Object>::New(function_template->GetFunction()->NewInstance());
-  NodeObjectProxy::Initialize(function_instance, String::NewSymbol(className));
+  NodeObjectProxy::Initialize(function_instance, String::NewSymbol(className), sourceClassName);
 
   _bindModule(className, function_instance);
 }
@@ -492,4 +492,3 @@ void NodeEventIOEntry::perform() {
   }
   NodeIOEntry::perform();
 }
-// vim: expandtab:ts=2:sw=2
