@@ -578,7 +578,7 @@ id NodeObjectProxy::RepresentedObjectForObjectProxy(v8::Local<v8::Value> objectP
   id representedObject = nil;
   if (objectProxy->IsObject()) {
     Local<Object> object = Local<Object>::New(objectProxy->ToObject());
-    if (object->InternalFieldCount()) {
+    if (object->InternalFieldCount() == 1) {
       NodeObjectProxy *p = ObjectWrap::Unwrap<NodeObjectProxy>(object);
       representedObject = p->representedObject_;
     }

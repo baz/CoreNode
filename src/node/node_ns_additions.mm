@@ -261,15 +261,80 @@ Persistent<Function> BuildContext::indexOf;
 }
 @end
 
+// ----------------------------------------------------------------------------
+
+class MutableDictionaryProxy {
+  public:
+    NSDictionary *wrappedDictionary_;
+    MutableDictionaryProxy(NSDictionary *dictionary) {
+      wrappedDictionary_ = [dictionary retain];
+    }
+    ~MutableDictionaryProxy() {
+      [wrappedDictionary_ release];
+    }
+
+    static void WeakCallback (v8::Persistent<v8::Value> value, void *data) {
+      MutableDictionaryProxy *dictProxy = static_cast<MutableDictionaryProxy *>(data);
+      assert(value.IsNearDeath());
+      delete dictProxy;
+      value.Dispose();
+    }
+};
+
+static Handle<Value> MutableDictionarySetter(Local<String> property,
+                               Local<Value> value,
+                               const AccessorInfo& info) {
+  HandleScope scope;
+  String::Utf8Value _name(property); const char *name = *_name;
+
+  Local<Object> holder = info.Holder();
+  if (holder->InternalFieldCount() == 2) {
+    Local<External> wrap = Local<External>::Cast(holder->GetInternalField(0));
+    void *ptr = wrap->Value();
+    MutableDictionaryProxy *dictProxy = static_cast<MutableDictionaryProxy *>(ptr);
+    id target = dictProxy->wrappedDictionary_;
+
+    @try {
+      // Set this same key/value on the wrapped dictionary (if it is mutable)
+      id key = [NSString stringWithUTF8String:name];
+      id object = [NSObject fromV8Value:value];
+      if (target) {
+        [target setValue:object forKey:key];
+      }
+    } @catch (NSException *exception) { }
+  }
+
+  // Always return an empty handle so V8 uses its regular setter instead of relying on this interceptor
+  Local<Value> empty;
+  return scope.Close(empty);
+}
+
 @implementation NSDictionary (v8)
 - (Local<Value>)v8Value {
   HandleScope scope;
-  Local<Object> o = Object::New();
-  [self enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop){
+
+  Local<ObjectTemplate> dictTemplate = ObjectTemplate::New();
+  // Differentiate this from NodeObjectProxy's number of internal fields
+  dictTemplate->SetInternalFieldCount(2);
+  dictTemplate->SetNamedPropertyHandler(NULL,
+                                       MutableDictionarySetter,
+                                       NULL,
+                                       NULL,
+                                       NULL,
+                                       Undefined());
+  Persistent<Object> dict = Persistent<Object>::New(dictTemplate->NewInstance());
+
+  // Wrap this dictionary instance and make sure it stays alive until this object is no longer referenced
+  MutableDictionaryProxy *dictProxy = new MutableDictionaryProxy(self);
+  dict->SetInternalField(0, External::New(dictProxy));
+  dict.MakeWeak(dictProxy, MutableDictionaryProxy::WeakCallback);
+
+  [self enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
     assert([key isKindOfClass:[NSString class]]);
-    o->Set(String::New([key UTF8String]), [obj v8Value]);
+    dict->Set(String::New([key UTF8String]), [obj v8Value]);
   }];
-  return scope.Close(o);
+
+  return scope.Close(dict);
 }
 @end
 
