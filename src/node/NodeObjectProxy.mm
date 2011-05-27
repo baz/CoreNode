@@ -172,13 +172,17 @@ v8::Handle<Value> NodeObjectProxy::New(const Arguments& args) {
 // named property handlers
 
 
-static NSInvocation *_findInvocation(NodeObjectProxy *p, NSString *selectorName) {
+static NSInvocation *_findInvocation(NodeObjectProxy *p, NSString *selectorName, BOOL methodSearch=NO) {
   HandleScope scope;
   if (!selectorName || !p->representedObject_)
     return NULL;
 
-  SEL sel = NSSelectorFromString(selectorName);
   NSInvocation *invocation = nil;
+  if (methodSearch) {
+    selectorName = [selectorName stringByReplacingOccurrencesOfString:@"_" withString:@":"];
+  }
+
+  SEL sel = NSSelectorFromString(selectorName);
   NSMethodSignature *msig =
       [p->representedObject_ methodSignatureForSelector:sel];
   if (msig) {
@@ -186,6 +190,7 @@ static NSInvocation *_findInvocation(NodeObjectProxy *p, NSString *selectorName)
     [invocation setSelector:sel];
     [invocation setTarget:p->representedObject_];
   }
+
   return invocation;
 }
 
@@ -329,6 +334,40 @@ static BOOL _invokeGetter(NSInvocation *invocation,
 }
 
 
+class NodeObjectProxyInvocation {
+  public:
+    NSInvocation *invocation_;
+    NodeObjectProxyInvocation(NSInvocation *invocation) {
+      invocation_ = [invocation retain];
+    }
+    ~NodeObjectProxyInvocation() {
+      [invocation_ release];
+      invocation_ = nil;
+    }
+
+    static Handle<Value> invocationCallback(const Arguments& args) {
+      HandleScope scope;
+      ARPoolScope poolScope;
+      NodeObjectProxyInvocation *nodeInvocation = static_cast<NodeObjectProxyInvocation *>(External::Unwrap(args.Data()));
+      NSInvocation *invocation = nodeInvocation->invocation_;
+
+      // Set arguments
+      if (args.Length() > 0) {
+        for (int i=0; i<args.Length(); ++i) {
+          id object = [NSObject fromV8Value:args[i]];
+          [invocation setArgument:&object atIndex:2+i];
+        }
+      }
+
+      Local<Value> returnValue;
+      _invokeGetter(invocation, returnValue);
+
+      delete nodeInvocation;
+      return scope.Close(returnValue);
+  }
+};
+
+
 static v8::Handle<Value> NamedGetter(Local<String> property,
                                      const AccessorInfo& info) {
   HandleScope scope;
@@ -367,13 +406,17 @@ static v8::Handle<Value> NamedGetter(Local<String> property,
       _invokeGetter(invocation, returnValue);
     }
   } else {
-    NSInvocation *invocation = _findInvocation(p, selectorName);
+    NSInvocation *invocation = _findInvocation(p, selectorName, YES);
     if (invocation) {
-      KN_DLOG("TODO find and return wrapped function '%s'", name);
+      // Not a property, but a method call
+      NodeObjectProxyInvocation *nodeInvocation = new NodeObjectProxyInvocation(invocation);
+      Local<FunctionTemplate> functionTemplate = FunctionTemplate::New();
+      functionTemplate->SetCallHandler(nodeInvocation->invocationCallback, External::New(nodeInvocation));
+      Local<Function> function = functionTemplate->GetFunction();
+      returnValue = function;
     }
   }
 
-  // do something with p
   return scope.Close(returnValue);
 }
 
