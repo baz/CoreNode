@@ -10,6 +10,8 @@
 
 #ifdef __cplusplus
 #include <v8.h>
+#include <map>
+using namespace v8;
 #endif
 
 
@@ -17,6 +19,7 @@
 	@private
 #ifdef __cplusplus
 		v8::Persistent<v8::Function> function_;
+		std::map<id, Persistent<Value> > valueCache_;
 #endif
 }
 

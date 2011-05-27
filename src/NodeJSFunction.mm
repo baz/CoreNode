@@ -11,10 +11,6 @@
 #import "node_ns_additions.h"
 #import "common.h"
 
-using namespace v8;
-
-static std::map<id, Persistent<Value> > valueCache;
-
 
 @implementation NodeJSFunction
 
@@ -24,13 +20,13 @@ static std::map<id, Persistent<Value> > valueCache;
   function_.Clear();
 
   std::map<id, Persistent<Value> >::iterator it;
-  for (it = valueCache.begin(); it != valueCache.end(); it++) {
+  for (it = self->valueCache_.begin(); it != self->valueCache_.end(); it++) {
     Persistent<Value> v = it->second;
     v.Dispose();
     v.Clear();
-    valueCache.erase(it->first);
+    self->valueCache_.erase(it->first);
   }
-  valueCache.clear();
+  self->valueCache_.clear();
 
   [super dealloc];
 }
@@ -55,13 +51,13 @@ static std::map<id, Persistent<Value> > valueCache;
     Handle<Value> *argv = new Handle<Value>[[arguments count]];
     int argc = 0;
     for (id arg in arguments) {
-      if (valueCache.count(arg)) {
-        argv[argc] = valueCache[arg];
+      if (self->valueCache_.count(arg)) {
+        argv[argc] = self->valueCache_[arg];
       } else {
         Local<Value> v = [arg v8Value];
         argv[argc] = v;
         // Cache for next time
-        valueCache[arg] = Persistent<Value>::New(v);
+        self->valueCache_[arg] = Persistent<Value>::New(v);
       }
       argc++;
     }
