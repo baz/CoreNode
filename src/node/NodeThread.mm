@@ -13,6 +13,8 @@ using namespace v8;
 
 static ev_prepare gPrepareNodeWatcher;
 static NodeModuleInitializeBlock ModuleInitializer;
+NSString *const NodeThreadDidFinishExiting = @"NodeThreadDidFinishExiting";
+
 
 static void _KPrepareNode(EV_P_ ev_prepare *watcher, int revents) {
   HandleScope scope;
@@ -114,33 +116,33 @@ static void _KPrepareNode(EV_P_ ev_prepare *watcher, int revents) {
   // set max priority so _KPrepareNode gets called before specified bootstrap file is executed
   ev_set_priority(&gPrepareNodeWatcher, EV_MAXPRI);
   
-  while (![self isCancelled]) {
-
+  if (![self isCancelled]) {
     ev_prepare_start(EV_DEFAULT_UC_ &gPrepareNodeWatcher);
     // Note: We do NOT ev_unref here since we want to keep node alive for as long
-    // as we are not canceled.
+    // as we are not cancelled.
 
     // start
     int exitStatus = node::Start(argc, (char**)argv);
     DLOG("[node] exited with status %d in %@", exitStatus, self);
-
-    if (![self isCancelled]) {
-      WLOG("forcing program termination due to Node.js unexpectedly exiting");
-      [self cancel];
-    }
   }
 
   unregisterAllNodeObjects();
 
-  [NSApp terminate:nil];
   [pool drain];
+
+  dispatch_async(dispatch_get_main_queue(), ^{
+    [[NSNotificationCenter defaultCenter] postNotificationName:NodeThreadDidFinishExiting object:self];
+  });
 }
 
 
 - (void)cancel {
   // break all currently active ev_run's
   ev_break(EV_DEFAULT_UC_ EVBREAK_ALL);
-  
+
+  // exit the current event loop
+  ev_unref(EV_DEFAULT_UC_);
+
   [super cancel];
 }
 
@@ -157,4 +159,3 @@ static void _KPrepareNode(EV_P_ ev_prepare *watcher, int revents) {
 
 
 @end
-// vim: expandtab:ts=2:sw=2

@@ -4,6 +4,7 @@
 
 
 typedef void(^NodeModuleInitializeBlock)(void);
+extern NSString *const NodeThreadDidFinishExiting;
 
 
 @interface NodeThread : NSThread {
@@ -18,4 +19,3 @@ typedef void(^NodeModuleInitializeBlock)(void);
 - (void)setEnvironment:(NSDictionary *)environment;
 
 @end
-// vim: expandtab:ts=2:sw=2
