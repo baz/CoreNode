@@ -19,8 +19,6 @@ objectiveNode.inheritNativeModule = function(moduleName, target) {
 // install last line of defence for exceptions to avoid Node killing the app
 process.on('uncaughtException', global._objective_node.handleUncaughtException);
 
-console.log('Node thread started ('+ process.version +')');
-
 objectiveNode._notifyNodeActive();
 
 module.exports = objectiveNode;
