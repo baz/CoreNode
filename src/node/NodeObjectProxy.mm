@@ -355,6 +355,7 @@ class NodeObjectProxyInvocation {
       if (args.Length() > 0) {
         for (int i=0; i<args.Length(); ++i) {
           id object = [NSObject fromV8Value:args[i]];
+          if (object == [NSNull null]) object = nil;
           [invocation setArgument:&object atIndex:2+i];
         }
       }
