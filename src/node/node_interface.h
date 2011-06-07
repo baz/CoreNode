@@ -7,8 +7,8 @@
 #import <node.h>
 #import "ObjectiveNode.h"
 #include <map>
-#include <vector.h>
-#include <string.h>
+#include <vector>
+#include <string>
 
 class NodeIOEntry;
 class NodeBlockFun;
