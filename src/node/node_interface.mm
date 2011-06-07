@@ -267,20 +267,6 @@ void nodeInvokeFunction(const char *functionName, const char *objectName, NodeCa
 }
 
 
-id nodeInvokeFunctionSync(const char *functionName, const char *objectName, NSArray *args) {
-  HandleScope scope;
-  NSUInteger argc = [args count];
-  Local<Value> *argv = new Local<Value>[argc];
-  for (int i=0; i<[args count]; i++) {
-    argv[i] = [[args objectAtIndex:i] v8Value];
-  }
-  id retVal = _invokeJSFunctionSync(functionName, objectName, (unsigned int) argc, argv);
-  delete argv;
-
-  return retVal;
-}
-
-
 void nodeEmitEventv(const char *eventName, const char *objectName, int argc, id *argv) {
   NodeEventIOEntry *entry = new NodeEventIOEntry(eventName, objectName, argc, argv);
   NodeEnqueueIOEntry(entry);

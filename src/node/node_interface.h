@@ -40,9 +40,6 @@ void nodeInvokeFunction(const char *functionName, const char *objectName, NSArra
 
 void nodeInvokeFunction(const char *functionName, const char *objectName, NodeCallbackBlock callback);
 
-// invoke a named function inside node synchronously
-id nodeInvokeFunctionSync(const char *functionName, const char *objectName, NSArray *args);
-
 // emit an event on the specified object, passing args
 void nodeEmitEventv(const char *eventName, const char *objectName, int argc, id *argv);
 

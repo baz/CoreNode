@@ -42,10 +42,6 @@
   nodeInvokeFunction([functionName UTF8String], [objectName UTF8String], arguments, callbackBlock);
 }
 
-+ (id)invokeFunctionSync:(NSString *)functionName onObjectName:(NSString *)objectName arguments:(NSArray *)arguments {
-  return nodeInvokeFunctionSync([functionName UTF8String], [objectName UTF8String], arguments);
-}
-
 + (void)injectNodeModule:(moduleInit)moduleInitializer name:(NSString *)name {
   injectNodeModule(moduleInitializer, [name UTF8String], false);
 }

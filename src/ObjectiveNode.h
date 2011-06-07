@@ -28,8 +28,6 @@ typedef void (*moduleInit)(v8::Handle<v8::Object> target);
 
 + (void)invokeFunction:(NSString *)functionName onObjectName:(NSString *)objectName arguments:(NSArray *)arguments callback:(NodeCallbackBlock)callbackBlock;
 
-+ (id)invokeFunctionSync:(NSString *)functionName onObjectName:(NSString *)objectName arguments:(NSArray *)arguments;
-
 + (void)enableObjectProxyForClassName:(NSString *)className;
 
 #ifdef __cplusplus
