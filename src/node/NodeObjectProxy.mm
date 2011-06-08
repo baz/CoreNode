@@ -23,13 +23,12 @@ static char kPersistentWrapperKey = 'a';
 @interface _NodeObjectProxyShelf : NSObject {} @end
 @implementation _NodeObjectProxyShelf
 - (void)_NodeObjectProxy_dealloc_associations {
-  //DLOG("_NodeObjectProxy_dealloc_associations for %p", self);
-  // TODO: assert that we are running in the nodejs thread, or we need to
-  // defer this to that thread since v8 will crash and burn unless so.
-
   // clear wrapper
   NSValue *v = objc_getAssociatedObject(self, &kPersistentWrapperKey);
   if (v) {
+    // Since we cannot guarantee which thread this method is invoked on, acquire a lock on V8
+    v8::Locker locker; 
+
     Persistent<Object> *pobj = (Persistent<Object>*)[v pointerValue];
     if (!pobj->IsEmpty()) {
       NodeObjectProxy *p = ObjectWrap::Unwrap<NodeObjectProxy>(*pobj);
