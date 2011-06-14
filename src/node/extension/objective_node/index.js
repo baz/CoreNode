@@ -16,7 +16,8 @@ objectiveNode.inheritNativeModule = function(moduleName, target) {
   target.prototype = _bindingObject;
 };
 
-// install last line of defence for exceptions to avoid Node killing the app
+// Install last line of defence for exceptions to avoid Node killing the app
+process.removeListener('uncaughtException', global._objective_node.handleUncaughtException);
 process.on('uncaughtException', global._objective_node.handleUncaughtException);
 
 objectiveNode._notifyNodeActive();
