@@ -162,7 +162,7 @@ class NodeBlockFun {
   inline v8::Local<v8::Value> function() { return *fun_; }
   static v8::Handle<v8::Value> InvocationProxy(const v8::Arguments& args);
  protected:
-  bool isReleased_;
+  static void WeakCallback (v8::Persistent<v8::Value> value, void *data);
 };
 
 // -------------------

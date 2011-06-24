@@ -278,6 +278,7 @@ class MutableDictionaryProxy {
       assert(value.IsNearDeath());
       delete dictProxy;
       value.Dispose();
+      value.Clear();
     }
 };
 

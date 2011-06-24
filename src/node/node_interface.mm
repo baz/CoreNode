@@ -84,15 +84,22 @@ static void _freePersistentArgs(int argc, Persistent<Value> *argv) {
 
 NodeBlockFun::NodeBlockFun(NodeFunctionBlock block) {
   block_ = [block copy];
-  isReleased_ = false;
   Local<FunctionTemplate> t = FunctionTemplate::New(&NodeBlockFun::InvocationProxy, External::Wrap(this));
   fun_ = Persistent<Function>::New(t->GetFunction());
+  fun_.MakeWeak(this, NodeBlockFun::WeakCallback);
+}
+
+void NodeBlockFun::WeakCallback (v8::Persistent<v8::Value> value, void *data) {
+  NodeBlockFun *blockFun = static_cast<NodeBlockFun *>(data);
+  assert(value.IsNearDeath());
+  delete blockFun;
+  value.Dispose();
+  value.Clear();
 }
 
 NodeBlockFun::~NodeBlockFun() {
   [block_ release];
   block_ = nil;
-  isReleased_ = true;
   if (!fun_.IsEmpty()) {
     fun_.Dispose();
     fun_.Clear();
@@ -106,10 +113,12 @@ v8::Handle<Value> NodeBlockFun::InvocationProxy(const Arguments& args) {
   Local<Value> data = args.Data();
   assert(!data.IsEmpty());
   NodeBlockFun* blockFun = (NodeBlockFun*)External::Unwrap(data);
-  if (!blockFun->isReleased_) {
+  if (blockFun->block_) {
     assert(((void*)blockFun->block_) != NULL);
     blockFun->block_(args);
-    delete blockFun;
+
+    [blockFun->block_ release];
+    blockFun->block_ = nil;
   }
   return Undefined();
 }
