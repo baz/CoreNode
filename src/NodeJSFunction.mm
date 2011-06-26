@@ -1,6 +1,6 @@
 //
 //  NodeJSFunction.m
-//  ObjectiveNode
+//  CoreNode
 //
 //  Created by Basil Shkara on 13/05/11.
 //  Copyright 2011 Neat.io Pty Ltd. All rights reserved.

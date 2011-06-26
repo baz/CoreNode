@@ -31,7 +31,7 @@ static ev_async KNodeIOInputQueueNotifier;
 // Map to hold registered objects
 static std::map<std::string, v8::Persistent<v8::Object> > nodeObjectMap;
 
-static v8::Persistent<v8::Object> objectiveNodeModule;
+static v8::Persistent<v8::Object> coreNodeModule;
 
 // max number of entries to dequeue in one flush
 #define KNODE_MAX_DEQUEUE 100
@@ -326,7 +326,7 @@ void NodePerformInNode(NodePerformBlock block) {
 }
 
 static void _bindModule(const char *name, v8::Handle<Object> module) {
-  Local<Value> bindingsObject = objectiveNodeModule->Get(String::New("binding"));
+  Local<Value> bindingsObject = coreNodeModule->Get(String::New("binding"));
   if (bindingsObject->IsObject()) {
     Local<Object>::Cast(bindingsObject)->Set(String::New(name), module);
   }
@@ -339,12 +339,12 @@ void injectNodeModule(void(*init_module)(v8::Handle<v8::Object> target), const c
   Persistent<Object> function_instance = Persistent<Object>::New(function_template->GetFunction()->NewInstance());
   init_module(function_instance);
   if (root) {
-    // Special case for the objective_node module
+    // Special case for the core_node module
     Local<Object> global = v8::Context::GetCurrent()->Global();
     global->Set(String::New(module_name), function_instance);
-    objectiveNodeModule = function_instance;
+    coreNodeModule = function_instance;
   } else {
-    // Set via binding object on objective_node module to prevent polluting the global namespace
+    // Set via binding object on core_node module to prevent polluting the global namespace
     _bindModule(module_name, function_instance);
   }
 }

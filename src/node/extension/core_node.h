@@ -9,7 +9,7 @@
 #endif
 
 extern NSString *const NodeDidFinishLaunchingNotification;
-extern BOOL ObjectiveNodeActive;
+extern BOOL CoreNodeActive;
 
 
 // Creates a new UTF-8 C string from a Value.
@@ -25,4 +25,4 @@ static inline char* KNToCString(v8::Handle<v8::Value> value) {
 }
 
 // Initialize this module
-void objective_node_init(v8::Handle<v8::Object> target);
+void core_node_init(v8::Handle<v8::Object> target);

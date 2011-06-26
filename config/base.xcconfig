@@ -1,4 +1,4 @@
-PRODUCT_NAME = ObjectiveNode
+PRODUCT_NAME = CoreNode
 ONLY_ACTIVE_ARCH = NO
 ARCHS = i386 x86_64
 GCC_VERSION = com.apple.compilers.llvm.clang.1_0
@@ -6,8 +6,8 @@ MACOSX_DEPLOYMENT_TARGET = 10.6
 OTHER_LDFLAGS = -lv8 -lnode
 ALWAYS_SEARCH_USER_PATHS = NO
 WRAPPER_EXTENSION = framework
-INFOPLIST_FILE = src/ObjectiveNode-Info.plist
-GCC_PREFIX_HEADER = src/ObjectiveNode-Prefix.pch
+INFOPLIST_FILE = src/CoreNode-Info.plist
+GCC_PREFIX_HEADER = src/CoreNode-Prefix.pch
 INSTALL_PATH = @executable_path/../Frameworks
 
 FRAMEWORK_VERSION = "A"

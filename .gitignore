@@ -13,4 +13,5 @@ build/
 *.xcworkspacedata
 *.xcscheme
 *.xcsettings
+xcuserdata/
 xcschememanagement.plist

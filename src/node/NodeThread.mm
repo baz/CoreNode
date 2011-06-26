@@ -4,7 +4,7 @@
 
 #import "common.h"
 #import "NodeThread.h"
-#import "objective_node.h"
+#import "core_node.h"
 #import "node_interface.h"
 #import <node.h>
 #import <node_events.h>
@@ -21,8 +21,8 @@ static void _KPrepareNode(EV_P_ ev_prepare *watcher, int revents) {
   kassert(watcher == &gPrepareNodeWatcher);
   kassert(revents == EV_PREPARE);
 
-  // Create global _objective_node module
-  injectNodeModule(&objective_node_init, "_objective_node", true);
+  // Create global _core_node module
+  injectNodeModule(&core_node_init, "_core_node", true);
 
   // Init Node interface
   NodeInitNode();
@@ -94,7 +94,7 @@ static void _KPrepareNode(EV_P_ ev_prepare *watcher, int revents) {
   if (self.bootstrapPath) argv[argc-1] = [self.bootstrapPath UTF8String];
 
   // NODE_PATH
-  NSString *extensionPath = [[onconf_bundle() resourcePath] stringByAppendingPathComponent:@"objective_node"];
+  NSString *extensionPath = [[onconf_bundle() resourcePath] stringByAppendingPathComponent:@"core_node"];
   NSString *nodePath = nil;
   const char *node_path_pch = getenv("NODE_PATH");
   if (self.nodePath) {

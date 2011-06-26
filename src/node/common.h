@@ -18,7 +18,7 @@
 #endif
 
 // Framework bundle
-static inline NSBundle* onconf_bundle() { return [NSBundle bundleWithIdentifier:@"io.neat.ObjectiveNode"]; }
+static inline NSBundle* onconf_bundle() { return [NSBundle bundleWithIdentifier:@"io.neat.CoreNode"]; }
 
 // URL for a resource
 NSURL* onconf_res_url(NSString* relpath);

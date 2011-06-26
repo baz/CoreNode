@@ -3,10 +3,10 @@
 // found in the LICENSE file.
 var events = require('events');
 
-var objectiveNode = global._objective_node;
+var coreNode = global._core_node;
 
-objectiveNode.inheritNativeModule = function(moduleName, target) {
-  var _bindingObject = objectiveNode.binding[moduleName];
+coreNode.inheritNativeModule = function(moduleName, target) {
+  var _bindingObject = coreNode.binding[moduleName];
 
   for (var i in events.EventEmitter.prototype) {
     _bindingObject.__proto__[i] = events.EventEmitter.prototype[i];
@@ -17,9 +17,9 @@ objectiveNode.inheritNativeModule = function(moduleName, target) {
 };
 
 // Install last line of defence for exceptions to avoid Node killing the app
-process.removeListener('uncaughtException', global._objective_node.handleUncaughtException);
-process.on('uncaughtException', global._objective_node.handleUncaughtException);
+process.removeListener('uncaughtException', global._core_node.handleUncaughtException);
+process.on('uncaughtException', global._core_node.handleUncaughtException);
 
-objectiveNode._notifyNodeActive();
+coreNode._notifyNodeActive();
 
-module.exports = objectiveNode;
+module.exports = coreNode;

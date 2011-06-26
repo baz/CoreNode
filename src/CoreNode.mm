@@ -1,20 +1,20 @@
 //
-//  ObjectiveNode.m
-//  ObjectiveNode
+//  CoreNode.m
+//  CoreNode
 //
 //  Created by Basil Shkara on 6/03/11.
 //  Copyright 2011 Neat IO Pty Ltd. All rights reserved.
 //
 
-#import "ObjectiveNode.h"
+#import "CoreNode.h"
 #import "node_interface.h"
-#import "objective_node.h"
+#import "core_node.h"
 #import "node_ns_additions.h"
 #import "NodeObjectProxy.h"
 #import <v8.h>
 #import <node.h>
 
-@implementation ObjectiveNode
+@implementation CoreNode
 
 
 + (NodeThread *)newNodeThreadForBootstrapPath:(NSString *)bootstrapPath nodePath:(NSString *)nodePath {
@@ -63,7 +63,7 @@
 }
 
 + (BOOL)isNodeActive {
-  return ObjectiveNodeActive;
+  return CoreNodeActive;
 }
 
 

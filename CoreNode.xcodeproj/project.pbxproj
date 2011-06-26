@@ -7,13 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		FD4295EE13239ACF00B8A790 /* ObjectiveNode.h in Headers */ = {isa = PBXBuildFile; fileRef = FD4295EC13239ACF00B8A790 /* ObjectiveNode.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		FD4295EF13239ACF00B8A790 /* ObjectiveNode.mm in Sources */ = {isa = PBXBuildFile; fileRef = FD4295ED13239ACF00B8A790 /* ObjectiveNode.mm */; };
+		FD4295EE13239ACF00B8A790 /* CoreNode.h in Headers */ = {isa = PBXBuildFile; fileRef = FD4295EC13239ACF00B8A790 /* CoreNode.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		FD4295EF13239ACF00B8A790 /* CoreNode.mm in Sources */ = {isa = PBXBuildFile; fileRef = FD4295ED13239ACF00B8A790 /* CoreNode.mm */; };
 		FD48CFC713234559004FACFB /* libcrypto.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = FD48CFC613234559004FACFB /* libcrypto.dylib */; };
 		FD48CFC91323455F004FACFB /* libssl.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = FD48CFC81323455F004FACFB /* libssl.dylib */; };
 		FD48CFCB13234567004FACFB /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = FD48CFCA13234567004FACFB /* libz.dylib */; };
-		FD48CFD013234606004FACFB /* objective_node.h in Headers */ = {isa = PBXBuildFile; fileRef = FD48CFCE13234606004FACFB /* objective_node.h */; };
-		FD48CFD113234606004FACFB /* objective_node.mm in Sources */ = {isa = PBXBuildFile; fileRef = FD48CFCF13234606004FACFB /* objective_node.mm */; };
+		FD48CFD013234606004FACFB /* core_node.h in Headers */ = {isa = PBXBuildFile; fileRef = FD48CFCE13234606004FACFB /* core_node.h */; };
+		FD48CFD113234606004FACFB /* core_node.mm in Sources */ = {isa = PBXBuildFile; fileRef = FD48CFCF13234606004FACFB /* core_node.mm */; };
 		FD48CFE113234669004FACFB /* node_interface.h in Headers */ = {isa = PBXBuildFile; fileRef = FD48CFD813234669004FACFB /* node_interface.h */; settings = {ATTRIBUTES = (); }; };
 		FD48CFE213234669004FACFB /* node_interface.mm in Sources */ = {isa = PBXBuildFile; fileRef = FD48CFD913234669004FACFB /* node_interface.mm */; };
 		FD48CFE313234669004FACFB /* ExternalUTF16String.h in Headers */ = {isa = PBXBuildFile; fileRef = FD48CFDA13234669004FACFB /* ExternalUTF16String.h */; };
@@ -28,13 +28,8 @@
 		FD48CFF413234690004FACFB /* common.m in Sources */ = {isa = PBXBuildFile; fileRef = FD48CFED13234690004FACFB /* common.m */; };
 		FD48CFF713234690004FACFB /* k_objc_prop.h in Headers */ = {isa = PBXBuildFile; fileRef = FD48CFF013234690004FACFB /* k_objc_prop.h */; };
 		FD48CFF813234690004FACFB /* k_objc_prop.m in Sources */ = {isa = PBXBuildFile; fileRef = FD48CFF113234690004FACFB /* k_objc_prop.m */; };
-		FD48CFFD132346E8004FACFB /* objective_node in CopyFiles */ = {isa = PBXBuildFile; fileRef = FD48CFD313234631004FACFB /* objective_node */; };
+		FD48CFFD132346E8004FACFB /* core_node in CopyFiles */ = {isa = PBXBuildFile; fileRef = FD48CFD313234631004FACFB /* core_node */; };
 		FD81C86D13233F7600EB9C10 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FD81C86C13233F7600EB9C10 /* Cocoa.framework */; };
-		FD81C87F13233F7600EB9C10 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FD81C86C13233F7600EB9C10 /* Cocoa.framework */; };
-		FD81C88213233F7600EB9C10 /* ObjectiveNode.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FD81C86913233F7600EB9C10 /* ObjectiveNode.framework */; };
-		FD81C88813233F7600EB9C10 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = FD81C88613233F7600EB9C10 /* InfoPlist.strings */; };
-		FD81C88B13233F7600EB9C10 /* Objective_NodeTests.h in Resources */ = {isa = PBXBuildFile; fileRef = FD81C88A13233F7600EB9C10 /* Objective_NodeTests.h */; };
-		FD81C88D13233F7600EB9C10 /* Objective_NodeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = FD81C88C13233F7600EB9C10 /* Objective_NodeTests.m */; };
 		FDB551A9137D049900889EAA /* NodeJSFunction.h in Headers */ = {isa = PBXBuildFile; fileRef = FDB551A7137D049900889EAA /* NodeJSFunction.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		FDB551AA137D049900889EAA /* NodeJSFunction.mm in Sources */ = {isa = PBXBuildFile; fileRef = FDB551A8137D049900889EAA /* NodeJSFunction.mm */; };
 /* End PBXBuildFile section */
@@ -47,13 +42,6 @@
 			remoteGlobalIDString = FD48CFC0132342A7004FACFB;
 			remoteInfo = Node;
 		};
-		FD81C88013233F7600EB9C10 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = FD81C85F13233F7600EB9C10 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = FD81C86813233F7600EB9C10;
-			remoteInfo = "Objective Node";
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -63,21 +51,21 @@
 			dstPath = objective_node;
 			dstSubfolderSpec = 12;
 			files = (
-				FD48CFFD132346E8004FACFB /* objective_node in CopyFiles */,
+				FD48CFFD132346E8004FACFB /* core_node in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		FD4295EC13239ACF00B8A790 /* ObjectiveNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObjectiveNode.h; sourceTree = "<group>"; };
-		FD4295ED13239ACF00B8A790 /* ObjectiveNode.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ObjectiveNode.mm; sourceTree = "<group>"; };
+		FD4295EC13239ACF00B8A790 /* CoreNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoreNode.h; sourceTree = "<group>"; };
+		FD4295ED13239ACF00B8A790 /* CoreNode.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CoreNode.mm; sourceTree = "<group>"; };
 		FD48CFC613234559004FACFB /* libcrypto.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libcrypto.dylib; path = /usr/lib/libcrypto.dylib; sourceTree = "<absolute>"; };
 		FD48CFC81323455F004FACFB /* libssl.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libssl.dylib; path = /usr/lib/libssl.dylib; sourceTree = "<absolute>"; };
 		FD48CFCA13234567004FACFB /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = /usr/lib/libz.dylib; sourceTree = "<absolute>"; };
-		FD48CFCE13234606004FACFB /* objective_node.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = objective_node.h; sourceTree = "<group>"; };
-		FD48CFCF13234606004FACFB /* objective_node.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = objective_node.mm; sourceTree = "<group>"; };
-		FD48CFD313234631004FACFB /* objective_node */ = {isa = PBXFileReference; lastKnownFileType = folder; path = objective_node; sourceTree = "<group>"; };
+		FD48CFCE13234606004FACFB /* core_node.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = core_node.h; sourceTree = "<group>"; };
+		FD48CFCF13234606004FACFB /* core_node.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = core_node.mm; sourceTree = "<group>"; };
+		FD48CFD313234631004FACFB /* core_node */ = {isa = PBXFileReference; lastKnownFileType = folder; path = core_node; sourceTree = "<group>"; };
 		FD48CFD813234669004FACFB /* node_interface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = node_interface.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		FD48CFD913234669004FACFB /* node_interface.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; path = node_interface.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		FD48CFDA13234669004FACFB /* ExternalUTF16String.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExternalUTF16String.h; sourceTree = "<group>"; };
@@ -92,19 +80,13 @@
 		FD48CFED13234690004FACFB /* common.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = common.m; sourceTree = "<group>"; };
 		FD48CFF013234690004FACFB /* k_objc_prop.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = k_objc_prop.h; sourceTree = "<group>"; };
 		FD48CFF113234690004FACFB /* k_objc_prop.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = k_objc_prop.m; sourceTree = "<group>"; };
-		FD81C86913233F7600EB9C10 /* ObjectiveNode.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ObjectiveNode.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		FD81C86913233F7600EB9C10 /* ObjectiveNode.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = ObjectiveNode.framework; path = CoreNode.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FD81C86C13233F7600EB9C10 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		FD81C86F13233F7600EB9C10 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
 		FD81C87013233F7600EB9C10 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		FD81C87113233F7600EB9C10 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
-		FD81C87413233F7600EB9C10 /* ObjectiveNode-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "ObjectiveNode-Info.plist"; sourceTree = "<group>"; };
-		FD81C87813233F7600EB9C10 /* ObjectiveNode-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ObjectiveNode-Prefix.pch"; sourceTree = "<group>"; };
-		FD81C87E13233F7600EB9C10 /* ObjectiveNodeTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ObjectiveNodeTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
-		FD81C88513233F7600EB9C10 /* Objective NodeTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Objective NodeTests-Info.plist"; sourceTree = "<group>"; };
-		FD81C88713233F7600EB9C10 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		FD81C88913233F7600EB9C10 /* Objective NodeTests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Objective NodeTests-Prefix.pch"; sourceTree = "<group>"; };
-		FD81C88A13233F7600EB9C10 /* Objective_NodeTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Objective_NodeTests.h; sourceTree = "<group>"; };
-		FD81C88C13233F7600EB9C10 /* Objective_NodeTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Objective_NodeTests.m; sourceTree = "<group>"; };
+		FD81C87413233F7600EB9C10 /* CoreNode-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "CoreNode-Info.plist"; sourceTree = "<group>"; };
+		FD81C87813233F7600EB9C10 /* CoreNode-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "CoreNode-Prefix.pch"; sourceTree = "<group>"; };
 		FD81C89B13233FD400EB9C10 /* base.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = base.xcconfig; sourceTree = "<group>"; };
 		FD81C89C13233FD400EB9C10 /* debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = debug.xcconfig; sourceTree = "<group>"; };
 		FD81C89D13233FD400EB9C10 /* release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = release.xcconfig; sourceTree = "<group>"; };
@@ -124,15 +106,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		FD81C87A13233F7600EB9C10 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				FD81C87F13233F7600EB9C10 /* Cocoa.framework in Frameworks */,
-				FD81C88213233F7600EB9C10 /* ObjectiveNode.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -149,9 +122,9 @@
 		FD48CFCD132345D8004FACFB /* Extension */ = {
 			isa = PBXGroup;
 			children = (
-				FD48CFD313234631004FACFB /* objective_node */,
-				FD48CFCE13234606004FACFB /* objective_node.h */,
-				FD48CFCF13234606004FACFB /* objective_node.mm */,
+				FD48CFD313234631004FACFB /* core_node */,
+				FD48CFCE13234606004FACFB /* core_node.h */,
+				FD48CFCF13234606004FACFB /* core_node.mm */,
 			);
 			name = Extension;
 			path = extension;
@@ -189,9 +162,8 @@
 		FD81C85D13233F7600EB9C10 = {
 			isa = PBXGroup;
 			children = (
-				FD81C87213233F7600EB9C10 /* Objective Node */,
+				FD81C87213233F7600EB9C10 /* Core Node */,
 				FD81C89A13233F9D00EB9C10 /* Config */,
-				FD81C88313233F7600EB9C10 /* Tests */,
 				FD81C86B13233F7600EB9C10 /* Frameworks */,
 				FD81C86A13233F7600EB9C10 /* Products */,
 			);
@@ -201,7 +173,6 @@
 			isa = PBXGroup;
 			children = (
 				FD81C86913233F7600EB9C10 /* ObjectiveNode.framework */,
-				FD81C87E13233F7600EB9C10 /* ObjectiveNodeTests.octest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -228,46 +199,25 @@
 			name = "Other Frameworks";
 			sourceTree = "<group>";
 		};
-		FD81C87213233F7600EB9C10 /* Objective Node */ = {
+		FD81C87213233F7600EB9C10 /* Core Node */ = {
 			isa = PBXGroup;
 			children = (
 				FD48CFCC132345BF004FACFB /* Node */,
 				FD81C87313233F7600EB9C10 /* Supporting Files */,
-				FD4295EC13239ACF00B8A790 /* ObjectiveNode.h */,
-				FD4295ED13239ACF00B8A790 /* ObjectiveNode.mm */,
+				FD4295EC13239ACF00B8A790 /* CoreNode.h */,
+				FD4295ED13239ACF00B8A790 /* CoreNode.mm */,
 				FDB551A7137D049900889EAA /* NodeJSFunction.h */,
 				FDB551A8137D049900889EAA /* NodeJSFunction.mm */,
 			);
-			name = "Objective Node";
+			name = "Core Node";
 			path = src;
 			sourceTree = "<group>";
 		};
 		FD81C87313233F7600EB9C10 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				FD81C87413233F7600EB9C10 /* ObjectiveNode-Info.plist */,
-				FD81C87813233F7600EB9C10 /* ObjectiveNode-Prefix.pch */,
-			);
-			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		FD81C88313233F7600EB9C10 /* Tests */ = {
-			isa = PBXGroup;
-			children = (
-				FD81C88A13233F7600EB9C10 /* Objective_NodeTests.h */,
-				FD81C88C13233F7600EB9C10 /* Objective_NodeTests.m */,
-				FD81C88413233F7600EB9C10 /* Supporting Files */,
-			);
-			name = Tests;
-			path = tests;
-			sourceTree = "<group>";
-		};
-		FD81C88413233F7600EB9C10 /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				FD81C88513233F7600EB9C10 /* Objective NodeTests-Info.plist */,
-				FD81C88613233F7600EB9C10 /* InfoPlist.strings */,
-				FD81C88913233F7600EB9C10 /* Objective NodeTests-Prefix.pch */,
+				FD81C87413233F7600EB9C10 /* CoreNode-Info.plist */,
+				FD81C87813233F7600EB9C10 /* CoreNode-Prefix.pch */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -290,7 +240,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FD48CFD013234606004FACFB /* objective_node.h in Headers */,
+				FD48CFD013234606004FACFB /* core_node.h in Headers */,
 				FD48CFE113234669004FACFB /* node_interface.h in Headers */,
 				FD48CFE313234669004FACFB /* ExternalUTF16String.h in Headers */,
 				FD48CFE413234669004FACFB /* node_ns_additions.h in Headers */,
@@ -299,7 +249,7 @@
 				FD48CFF213234690004FACFB /* hcommon.h in Headers */,
 				FD48CFF313234690004FACFB /* common.h in Headers */,
 				FD48CFF713234690004FACFB /* k_objc_prop.h in Headers */,
-				FD4295EE13239ACF00B8A790 /* ObjectiveNode.h in Headers */,
+				FD4295EE13239ACF00B8A790 /* CoreNode.h in Headers */,
 				FDB551A9137D049900889EAA /* NodeJSFunction.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -324,9 +274,9 @@
 /* End PBXLegacyTarget section */
 
 /* Begin PBXNativeTarget section */
-		FD81C86813233F7600EB9C10 /* ObjectiveNode */ = {
+		FD81C86813233F7600EB9C10 /* CoreNode */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = FD81C89013233F7600EB9C10 /* Build configuration list for PBXNativeTarget "ObjectiveNode" */;
+			buildConfigurationList = FD81C89013233F7600EB9C10 /* Build configuration list for PBXNativeTarget "CoreNode" */;
 			buildPhases = (
 				FD81C86413233F7600EB9C10 /* Sources */,
 				FD81C86513233F7600EB9C10 /* Frameworks */,
@@ -338,29 +288,10 @@
 			dependencies = (
 				FD48CFFF132346F5004FACFB /* PBXTargetDependency */,
 			);
-			name = ObjectiveNode;
+			name = CoreNode;
 			productName = "Objective Node";
 			productReference = FD81C86913233F7600EB9C10 /* ObjectiveNode.framework */;
 			productType = "com.apple.product-type.framework";
-		};
-		FD81C87D13233F7600EB9C10 /* ObjectiveNodeTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = FD81C89313233F7600EB9C10 /* Build configuration list for PBXNativeTarget "ObjectiveNodeTests" */;
-			buildPhases = (
-				FD81C87913233F7600EB9C10 /* Sources */,
-				FD81C87A13233F7600EB9C10 /* Frameworks */,
-				FD81C87B13233F7600EB9C10 /* Resources */,
-				FD81C87C13233F7600EB9C10 /* ShellScript */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				FD81C88113233F7600EB9C10 /* PBXTargetDependency */,
-			);
-			name = ObjectiveNodeTests;
-			productName = "Objective NodeTests";
-			productReference = FD81C87E13233F7600EB9C10 /* ObjectiveNodeTests.octest */;
-			productType = "com.apple.product-type.bundle";
 		};
 /* End PBXNativeTarget section */
 
@@ -371,7 +302,7 @@
 				LastUpgradeCheck = 0410;
 				ORGANIZATIONNAME = "Neat IO Pty Ltd";
 			};
-			buildConfigurationList = FD81C86213233F7600EB9C10 /* Build configuration list for PBXProject "ObjectiveNode" */;
+			buildConfigurationList = FD81C86213233F7600EB9C10 /* Build configuration list for PBXProject "CoreNode" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -383,63 +314,26 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				FD81C86813233F7600EB9C10 /* ObjectiveNode */,
-				FD81C87D13233F7600EB9C10 /* ObjectiveNodeTests */,
+				FD81C86813233F7600EB9C10 /* CoreNode */,
 				FD48CFC0132342A7004FACFB /* Node */,
 			);
 		};
 /* End PBXProject section */
-
-/* Begin PBXResourcesBuildPhase section */
-		FD81C87B13233F7600EB9C10 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				FD81C88813233F7600EB9C10 /* InfoPlist.strings in Resources */,
-				FD81C88B13233F7600EB9C10 /* Objective_NodeTests.h in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		FD81C87C13233F7600EB9C10 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		FD81C86413233F7600EB9C10 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FD48CFD113234606004FACFB /* objective_node.mm in Sources */,
+				FD48CFD113234606004FACFB /* core_node.mm in Sources */,
 				FD48CFE213234669004FACFB /* node_interface.mm in Sources */,
 				FD48CFE513234669004FACFB /* node_ns_additions.mm in Sources */,
 				FD48CFE713234669004FACFB /* NodeThread.mm in Sources */,
 				FD48CFE913234669004FACFB /* NodeObjectProxy.mm in Sources */,
 				FD48CFF413234690004FACFB /* common.m in Sources */,
 				FD48CFF813234690004FACFB /* k_objc_prop.m in Sources */,
-				FD4295EF13239ACF00B8A790 /* ObjectiveNode.mm in Sources */,
+				FD4295EF13239ACF00B8A790 /* CoreNode.mm in Sources */,
 				FDB551AA137D049900889EAA /* NodeJSFunction.mm in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		FD81C87913233F7600EB9C10 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				FD81C88D13233F7600EB9C10 /* Objective_NodeTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -451,23 +345,7 @@
 			target = FD48CFC0132342A7004FACFB /* Node */;
 			targetProxy = FD48CFFE132346F5004FACFB /* PBXContainerItemProxy */;
 		};
-		FD81C88113233F7600EB9C10 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = FD81C86813233F7600EB9C10 /* ObjectiveNode */;
-			targetProxy = FD81C88013233F7600EB9C10 /* PBXContainerItemProxy */;
-		};
 /* End PBXTargetDependency section */
-
-/* Begin PBXVariantGroup section */
-		FD81C88613233F7600EB9C10 /* InfoPlist.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				FD81C88713233F7600EB9C10 /* en */,
-			);
-			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		FD48CFC2132342A7004FACFB /* Debug */ = {
@@ -511,54 +389,12 @@
 		FD81C89113233F7600EB9C10 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				DYLIB_CURRENT_VERSION = "";
 			};
 			name = Debug;
 		};
 		FD81C89213233F7600EB9C10 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				DYLIB_CURRENT_VERSION = "";
-			};
-			name = Release;
-		};
-		FD81C89413233F7600EB9C10 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				COPY_PHASE_STRIP = NO;
-				FRAMEWORK_SEARCH_PATHS = "$(DEVELOPER_LIBRARY_DIR)/Frameworks";
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Objective NodeTests/Objective NodeTests-Prefix.pch";
-				INFOPLIST_FILE = "Objective NodeTests/Objective NodeTests-Info.plist";
-				OTHER_LDFLAGS = (
-					"-framework",
-					SenTestingKit,
-				);
-				PRODUCT_NAME = ObjectiveNodeTests;
-				WRAPPER_EXTENSION = octest;
-			};
-			name = Debug;
-		};
-		FD81C89513233F7600EB9C10 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				COPY_PHASE_STRIP = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				FRAMEWORK_SEARCH_PATHS = "$(DEVELOPER_LIBRARY_DIR)/Frameworks";
-				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Objective NodeTests/Objective NodeTests-Prefix.pch";
-				INFOPLIST_FILE = "Objective NodeTests/Objective NodeTests-Info.plist";
-				OTHER_LDFLAGS = (
-					"-framework",
-					SenTestingKit,
-				);
-				PRODUCT_NAME = ObjectiveNodeTests;
-				WRAPPER_EXTENSION = octest;
 			};
 			name = Release;
 		};
@@ -574,7 +410,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		FD81C86213233F7600EB9C10 /* Build configuration list for PBXProject "ObjectiveNode" */ = {
+		FD81C86213233F7600EB9C10 /* Build configuration list for PBXProject "CoreNode" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				FD81C88E13233F7600EB9C10 /* Debug */,
@@ -583,20 +419,11 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		FD81C89013233F7600EB9C10 /* Build configuration list for PBXNativeTarget "ObjectiveNode" */ = {
+		FD81C89013233F7600EB9C10 /* Build configuration list for PBXNativeTarget "CoreNode" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				FD81C89113233F7600EB9C10 /* Debug */,
 				FD81C89213233F7600EB9C10 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		FD81C89313233F7600EB9C10 /* Build configuration list for PBXNativeTarget "ObjectiveNodeTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				FD81C89413233F7600EB9C10 /* Debug */,
-				FD81C89513233F7600EB9C10 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

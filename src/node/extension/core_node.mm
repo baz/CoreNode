@@ -2,14 +2,14 @@
 // Use of this source code is governed by a MIT-style license that can be
 // found in the LICENSE file.
 
-#import "objective_node.h"
+#import "core_node.h"
 #import "common.h"
 #import "node_interface.h"
 #import "node_ns_additions.h"
 #import "NodeThread.h"
 
 NSString *const NodeDidFinishLaunchingNotification = @"NodeDidFinishLaunchingNotification";
-BOOL ObjectiveNodeActive = NO;
+BOOL CoreNodeActive = NO;
 
 using namespace v8;
 using namespace node;
@@ -58,11 +58,11 @@ static v8::Handle<Value> NotifyNodeActive(const Arguments& args) {
   dispatch_async(dispatch_get_main_queue(), ^{
     [[NSNotificationCenter defaultCenter] postNotificationName:NodeDidFinishLaunchingNotification object:nil];
   });
-  ObjectiveNodeActive = YES;
+  CoreNodeActive = YES;
   return Undefined();
 }
 
-void objective_node_init(v8::Handle<v8::Object> target) {
+void core_node_init(v8::Handle<v8::Object> target) {
   HandleScope scope;
 
   NSString *version = [onconf_bundle() objectForInfoDictionaryKey:@"CFBundleVersion"];

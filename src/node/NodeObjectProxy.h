@@ -2,7 +2,7 @@
 // Use of this source code is governed by a MIT-style license that can be
 // found in the LICENSE file.
 
-#import "objective_node.h"
+#import "core_node.h"
 #include <map>
 
 #define KN_OBJC_CLASS_ADDITIONS_BEGIN(name) \

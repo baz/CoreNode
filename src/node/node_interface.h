@@ -5,7 +5,7 @@
 #import <Cocoa/Cocoa.h>
 #import <dispatch/dispatch.h>
 #import <node.h>
-#import "ObjectiveNode.h"
+#import "CoreNode.h"
 #include <map>
 #include <vector>
 #include <string>
@@ -46,8 +46,8 @@ void nodeEmitEventv(const char *eventName, const char *objectName, int argc, id 
 // emit an event on the specified object, passing nil-terminated list of args
 void nodeEmitEvent(const char *eventName, const char *objectName, ...);
 
-// perform |block| in the kod runtime (queue defaults to main thread)
-static inline void NodePerformInObjectiveNode(NodeCallbackBlock block,
+// perform |block| in the CoreNode runtime (queue defaults to main thread)
+static inline void NodePerformInCoreNode(NodeCallbackBlock block,
                                      NSError *err=nil,
                                      NSArray *args=nil,
                                      dispatch_queue_t queue=NULL) {
@@ -109,7 +109,7 @@ class KNodeTransactionalIOEntry : public NodeIOEntry {
       if (callback) {
         // queue may be released by now
         // invoke the original ObjC callback block that was provided by the caller
-        NodePerformInObjectiveNode(callback, err, args, blockReturnQueue);
+        NodePerformInCoreNode(callback, err, args, blockReturnQueue);
       }
     });
     // call super which will delete this instance

@@ -1,6 +1,6 @@
 //
-//  ObjectiveNode.h
-//  ObjectiveNode
+//  CoreNode.h
+//  CoreNode
 //
 //  Created by Basil Shkara on 6/03/11.
 //  Copyright 2011 Neat IO Pty Ltd. All rights reserved.
@@ -18,7 +18,7 @@ typedef void (*moduleInit)(v8::Handle<v8::Object> target);
 #endif
 
 
-@interface ObjectiveNode : NSObject {
+@interface CoreNode : NSObject {
 }
 
 
