@@ -48,7 +48,7 @@
 		FD48CFFC132346DD004FACFB /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
-			dstPath = objective_node;
+			dstPath = core_node;
 			dstSubfolderSpec = 12;
 			files = (
 				FD48CFFD132346E8004FACFB /* core_node in CopyFiles */,
@@ -80,7 +80,7 @@
 		FD48CFED13234690004FACFB /* common.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = common.m; sourceTree = "<group>"; };
 		FD48CFF013234690004FACFB /* k_objc_prop.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = k_objc_prop.h; sourceTree = "<group>"; };
 		FD48CFF113234690004FACFB /* k_objc_prop.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = k_objc_prop.m; sourceTree = "<group>"; };
-		FD81C86913233F7600EB9C10 /* ObjectiveNode.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = ObjectiveNode.framework; path = CoreNode.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		FD81C86913233F7600EB9C10 /* CoreNode.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CoreNode.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FD81C86C13233F7600EB9C10 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		FD81C86F13233F7600EB9C10 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
 		FD81C87013233F7600EB9C10 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
@@ -172,7 +172,7 @@
 		FD81C86A13233F7600EB9C10 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				FD81C86913233F7600EB9C10 /* ObjectiveNode.framework */,
+				FD81C86913233F7600EB9C10 /* CoreNode.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -289,8 +289,8 @@
 				FD48CFFF132346F5004FACFB /* PBXTargetDependency */,
 			);
 			name = CoreNode;
-			productName = "Objective Node";
-			productReference = FD81C86913233F7600EB9C10 /* ObjectiveNode.framework */;
+			productName = "Core Node";
+			productReference = FD81C86913233F7600EB9C10 /* CoreNode.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 /* End PBXNativeTarget section */
