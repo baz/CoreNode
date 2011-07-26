@@ -8,15 +8,13 @@
 #define KN_OBJC_CLASS_ADDITIONS_BEGIN(name) \
   @interface name##_node_ : NSObject {} @end @implementation name##_node_
 
-#if !NDEBUG
-  // Dump a message to stderr
-  #define KN_DLOG(tmpl, ...)\
-    do {\
-      fprintf(stderr, "D [node-kod %s:%d] " tmpl "\n", \
-              __FILENAME__, __LINE__, ##__VA_ARGS__);\
-      fflush(stderr);\
-    } while (0)
-#endif
+// Dump a message to stderr
+#define KN_DLOG(tmpl, ...)\
+  do {\
+    fprintf(stderr, "D [node-kod %s:%d] " tmpl "\n", \
+            __FILENAME__, __LINE__, ##__VA_ARGS__);\
+    fflush(stderr);\
+  } while (0)
 
 
 class NodeObjectProxy : public node::EventEmitter {
