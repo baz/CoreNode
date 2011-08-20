@@ -5,6 +5,7 @@
 
 typedef void(^NodeModuleInitializeBlock)(void);
 extern NSString *const NodeThreadDidFinishExiting;
+extern NSString *const NodeThreadDidCatchUnhandledException;
 
 
 @interface NodeThread : NSThread {

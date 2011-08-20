@@ -14,6 +14,7 @@ using namespace v8;
 static ev_prepare gPrepareNodeWatcher;
 static NodeModuleInitializeBlock ModuleInitializer;
 NSString *const NodeThreadDidFinishExiting = @"NodeThreadDidFinishExiting";
+NSString *const NodeThreadDidCatchUnhandledException = @"NodeThreadDidCatchUnhandledException";
 
 
 static void _KPrepareNode(EV_P_ ev_prepare *watcher, int revents) {
@@ -155,6 +156,10 @@ static void _KPrepareNode(EV_P_ ev_prepare *watcher, int revents) {
       msg = err;
   }
   WLOG("[node] unhandled exception: %@", msg);
+
+  dispatch_async(dispatch_get_main_queue(), ^{
+    [[NSNotificationCenter defaultCenter] postNotificationName:NodeThreadDidCatchUnhandledException object:msg];
+  });
 }
 
 

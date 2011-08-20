@@ -202,12 +202,12 @@
 		FD81C87213233F7600EB9C10 /* Core Node */ = {
 			isa = PBXGroup;
 			children = (
-				FD48CFCC132345BF004FACFB /* Node */,
-				FD81C87313233F7600EB9C10 /* Supporting Files */,
 				FD4295EC13239ACF00B8A790 /* CoreNode.h */,
 				FD4295ED13239ACF00B8A790 /* CoreNode.mm */,
 				FDB551A7137D049900889EAA /* NodeJSFunction.h */,
 				FDB551A8137D049900889EAA /* NodeJSFunction.mm */,
+				FD48CFCC132345BF004FACFB /* Node */,
+				FD81C87313233F7600EB9C10 /* Supporting Files */,
 			);
 			name = "Core Node";
 			path = src;
