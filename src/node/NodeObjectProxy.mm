@@ -510,26 +510,23 @@ static v8::Handle<Array> NamedEnumerator(const AccessorInfo& info) {
   uint32_t index = 0;
   Class cls = [p->representedObject_ class];
   while (cls) {
+    // Any properties prefixed with '__' are ignored
     unsigned int propsCount;
     objc_property_t *props = class_copyPropertyList(cls, &propsCount);
-
     for (unsigned int i=0; i<propsCount; ++i) {
       KObjCPropFlags propflags = k_objc_propattrs(props[i], NULL, NULL, NULL, NULL);
       if (propflags & KObjCPropReadable) {
-        list->Set(index++, String::New(property_getName(props[i])));
+        const char *propertyName = property_getName(props[i]);
+        if (strlen(propertyName) > 2 && propertyName[0] == '_' && propertyName[1] == '_') {
+          continue;
+        }
+        list->Set(index++, String::New(propertyName));
       }
     }
     free(props);
 
     cls = class_getSuperclass(cls);
   }
-
-  // TODO: list methods and include methods which match the property pattern:
-  //  -*
-  //  -set*: AND -* exists
-  //
-  // Other methods should be included as well when we support wrapping methods
-  // in v8 functions
 
   return scope.Close(list);
 }
