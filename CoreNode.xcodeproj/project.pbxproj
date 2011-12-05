@@ -299,8 +299,8 @@
 		FD81C85F13233F7600EB9C10 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0410;
-				ORGANIZATIONNAME = "Neat IO Pty Ltd";
+				LastUpgradeCheck = 0420;
+				ORGANIZATIONNAME = Neat.io;
 			};
 			buildConfigurationList = FD81C86213233F7600EB9C10 /* Build configuration list for PBXProject "CoreNode" */;
 			compatibilityVersion = "Xcode 3.2";

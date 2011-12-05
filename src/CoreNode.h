@@ -14,6 +14,7 @@ extern NSString *const NodeDidFinishLaunchingNotification;
 
 #ifdef __cplusplus
 #import <v8.h>
+#import <node.h>
 typedef void (*moduleInit)(v8::Handle<v8::Object> target);
 #endif
 
