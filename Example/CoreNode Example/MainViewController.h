@@ -14,5 +14,6 @@
 
 - (IBAction)didClickFirstButton:(id)sender;
 - (IBAction)didClickSecondButton:(id)sender;
+- (IBAction)didClickThirdButton:(id)sender;
 
 @end

@@ -12,6 +12,12 @@ function ExampleModule() {
 
     callback(null, test);
   };
+
+  this.thirdMethod = function(viewController, callback) {
+    viewController.callMe();
+    viewController.callMe_secondString_('first arg string', 'second arg string');
+    callback(null, null);
+  };
 }
 
 module.exports = new ExampleModule();
